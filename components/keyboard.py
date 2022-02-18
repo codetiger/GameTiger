@@ -1,5 +1,7 @@
 import sys
 
+from pygame import K_ESCAPE
+
 if sys.implementation.name == "micropython":
     from machine import Pin
 else:
@@ -38,4 +40,6 @@ class Keyboard():
                     for i in range(len(self.keys)):
                         if event.key == self.keys[i]["object"]:
                             return i
+                if event.type == KEYDOWN and event.key == K_ESCAPE:
+                    exit()
         return None

@@ -5,6 +5,8 @@ class LCD_display():
     screen = None
     GREEN = (30, 255, 60)
     DARK_GREEN = (30, 120, 60)
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
 
     def __init__(self):
         self.screen = pygame.display.set_mode([320, 240])
@@ -33,3 +35,20 @@ class LCD_display():
 
     def scroll(self, xinc, yinc):
         self.screen.scroll(xinc, yinc)
+
+    def setBrightness(self, brightness):
+        pass
+
+    def drawImage(self, filename, x, y, width, height):
+        with open(filename, "rb") as f:
+            for i in range(height):
+                for j in range(width):
+                    pixelData = int.from_bytes(f.read(2), 'big') & 0xFFFF
+                    pixelData = ((pixelData & 0xFF) << 8) | ((pixelData >> 8) & 0xFF)
+                    red = (pixelData & 0xF800) >> 11
+                    red = (red << 3) | (red >> 2)
+                    green = (pixelData & 0x07e0) >> 5
+                    green = (green << 2) | (green >> 1)
+                    blue = pixelData & 0x001f
+                    blue = (blue << 3) | (blue >> 2)
+                    self.pixel(x + j, y + i, (red, green, blue))
