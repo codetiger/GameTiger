@@ -10,11 +10,11 @@ class Screen {
 protected:
     void (*returnCallBack)(int8_t menu);
 public:
-    virtual void update();
-    virtual void draw(Display *display);
-    virtual void keyPressed(uint8_t key);
-    virtual void keyReleased(uint8_t key);
-    virtual void keyDown(uint8_t key);
+    virtual void update() = 0;
+    virtual void draw(Display *display) = 0;
+    virtual void keyPressed(uint8_t key) = 0;
+    virtual void keyReleased(uint8_t key) = 0;
+    virtual void keyDown(uint8_t key) = 0;
 
     Type type; 
 };

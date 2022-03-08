@@ -71,6 +71,8 @@ void Display::initSequence() {
     this->write_cmd(0x21);
     this->write_cmd(0x11);
     this->write_cmd(0x29);
+
+    this->setWindow(0, 0, this->width, this->height);
 }
 
 void Display::reset() {
@@ -80,6 +82,7 @@ void Display::reset() {
     sleep_ms(100);
     gpio_put(RST_PIN, 1);
     sleep_ms(100);
+    gpio_put(CS_PIN, 0);
 }
 
 void Display::setBrightness(uint8_t brightness) {
@@ -106,21 +109,23 @@ void Display::setCursor(const uint16_t x, const uint16_t y) {
     this->setWindow(x, y, x+1, y+1);
 }
 
+#define div_255_fast(x)    (((x) + (((x) + 257) >> 8)) >> 8)
+
 void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
     if (x < 0 || x >= this->width || y < 0 || y >= this->height)
         return;
     
     int index = (y * this->width) + x;
     if(alpha != 255) {
-        this->buffer[index].red = (c.red * alpha + this->buffer[index].red * (255 - alpha)) / 255;
-        this->buffer[index].green = (c.green * alpha + this->buffer[index].green * (255 - alpha)) / 255;
-        this->buffer[index].blue = (c.blue * alpha + this->buffer[index].blue * (255 - alpha)) / 255;
+        uint8_t ralpha = 255 - alpha;
+        this->buffer[index].red = div_255_fast(c.red * alpha + this->buffer[index].red * ralpha);
+        this->buffer[index].green = div_255_fast(c.green * alpha + this->buffer[index].green * ralpha);
+        this->buffer[index].blue = div_255_fast(c.blue * alpha + this->buffer[index].blue * ralpha);
     } else
         this->buffer[index] = c;
 }
 
 void Display::update() {
-    this->setWindow(0, 0, this->width, this->height);
     gpio_put(DC_PIN, 1);
     spi_write_blocking(spi1, (uint8_t*)this->buffer, this->width * this->height * 2);
 }
@@ -136,24 +141,21 @@ void Display::sendData(const uint8_t cmd, const uint8_t data) {
 }
 
 void Display::write_cmd(const uint8_t cmd) {
-    gpio_put(CS_PIN, 0);
     gpio_put(DC_PIN, 0);
     uint8_t buf[] = {cmd};
     spi_write_blocking(spi1, buf, 1);
 }
 
 void Display::write_data(const uint8_t data) {
-    gpio_put(CS_PIN, 0);
     gpio_put(DC_PIN, 1);
     uint8_t buf[] = {data};
     spi_write_blocking(spi1, buf, 1);
-    gpio_put(CS_PIN, 1);
 }
 
 void Display::write_data(const uint8_t data[]) {
     int n = sizeof(data) / sizeof(data[0]);
-    for (int i = 0; i < n; i++)
-        this->write_data(data[i]);
+    gpio_put(DC_PIN, 1);
+    spi_write_blocking(spi1, data, n);
 }
 
 void Display::fillRect(int x, int y, int width, int height, Color c, uint8_t alpha) {

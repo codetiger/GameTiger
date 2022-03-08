@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "pico/stdlib.h"
 #include "core/display.h"
 #include "core/battery.h"
@@ -12,7 +13,7 @@ Screen *screen;
 
 uint16_t printDuration(uint32_t *start) {
     uint16_t timeDiff = to_ms_since_boot(get_absolute_time()) - *start;
-    // printf("Timetaken: %d\n", timeDiff);
+    printf("FPS: %d Timetaken: %d\n", 1000 / timeDiff, timeDiff);
     *start = to_ms_since_boot(get_absolute_time());
     return timeDiff;
 }
@@ -44,12 +45,12 @@ int main() {
     uint32_t start = to_ms_since_boot(get_absolute_time());
     while (true) {
         uint16_t duration = printDuration(&start);
-        // printf("FPS: %d\n", 1000 / duration);
         gpio_xor_mask(1<<LED_PIN);
         screen->update();
+        keyboard->checkKeyState(screen);
+
         screen->draw(display);
         battery->drawLevel(display);
-        keyboard->checkKeyState(screen);
         display->update();
     }
     return 0;

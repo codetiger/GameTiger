@@ -29,8 +29,15 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
 
     spriteWidth = (spriteWidth == 0) ? this->width : spriteWidth;
     spriteHeight = (spriteHeight == 0) ? this->height : spriteHeight;
+
+    if(screenX+spriteWidth <= 0 || screenX > display->width || screenY+spriteHeight <= 0 || screenY > display->height)
+        return;
+
     for (int y = 0; y < spriteHeight; y++) {
         for (int x = 0; x < spriteWidth; x++) {
+            if (x+screenX < 0 || x+screenX >= display->width || y+screenY < 0 || y+screenY >= display->height) 
+                continue;
+
             int pixIndex = (y+spriteY) * this->width + (x+spriteX);
             int colIndex = this->pixelData[pixIndex] * 4;
             Color c = Color(this->palette[colIndex], this->palette[colIndex+1], this->palette[colIndex+2]);
