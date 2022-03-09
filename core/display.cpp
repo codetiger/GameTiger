@@ -5,6 +5,21 @@
 Display::Display() {
     this->initHardware();
     this->initSequence();
+
+    this->dmaSPIChannel = dma_claim_unused_channel(true);
+    this->dmaSPIConfig = dma_channel_get_default_config(this->dmaSPIChannel);
+    channel_config_set_transfer_data_size(&this->dmaSPIConfig, DMA_SIZE_16);
+    channel_config_set_read_increment(&this->dmaSPIConfig, true);
+    channel_config_set_write_increment(&this->dmaSPIConfig, false);
+    channel_config_set_ring(&this->dmaSPIConfig, false, 0);
+    channel_config_set_dreq(&this->dmaSPIConfig, DREQ_SPI1_TX);
+
+    this->dmaMemChannel = dma_claim_unused_channel(true);
+    this->dmaMemConfig = dma_channel_get_default_config(this->dmaMemChannel);
+    channel_config_set_transfer_data_size(&this->dmaMemConfig, DMA_SIZE_16);
+    channel_config_set_read_increment(&this->dmaMemConfig, false);
+    channel_config_set_write_increment(&this->dmaMemConfig, true);
+    channel_config_set_ring(&this->dmaMemConfig, false, 0);
 }
 
 void Display::initHardware() {
@@ -25,15 +40,16 @@ void Display::initHardware() {
     this->setBrightness(50);
 
     int br = spi_init(spi1, 62.5 * 1000 * 1000);
-
     printf("Display baudrate: %d\n", br);
+
     gpio_set_function(SCK_PIN, GPIO_FUNC_SPI);
     gpio_set_function(MOSI_PIN, GPIO_FUNC_SPI);
 }
 
 void Display::initSequence() {
     this->reset();
-    
+    gpio_put(CS_PIN, 0);
+
     this->sendData(0x36, (uint8_t)0x78);
     this->sendData(0x3A, 0x05);
 
@@ -45,7 +61,7 @@ void Display::initSequence() {
     uint8_t buf2[] = {0x00, 0x00, 0x00, 0xEF};
     this->sendData(0x2B, buf2);
 
-    uint8_t buf3[] = {0x00, 0xE8};
+    uint8_t buf3[] = {0x00, 0xE0};
     this->sendData(0xB0, buf3);
 
     uint8_t buf4[] = {0x0C, 0x0C, 0x00, 0x33, 0x33};
@@ -73,6 +89,7 @@ void Display::initSequence() {
     this->write_cmd(0x29);
 
     this->setWindow(0, 0, this->width, this->height);
+    spi_set_format(spi1, 16, SPI_CPOL_0, SPI_CPHA_0, SPI_MSB_FIRST);
 }
 
 void Display::reset() {
@@ -82,7 +99,6 @@ void Display::reset() {
     sleep_ms(100);
     gpio_put(RST_PIN, 1);
     sleep_ms(100);
-    gpio_put(CS_PIN, 0);
 }
 
 void Display::setBrightness(uint8_t brightness) {
@@ -90,9 +106,8 @@ void Display::setBrightness(uint8_t brightness) {
 }
 
 void Display::clear(Color c) {
-    for (int i = 0; i < this->height; i++)
-        for (int j = 0; j < this->width; j++)
-            this->setPixel(j, i, c);
+    dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer, &c, this->height*this->width, true);
+    dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
 }
 
 void Display::setWindow(const uint16_t sx, const uint16_t sy, const uint16_t ex, const uint16_t ey){
@@ -116,18 +131,23 @@ void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
         return;
     
     int index = (y * this->width) + x;
-    if(alpha != 255) {
+    alpha = (alpha & 0xc0) | (alpha | 0x3f);
+    if(alpha > 192) {
+        this->buffer[index] = c;
+    } else if(alpha < 64) {
+    } else {
         uint8_t ralpha = 255 - alpha;
         this->buffer[index].red = div_255_fast(c.red * alpha + this->buffer[index].red * ralpha);
         this->buffer[index].green = div_255_fast(c.green * alpha + this->buffer[index].green * ralpha);
         this->buffer[index].blue = div_255_fast(c.blue * alpha + this->buffer[index].blue * ralpha);
-    } else
-        this->buffer[index] = c;
+    }
 }
 
 void Display::update() {
     gpio_put(DC_PIN, 1);
-    spi_write_blocking(spi1, (uint8_t*)this->buffer, this->width * this->height * 2);
+
+    dma_channel_configure(this->dmaSPIChannel, &this->dmaSPIConfig, &spi_get_hw(spi1)->dr, (uint16_t*)this->buffer, this->width * this->height, true);
+    dma_channel_wait_for_finish_blocking(this->dmaSPIChannel);
 }
 
 void Display::sendData(const uint8_t cmd, const uint8_t data[]) {
@@ -162,9 +182,22 @@ void Display::fillRect(int x, int y, int width, int height, Color c, uint8_t alp
     if(x >= this->width || y >= this->height || x + width < 0 || y + height < 0)
         return;
 
-    for (int i = y; i < y + height; i++)
-        for (int j = x; j < x + width; j++)
-            this->setPixel(j, i, c, alpha);
+    if(alpha != 255 || width < 8) {
+        for (int i = y; i < y + height; i++)
+            for (int j = x; j < x + width; j++)
+                this->setPixel(j, i, c, alpha);
+    } else {
+        width = std::min(width, this->width - x);
+        height = std::min(height, this->height - y);
+        x = std::max(x, 0);
+        y = std::max(y, 0);
+        
+        for (int i = y; i < y + height; i++) {
+            int index = (i * this->width) + x;
+            dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer[index], &c, width, true);
+            dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
+        }
+    }
 }
 
 Display::~Display() {

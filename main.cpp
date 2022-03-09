@@ -31,6 +31,7 @@ void backHandler(int8_t menu) {
 
 int main() {
     stdio_init_all();
+    sleep_ms(3000);
     const uint LED_PIN = PICO_DEFAULT_LED_PIN;
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);

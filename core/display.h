@@ -1,6 +1,7 @@
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
 #include "hardware/spi.h"
+#include "hardware/dma.h"
 #include "color.h"
 
 #ifndef _GAME_TIGER_DISPLAY_H
@@ -27,6 +28,12 @@ private:
     void initSequence();
 
     Color buffer[320*240];
+
+    uint dmaSPIChannel = 0;
+    dma_channel_config dmaSPIConfig;
+
+    uint dmaMemChannel = 0;
+    dma_channel_config dmaMemConfig;
 public:
     const uint16_t width = 320, height = 240;
 
@@ -38,7 +45,7 @@ public:
     void clear(Color c);
     void setBrightness(uint8_t brightness);
 
-    void setPixel(int x, int y, Color c, uint8_t alpha = 255);
+    void setPixel(int x, int y, Color c, uint8_t alpha);
     void fillRect(int x, int y, int width, int height, Color c, uint8_t alpha = 255);
     void hLine(int x, int y, int width, Color c, uint8_t alpha = 255);
     void vLine(int x, int y, int height, Color c, uint8_t alpha = 255);

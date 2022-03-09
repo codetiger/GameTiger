@@ -16,7 +16,7 @@ add_executable(GameTiger
     main.cpp
 )
 
-target_link_libraries(GameTiger pico_stdlib hardware_spi hardware_pwm hardware_adc)
+target_link_libraries(GameTiger pico_stdlib hardware_spi hardware_pwm hardware_adc hardware_dma)
 
 pico_sdk_init()
 pico_enable_stdio_usb(GameTiger 1)
