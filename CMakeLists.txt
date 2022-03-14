@@ -23,3 +23,5 @@ pico_enable_stdio_usb(GameTiger 1)
 pico_enable_stdio_uart(GameTiger 1)
 
 pico_add_extra_outputs(GameTiger)
+
+file(COPY ${CMAKE_CURRENT_BINARY_DIR}/GameTiger.uf2 DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
