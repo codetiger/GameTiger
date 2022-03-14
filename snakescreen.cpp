@@ -4,9 +4,12 @@
 #include "content/gameover.h"
 #include <string> 
 
-SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu)) {
-    this->returnCallBack = rcb;
+SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t hs) {
+    this->screenId = 2;
     this->type = Type::GAME;
+    this->highScore = hs;
+    this->returnCallBack = rcb;
+    this->highScoreCallBack = hscb;
     this->font2 = new Image(font2_img_width, font2_img_height, font2_color_count, (uint8_t*)font2_palette, (uint8_t*)font2_pixel_data, font2_sprite_data);
     this->gameOver = new Image(gameover_img_width, gameover_img_height, gameover_color_count, (uint8_t*)gameover_palette, (uint8_t*)gameover_pixel_data);
 
@@ -14,7 +17,6 @@ SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu)) {
     this->snakeBlocks[1][0] = 14, this->snakeBlocks[1][1] = 12;
     this->snakeBlocks[2][0] = 13, this->snakeBlocks[2][1] = 12;
 
-    this->highScore = 0;
     this->gameState = WAITING;
     this->createNewFood();
 
@@ -32,7 +34,6 @@ void SnakeScreen::createNewFood() {
 
 void SnakeScreen::moveSnake() {
     int8_t newPos[2] = {(int8_t)this->snakeBlocks[0][0] + this->DIR_INFO[this->snakeDir][0], (int8_t)this->snakeBlocks[0][1] + this->DIR_INFO[this->snakeDir][1]};
-    printf("New Pos: %d, %d\n", newPos[0], newPos[1]);
     if(newPos[0] < 0 || newPos[0] >= BOARD_WIDTH || newPos[1] < 0 || newPos[1] >= BOARD_HEIGHT || this->checkSnakeLoop()) {
         this->gameState = LOST;
         return;
@@ -51,8 +52,10 @@ void SnakeScreen::moveSnake() {
         this->snakeLength++;
         this->createNewFood();
         this->gameSpeed = (this->snakeLength / 10) + 1;
-        if(this->highScore < this->snakeLength - 3)
+        if(this->highScore < this->snakeLength - 3) {
             this->highScore = this->snakeLength - 3;
+            this->highScoreCallBack(this->highScore);
+        }
     }
 }
 

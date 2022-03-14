@@ -5,12 +5,14 @@
 #include "content/tetris.h"
 #include "core/keyboard.h"
 
-MenuScreen::MenuScreen(void (*rcb)(int8_t menu)) {
+MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+    this->screenId = 1;
+    this->type = Type::MENU;
     this->returnCallBack = rcb;
+    this->highScoreCallBack = hscb;
     this->currentMenuItem = this->selectedMenuItem = 0;
     this->isAnimating = false;
     this->animationCounter = 0;
-    this->type = Type::MENU;
     this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);
     this->menuItemLogo[0] = new Image(snake_img_width, snake_img_height, snake_color_count, (uint8_t*)snake_palette, (uint8_t*)snake_pixel_data);
     this->menuItemLogo[1] = new Image(tetris_img_width, tetris_img_height, tetris_color_count, (uint8_t*)tetris_palette, (uint8_t*)tetris_pixel_data);

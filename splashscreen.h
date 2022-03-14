@@ -11,7 +11,7 @@ private:
     uint8_t imageAlpha = 0;
     uint32_t startTime = 0;
 public:
-    SplashScreen(void (*returnCallBack)(int8_t menu));
+    SplashScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
     ~SplashScreen();
 
     void update();

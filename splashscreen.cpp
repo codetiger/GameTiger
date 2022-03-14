@@ -4,9 +4,11 @@
 #include "content/tiger.h"
 #include "content/font.h"
 
-SplashScreen::SplashScreen(void (*rcb)(int8_t menu)) {
-    this->returnCallBack = rcb;
+SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+    this->screenId = 0;
     this->type = Type::SPLASH;
+    this->returnCallBack = rcb;
+    this->highScoreCallBack = hscb;
     this->imageAlpha = 0;
     this->tiger = new Image(tiger_img_width, tiger_img_height, tiger_color_count, (uint8_t*)tiger_palette, (uint8_t*)tiger_pixel_data);
     this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);

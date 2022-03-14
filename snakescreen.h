@@ -37,7 +37,7 @@ private:
     void moveSnake();
     void drawBlock(Display *display, uint16_t x, uint16_t y);
 public:
-    SnakeScreen(void (*returnCallBack)(int8_t menu));
+    SnakeScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
     ~SnakeScreen();
 
     void update();

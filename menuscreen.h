@@ -20,7 +20,7 @@ private:
     bool isAnimating;
     const uint8_t menuItemGap = 160;
 public:
-    MenuScreen(void (*returnCallBack)(int8_t menu));
+    MenuScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
     ~MenuScreen();
 
     void update();
