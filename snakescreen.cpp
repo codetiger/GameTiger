@@ -21,7 +21,7 @@ SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highsco
     this->createNewFood();
 
     this->lastUpdate = to_ms_since_boot(get_absolute_time());
-    this->gameSpeed = (this->snakeLength / 10) + 1;
+    this->gameSpeed = 1;
 }
 
 SnakeScreen::~SnakeScreen() {
@@ -51,7 +51,6 @@ void SnakeScreen::moveSnake() {
         this->snakeBlocks[this->snakeLength][1] = this->snakeBlocks[this->snakeLength-1][1];
         this->snakeLength++;
         this->createNewFood();
-        this->gameSpeed = (this->snakeLength / 10) + 1;
         if(this->highScore < this->snakeLength - 3) {
             this->highScore = this->snakeLength - 3;
             this->highScoreCallBack(this->highScore);
@@ -105,10 +104,17 @@ void SnakeScreen::keyPressed(uint8_t key) {
         (key == KEY_LEFT && this->snakeDir != KEY_RIGHT) || 
         (key == KEY_RIGHT && this->snakeDir != KEY_LEFT)) {
         this->snakeDir = key;
-    } else if(key == KEY_A && this->gameState == WAITING)
-        this->gameState = PLAYING;
-    else if(key == KEY_B && this->gameState == LOST)
-        this->returnCallBack(-1);
+    } else if(key == KEY_A) {
+        if(this->gameState == WAITING)
+            this->gameState = PLAYING;
+        else if(this->gameState == PLAYING) 
+            this->gameSpeed = (this->gameSpeed < 12) ? this->gameSpeed+1 : this->gameSpeed;
+    } else if(key == KEY_B) {
+        if(this->gameState == LOST) 
+            this->returnCallBack(-1);
+        else if(this->gameState == PLAYING)
+            this->gameSpeed = (this->gameSpeed > 1) ? this->gameSpeed-1 : this->gameSpeed;
+    }
 }
 
 void SnakeScreen::keyReleased(uint8_t key) {
