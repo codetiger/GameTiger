@@ -11,10 +11,10 @@ private:
     const uint8_t menuCount = 5;
     const std::string menuItemNames[5] = {
         "SNAKE ", 
+        " 2048 ",
         "TETRIS",
         " ONE  ",
-        " TWO  ",
-        "THREE "
+        " TWO  "
     };
     uint8_t selectedMenuItem, currentMenuItem, animationCounter;
     bool isAnimating;

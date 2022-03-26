@@ -66,6 +66,13 @@ void Image::drawSprites(Display *display, std::string indices, int16_t screenX, 
     }
 }
 
+uint16_t Image::getWidth(std::string indices) {
+    uint16_t width = 0;
+    for(char& index : indices)
+        width += this->spriteData[index][2] - 1;
+    return width;
+}
+
 Image::~Image() {
     delete[] this->palette;
     delete[] this->pixelData;

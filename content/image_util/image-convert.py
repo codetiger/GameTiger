@@ -3,10 +3,10 @@ from PIL import Image
 from collections import defaultdict
 
 color_count = 16
-image_name = "font2"
+image_name = "g2048"
 
 im = Image.open(image_name + '.png').convert('RGBA')
-im = im.resize((70,28), Image.NEAREST)
+# im = im.resize((70,28), Image.NEAREST)
 im = im.convert('P', palette=Image.ADAPTIVE, colors=color_count)
 im = im.convert('RGBA')
 

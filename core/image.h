@@ -25,6 +25,7 @@ public:
     void draw(Display *display, int16_t screenX, int16_t screenY, uint16_t spriteX = 0, uint16_t spriteY = 0, uint16_t spriteWidth = 0, uint16_t spriteHeight = 0);
     void drawSprite(Display *display, char index, int16_t screenX, int16_t screenY);
     void drawSprites(Display *display, std::string indices, int16_t screenX, int16_t screenY);
+    uint16_t getWidth(std::string indices);
 };
 
 #endif

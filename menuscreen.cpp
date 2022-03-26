@@ -3,6 +3,7 @@
 #include "content/font.h"
 #include "content/snake.h"
 #include "content/tetris.h"
+#include "content/g2048.h"
 #include "core/keyboard.h"
 
 MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
@@ -15,8 +16,8 @@ MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore
     this->animationCounter = 0;
     this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);
     this->menuItemLogo[0] = new Image(snake_img_width, snake_img_height, snake_color_count, (uint8_t*)snake_palette, (uint8_t*)snake_pixel_data);
-    this->menuItemLogo[1] = new Image(tetris_img_width, tetris_img_height, tetris_color_count, (uint8_t*)tetris_palette, (uint8_t*)tetris_pixel_data);
-    this->menuItemLogo[2] = new Image(snake_img_width, snake_img_height, snake_color_count, (uint8_t*)snake_palette, (uint8_t*)snake_pixel_data);
+    this->menuItemLogo[1] = new Image(g2048_img_width, g2048_img_height, g2048_color_count, (uint8_t*)g2048_palette, (uint8_t*)g2048_pixel_data);
+    this->menuItemLogo[2] = new Image(tetris_img_width, tetris_img_height, tetris_color_count, (uint8_t*)tetris_palette, (uint8_t*)tetris_pixel_data);
     this->menuItemLogo[3] = new Image(snake_img_width, snake_img_height, snake_color_count, (uint8_t*)snake_palette, (uint8_t*)snake_pixel_data);
     this->menuItemLogo[4] = new Image(snake_img_width, snake_img_height, snake_color_count, (uint8_t*)snake_palette, (uint8_t*)snake_pixel_data);
 }

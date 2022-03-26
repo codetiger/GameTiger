@@ -11,6 +11,7 @@
 #include "splashscreen.h"
 #include "menuscreen.h"
 #include "snakescreen.h"
+#include "g2048screen.h"
 
 #define HIGHSCORESIZE (FLASH_PAGE_SIZE/4)
 #define FLASH_TARGET_OFFSET (1536 * 1024)
@@ -51,6 +52,8 @@ void backHandler(int8_t menu) {
         delete screen;
         if(menu == 0)
             screen = new SnakeScreen(*backHandler, *highScoreHandler, highscores[2]);
+        else if(menu == 1)
+            screen = new G2048Screen(*backHandler, *highScoreHandler, highscores[3]);
     }
 }
 
