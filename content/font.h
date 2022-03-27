@@ -1,5 +1,8 @@
-#include "pico/stdlib.h"
+#ifdef FORMPU
+    #include "pico/stdlib.h"
+#endif
 #include <map>
+#include <array>
 
 extern uint16_t font_img_width;
 extern uint16_t font_img_height;

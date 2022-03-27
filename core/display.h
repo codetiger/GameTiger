@@ -1,7 +1,4 @@
-#include "pico/stdlib.h"
-#include "hardware/pwm.h"
-#include "hardware/spi.h"
-#include "hardware/dma.h"
+#include "common.h"
 #include "color.h"
 
 #ifndef _GAME_TIGER_DISPLAY_H
@@ -16,6 +13,7 @@ private:
     const uint8_t MOSI_PIN = 11;
     const uint8_t SCK_PIN = 10;
 
+#ifdef FORMPU
     void write_cmd(const uint8_t cmd);
     void write_data(const uint8_t data);
     void write_data(const uint8_t data[]);
@@ -26,21 +24,27 @@ private:
 
     void initHardware();
     void initSequence();
+    void reset();
+#else
+    SDL_Renderer* renderer;
+    SDL_Window* window;
+#endif
 
     Color buffer[320*240];
 
-    uint dmaSPIChannel = 0;
+#ifdef FORMPU
+    int dmaSPIChannel = 0;
     dma_channel_config dmaSPIConfig;
 
-    uint dmaMemChannel = 0;
+    int dmaMemChannel = 0;
     dma_channel_config dmaMemConfig;
+#endif
 public:
     const uint16_t width = 320, height = 240;
 
     Display();
     ~Display();
 
-    void reset();
     void update();
     void clear(Color c);
     void setBrightness(uint8_t brightness);

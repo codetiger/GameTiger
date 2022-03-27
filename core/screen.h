@@ -1,4 +1,4 @@
-#include "pico/stdlib.h"
+#include "common.h"
 #include "display.h"
 
 #ifndef _GAME_TIGER_SCREEN_H

@@ -3,9 +3,35 @@
 #include <algorithm>
 
 Display::Display() {
+#ifdef FORMPU
     this->initHardware();
     this->initSequence();
+#else
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+		printf("SDL_Init Error: %s\n", SDL_GetError());
+        exit(EXIT_FAILURE);
+	}
 
+	this->window = SDL_CreateWindow("GameTiger!", 100, 100, 320, 240, SDL_WINDOW_SHOWN);
+	if (this->window == NULL) {
+		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
+        exit(EXIT_FAILURE);
+	}
+
+	this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (this->renderer == NULL) {
+		printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
+		SDL_DestroyWindow(this->window);
+		SDL_Quit();
+        exit(EXIT_FAILURE);
+	}
+    SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
+    SDL_RenderClear(this->renderer);
+#endif
+}
+
+#ifdef FORMPU
+void Display::initHardware() {
     this->dmaSPIChannel = dma_claim_unused_channel(true);
     this->dmaSPIConfig = dma_channel_get_default_config(this->dmaSPIChannel);
     channel_config_set_transfer_data_size(&this->dmaSPIConfig, DMA_SIZE_16);
@@ -20,9 +46,7 @@ Display::Display() {
     channel_config_set_read_increment(&this->dmaMemConfig, false);
     channel_config_set_write_increment(&this->dmaMemConfig, true);
     channel_config_set_ring(&this->dmaMemConfig, false, 0);
-}
 
-void Display::initHardware() {
     gpio_init(CS_PIN);
     gpio_set_dir(CS_PIN, GPIO_OUT);
 
@@ -101,15 +125,6 @@ void Display::reset() {
     sleep_ms(100);
 }
 
-void Display::setBrightness(uint8_t brightness) {
-    pwm_set_gpio_level(BL_PIN, int(65535 * brightness / 100));
-}
-
-void Display::clear(Color c) {
-    dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer, &c, this->height*this->width, true);
-    dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
-}
-
 void Display::setWindow(const uint16_t sx, const uint16_t sy, const uint16_t ex, const uint16_t ey){
     uint8_t buf1[] = {sx >> 8, sx & 0xFF, (ex-1) >> 8, (ex-1) & 0xFF};
     this->sendData(0x2A, buf1);
@@ -122,32 +137,6 @@ void Display::setWindow(const uint16_t sx, const uint16_t sy, const uint16_t ex,
 
 void Display::setCursor(const uint16_t x, const uint16_t y) {
     this->setWindow(x, y, x+1, y+1);
-}
-
-#define div_255_fast(x)    (((x) + (((x) + 257) >> 8)) >> 8)
-
-void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
-    if (x < 0 || x >= this->width || y < 0 || y >= this->height)
-        return;
-    
-    int index = (y * this->width) + x;
-    alpha = (alpha & 0xc0) | (alpha | 0x3f);
-    if(alpha > 192) {
-        this->buffer[index] = c;
-    } else if(alpha < 64) {
-    } else {
-        uint8_t ralpha = 255 - alpha;
-        this->buffer[index].red = div_255_fast(c.red * alpha + this->buffer[index].red * ralpha);
-        this->buffer[index].green = div_255_fast(c.green * alpha + this->buffer[index].green * ralpha);
-        this->buffer[index].blue = div_255_fast(c.blue * alpha + this->buffer[index].blue * ralpha);
-    }
-}
-
-void Display::update() {
-    gpio_put(DC_PIN, 1);
-
-    dma_channel_configure(this->dmaSPIChannel, &this->dmaSPIConfig, &spi_get_hw(spi1)->dr, (uint16_t*)this->buffer, this->width * this->height, true);
-    dma_channel_wait_for_finish_blocking(this->dmaSPIChannel);
 }
 
 void Display::sendData(const uint8_t cmd, const uint8_t data[]) {
@@ -177,26 +166,90 @@ void Display::write_data(const uint8_t data[]) {
     gpio_put(DC_PIN, 1);
     spi_write_blocking(spi1, data, n);
 }
+#endif
+
+void Display::setBrightness(uint8_t brightness) {
+#ifdef FORMPU
+    pwm_set_gpio_level(BL_PIN, int(65535 * brightness / 100));
+#endif
+}
+
+void Display::clear(Color c) {
+#ifdef FORMPU
+    dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer, &c, this->height*this->width, true);
+    dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
+#else
+    for (int i = 0; i < this->height; i++) {
+        for (int j = 0; j < this->width; j++) {
+            int index = (i * this->width) + j;
+            this->buffer[index] = c;
+        }
+    }
+#endif
+}
+
+#define div_255_fast(x)    (((x) + (((x) + 257) >> 8)) >> 8)
+
+void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
+    if (x < 0 || x >= this->width || y < 0 || y >= this->height)
+        return;
+    
+    int index = (y * this->width) + x;
+    alpha = (alpha & 0xc0) | (alpha | 0x3f);
+    if(alpha > 192) {
+        this->buffer[index] = c;
+    } else if(alpha < 64) {
+    } else {
+        uint8_t ralpha = 255 - alpha;
+        this->buffer[index].red = div_255_fast(c.red * alpha + this->buffer[index].red * ralpha);
+        this->buffer[index].green = div_255_fast(c.green * alpha + this->buffer[index].green * ralpha);
+        this->buffer[index].blue = div_255_fast(c.blue * alpha + this->buffer[index].blue * ralpha);
+    }
+}
+
+void Display::update() {
+#ifdef FORMPU
+    gpio_put(DC_PIN, 1);
+
+    dma_channel_configure(this->dmaSPIChannel, &this->dmaSPIConfig, &spi_get_hw(spi1)->dr, (uint16_t*)this->buffer, this->width * this->height, true);
+    dma_channel_wait_for_finish_blocking(this->dmaSPIChannel);
+#else
+    for (int i = 0; i < this->height; i++) {
+        for (int j = 0; j < this->width; j++) {
+            int index = (i * this->width) + j;
+            SDL_SetRenderDrawColor(this->renderer, this->buffer[index].red<<3, this->buffer[index].green<<2, this->buffer[index].blue<<3, 255);
+            SDL_RenderDrawPoint(this->renderer, j, i);
+        }
+    }
+    SDL_RenderPresent(this->renderer);
+#endif
+}
 
 void Display::fillRect(int x, int y, int width, int height, Color c, uint8_t alpha) {
     if(x >= this->width || y >= this->height || x + width < 0 || y + height < 0)
         return;
+
+    width = std::min(width, this->width - x);
+    height = std::min(height, this->height - y);
+    x = std::max(x, 0);
+    y = std::max(y, 0);
 
     if(alpha != 255 || width < 8) {
         for (int i = y; i < y + height; i++)
             for (int j = x; j < x + width; j++)
                 this->setPixel(j, i, c, alpha);
     } else {
-        width = std::min(width, this->width - x);
-        height = std::min(height, this->height - y);
-        x = std::max(x, 0);
-        y = std::max(y, 0);
-        
+        #ifdef FORMPU
         for (int i = y; i < y + height; i++) {
             int index = (i * this->width) + x;
             dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer[index], &c, width, true);
             dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
         }
+        #else
+        for (int i = y; i < y + height; i++)
+            for (int j = x; j < x + width; j++)
+                this->setPixel(j, i, c, alpha);
+        #endif
     }
 }
 

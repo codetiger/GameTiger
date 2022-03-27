@@ -1,8 +1,6 @@
-#include "pico/stdlib.h"
 #include "snakescreen.h"
-#include "content/font2.h"
-#include "content/gameover.h"
-#include <string> 
+#include "../content/font2.h"
+#include "../content/gameover.h"
 
 SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t hs) {
     this->screenId = 2;
@@ -20,7 +18,7 @@ SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highsco
     this->gameState = WAITING;
     this->createNewFood();
 
-    this->lastUpdate = to_ms_since_boot(get_absolute_time());
+    this->lastUpdate = TimeSinceBoot;
     this->gameSpeed = 1;
 }
 
@@ -33,7 +31,9 @@ void SnakeScreen::createNewFood() {
 }
 
 void SnakeScreen::moveSnake() {
-    int8_t newPos[2] = {(int8_t)this->snakeBlocks[0][0] + this->DIR_INFO[this->snakeDir][0], (int8_t)this->snakeBlocks[0][1] + this->DIR_INFO[this->snakeDir][1]};
+    int8_t newPos[2] = {static_cast<int8_t>(this->snakeBlocks[0][0]), static_cast<int8_t>(this->snakeBlocks[0][1])};
+    newPos[0] += this->DIR_INFO[this->snakeDir][0];
+    newPos[1] += this->DIR_INFO[this->snakeDir][1];
     if(newPos[0] < 0 || newPos[0] >= BOARD_WIDTH || newPos[1] < 0 || newPos[1] >= BOARD_HEIGHT || this->checkSnakeLoop()) {
         this->gameState = LOST;
         return;
@@ -59,9 +59,9 @@ void SnakeScreen::moveSnake() {
 }
 
 void SnakeScreen::update() {
-    uint16_t timeDiff = to_ms_since_boot(get_absolute_time()) - this->lastUpdate;
+    uint16_t timeDiff = TimeSinceBoot - this->lastUpdate;
     if(this->gameState == PLAYING && timeDiff > 350 - this->gameSpeed*25) {
-        this->lastUpdate = to_ms_since_boot(get_absolute_time());
+        this->lastUpdate = TimeSinceBoot;
         this->moveSnake();
     }
 }

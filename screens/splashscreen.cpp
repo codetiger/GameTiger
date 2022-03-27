@@ -1,8 +1,6 @@
-#include "pico/stdlib.h"
 #include "splashscreen.h"
-#include <math.h>
-#include "content/tiger.h"
-#include "content/font.h"
+#include "../content/tiger.h"
+#include "../content/font.h"
 
 SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
     this->screenId = 0;
@@ -14,7 +12,7 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highs
     this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);
     this->tiger->setAlpha(this->imageAlpha);
     this->font->setAlpha(this->imageAlpha);
-    this->startTime = to_ms_since_boot(get_absolute_time());
+    this->startTime = TimeSinceBoot;
 }
 
 SplashScreen::~SplashScreen() {
@@ -29,7 +27,7 @@ void SplashScreen::update() {
         this->imageAlpha += 15;
     this->tiger->setAlpha(this->imageAlpha);
     this->font->setAlpha(this->imageAlpha);
-    uint8_t timeDiffSec = (to_ms_since_boot(get_absolute_time()) - this->startTime) / 1000;
+    uint8_t timeDiffSec = (TimeSinceBoot - this->startTime) / CLOCKS_PER_SEC;
     if(timeDiffSec > 3)
         this->returnCallBack(-1);
 }

@@ -1,26 +1,42 @@
 cmake_minimum_required(VERSION 3.12)
 
-include(pico_sdk_import.cmake)
+if(FORCPU)
+    set(CMAKE_CXX_STANDARD 11)
+    find_package(SDL2 REQUIRED)
+    # find_library(SDL2_LIBRARY NAME SDL2)
+else(FORCPU)
+    add_definitions ( -DFORMPU=1 )
+    include(pico_sdk_import.cmake)    
+endif(FORCPU)
+
 
 project(GameTiger VERSION 1.0.0)
  
-add_executable(GameTiger 
+add_executable(${PROJECT_NAME} 
     core/display.cpp
     core/image.cpp
     core/battery.cpp
     core/keyboard.cpp
     content/font.cpp
-    splashscreen.cpp
-    menuscreen.cpp
-    snakescreen.cpp
-    g2048screen.cpp
+    screens/splashscreen.cpp
+    screens/menuscreen.cpp
+    screens/snakescreen.cpp
+    screens/g2048screen.cpp
     main.cpp
 )
 
-target_link_libraries(GameTiger pico_stdlib hardware_spi hardware_pwm hardware_adc hardware_dma hardware_flash hardware_sync)
+if(FORCPU)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
+else(FORCPU)
+    target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_spi hardware_pwm hardware_adc hardware_dma hardware_flash hardware_sync)
+endif(FORCPU)
 
-pico_sdk_init()
-pico_enable_stdio_usb(GameTiger 1)
-pico_enable_stdio_uart(GameTiger 1)
+if(FORCPU)
+else(FORCPU)
+    pico_sdk_init()
+    pico_enable_stdio_usb(${PROJECT_NAME} 1)
+    pico_enable_stdio_uart(${PROJECT_NAME} 1)
 
-pico_add_extra_outputs(GameTiger)
+    pico_add_extra_outputs(${PROJECT_NAME})
+endif(FORCPU)

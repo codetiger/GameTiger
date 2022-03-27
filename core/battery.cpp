@@ -4,6 +4,7 @@
 #include <algorithm>
 
 Battery::Battery(/* args */) {
+#ifdef FORMPU
     this->lastCachedTime = to_ms_since_boot(get_absolute_time()) - 12000;
     gpio_init(POWER_PIN);
     gpio_set_dir(POWER_PIN, GPIO_IN);
@@ -12,10 +13,12 @@ Battery::Battery(/* args */) {
     adc_init();
     adc_gpio_init(VSYS_PIN);
     adc_select_input(3);
+#endif
 }
 
 uint8_t Battery::getLevel() {
-    uint8_t timeDiffSec = (to_ms_since_boot(get_absolute_time()) - this->lastCachedTime) / 1000;
+#ifdef FORMPU
+    uint8_t timeDiffSec = (to_ms_since_boot(get_absolute_time()) - this->lastCachedTime) / CLOCKS_PER_SEC;
     if(timeDiffSec > 10) {
         adc_select_input(3);
         float voltage = adc_read() * 3 * 3.3f / (1 << 12);
@@ -23,12 +26,16 @@ uint8_t Battery::getLevel() {
         this->levelCached = std::max(std::min((uint8_t)100, percentage), (uint8_t)0);
         this->lastCachedTime = to_ms_since_boot(get_absolute_time());
     }
-
+#endif
     return this->levelCached;
 }
 
 bool Battery::isCharging() {
+#ifdef FORMPU
     return gpio_get(POWER_PIN);
+#else
+    return false;
+#endif
 }
 
 void Battery::drawLevel(Display* display) {

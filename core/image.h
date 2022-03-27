@@ -1,7 +1,5 @@
-#include "pico/stdlib.h"
+#include "common.h"
 #include "display.h"
-#include <map>
-#include <string>
 
 #ifndef _GAME_TIGER_IMAGE_H
 #define _GAME_TIGER_IMAGE_H

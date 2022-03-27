@@ -1,4 +1,4 @@
-#include "pico/stdlib.h"
+#include "common.h"
 
 #ifndef _GAME_TIGER_COLOR_H
 #define _GAME_TIGER_COLOR_H

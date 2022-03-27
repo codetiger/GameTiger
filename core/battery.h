@@ -1,6 +1,4 @@
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
-#include "hardware/adc.h"
+#include "common.h"
 #include "display.h"
 
 class Battery {

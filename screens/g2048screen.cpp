@@ -1,9 +1,5 @@
-#include "pico/stdlib.h"
-#include <math.h>
-#include <algorithm>
 #include "g2048screen.h"
-#include "content/font.h"
-#include <string> 
+#include "../content/font.h"
 
 /* Board move/combine code is copied from https://github.com/yerzhan7/2048/blob/master/2048/game.cpp */
 

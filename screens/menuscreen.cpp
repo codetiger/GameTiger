@@ -1,10 +1,9 @@
-#include "pico/stdlib.h"
 #include "menuscreen.h"
-#include "content/font.h"
-#include "content/snake.h"
-#include "content/tetris.h"
-#include "content/g2048.h"
-#include "core/keyboard.h"
+#include "../content/font.h"
+#include "../content/snake.h"
+#include "../content/tetris.h"
+#include "../content/g2048.h"
+#include "../core/keyboard.h"
 
 MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
     this->screenId = 1;

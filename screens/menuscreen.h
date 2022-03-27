@@ -1,7 +1,6 @@
-#include "pico/stdlib.h"
-#include "core/screen.h"
-#include "core/image.h"
-#include <string>
+#include "../core/common.h"
+#include "../core/screen.h"
+#include "../core/image.h"
 
 class MenuScreen : public Screen
 {

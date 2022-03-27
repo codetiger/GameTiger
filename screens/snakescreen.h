@@ -1,7 +1,7 @@
-#include "pico/stdlib.h"
-#include "core/screen.h"
-#include "core/image.h"
-#include "core/keyboard.h"
+#include "../core/common.h"
+#include "../core/screen.h"
+#include "../core/image.h"
+#include "../core/keyboard.h"
 #include <map>
 #include <vector>
 
