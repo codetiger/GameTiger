@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
     sleep_ms(3000);
     #endif
 
+    srand((unsigned int)time(0));
     readHighScoreData(); 
     Display *display = new Display();
     display->clear(Color(255, 255, 255));

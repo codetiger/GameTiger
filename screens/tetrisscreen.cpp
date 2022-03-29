@@ -16,7 +16,6 @@ TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highs
     this->font2 = new Image(font2_img_width, font2_img_height, font2_color_count, (uint8_t*)font2_palette, (uint8_t*)font2_pixel_data, font2_sprite_data);
     this->gameOver = new Image(gameover_img_width, gameover_img_height, gameover_color_count, (uint8_t*)gameover_palette, (uint8_t*)gameover_pixel_data);
 
-    srand((unsigned int)time(0));
     this->lastUpdate = getTime();
     createNewBlock();
     createNewBlock();
