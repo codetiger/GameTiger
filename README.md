@@ -87,6 +87,18 @@ The software is well optimised to achieve a target of 30 frames per second. The 
 
 ## Current State
 
+### Snake Game
+![Snake Game GameTiger Console](/docs/snake.png)
+
+### 2048 Game
+![2048 Game GameTiger Console](/docs/2048.png)
+
+### Tetris Game
+![Tetris Game GameTiger Console](/docs/tetris.png)
+
+### Minesweeper Game
+![Minesweeper Game GameTiger Console](/docs/minesweeper.png)
+
 [![GameTiger Console](https://img.youtube.com/vi/edIZAm9zVC8/0.jpg)](https://youtu.be/edIZAm9zVC8)
 
 
