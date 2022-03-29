@@ -9,11 +9,11 @@ private:
     Image *menuItemLogo[5];
     const uint8_t menuCount = 5;
     const std::string menuItemNames[5] = {
-        "SNAKE ", 
-        " 2048 ",
+        "SNAKE", 
+        "2048",
         "TETRIS",
-        " ONE  ",
-        " TWO  "
+        "MINESWEEPER",
+        "EMPTY"
     };
     uint8_t selectedMenuItem, currentMenuItem, animationCounter;
     bool isAnimating;

@@ -2,13 +2,14 @@ import struct
 from PIL import Image
 from collections import defaultdict
 
-color_count = 16
-image_name = "g2048"
+color_count = 32
+image_name = "sweeper"
 
 im = Image.open(image_name + '.png').convert('RGBA')
 # im = im.resize((70,28), Image.NEAREST)
 im = im.convert('P', palette=Image.ADAPTIVE, colors=color_count)
 im = im.convert('RGBA')
+im.save(image_name + '2.png')
 
 image_width = im.size[0]
 image_height = im.size[1]
@@ -32,9 +33,9 @@ color_count = len(palette)
 
 print ("Image Width:%d Height:%d Color Count:%d" % (image_width, image_height, color_count))
 file = open(image_name + '.h', "w")
-file.write("uint16_t " + image_name + "_img_width = " + str(image_width) + ";\n")
-file.write("uint16_t " + image_name + "_img_height = " + str(image_height) + ";\n")
-file.write("uint16_t " + image_name + "_color_count = " + str(color_count) + ";\n\n")
+file.write("const uint16_t " + image_name + "_img_width = " + str(image_width) + ";\n")
+file.write("const uint16_t " + image_name + "_img_height = " + str(image_height) + ";\n")
+file.write("const uint16_t " + image_name + "_color_count = " + str(color_count) + ";\n\n")
 
 file.write(paletteStr)
 file.write(pixelStr)

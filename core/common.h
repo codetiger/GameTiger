@@ -40,6 +40,8 @@
 #include "../content/snake.h"
 #include "../content/tetris.h"
 #include "../content/g2048.h"
+#include "../content/mine.h"
+#include "../content/sweeper.h"
 #include "../content/gameover.h"
 
 enum GameState {WAITING, PLAYING, LOST};
