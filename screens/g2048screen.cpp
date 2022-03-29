@@ -1,5 +1,4 @@
 #include "g2048screen.h"
-#include "../content/font.h"
 
 /* Board move/combine code is copied from https://github.com/yerzhan7/2048/blob/master/2048/game.cpp */
 
@@ -156,7 +155,7 @@ void G2048Screen::combine(bool& valid_step) {
     }
 }
 
-void G2048Screen::update() {
+void G2048Screen::update(uint16_t deltaTimeMS) {
     if(this->direction != -1) {
         bool valid_step = false;
         move(valid_step);

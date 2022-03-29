@@ -9,12 +9,12 @@ private:
     int8_t tileMoveY = 0;
     Image *tiger, *font;
     uint8_t imageAlpha = 0;
-    timetype startTime;
+    uint16_t totalDuration, accDeltaTimeMS;
 public:
     SplashScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
     ~SplashScreen();
 
-    void update();
+    void update(uint16_t deltaTimeMS);
     void draw(Display *display);
     void keyPressed(uint8_t key);
     void keyReleased(uint8_t key);

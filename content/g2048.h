@@ -1,6 +1,6 @@
-uint16_t g2048_img_width = 96;
-uint16_t g2048_img_height = 96;
-uint16_t g2048_color_count = 16;
+const uint16_t g2048_img_width = 96;
+const uint16_t g2048_img_height = 96;
+const uint16_t g2048_color_count = 16;
 
 const uint8_t g2048_palette[] = {
  0x0, 0x0, 0x0, 0x0,

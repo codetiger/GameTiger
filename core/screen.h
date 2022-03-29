@@ -11,7 +11,7 @@ protected:
     void (*returnCallBack)(int8_t menu);
     void (*highScoreCallBack)(uint32_t highscore);
 public:
-    virtual void update() = 0;
+    virtual void update(uint16_t deltaTimeMS) = 0;
     virtual void draw(Display *display) = 0;
     virtual void keyPressed(uint8_t key) = 0;
     virtual void keyReleased(uint8_t key) = 0;

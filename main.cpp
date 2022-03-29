@@ -14,13 +14,6 @@
 Screen *screen;
 uint32_t highscores[HIGHSCORESIZE];
 
-uint16_t printDuration(timetype *start) {
-    uint16_t timeDiff = getTimeDiffMS(*start);
-    // printf("FPS: %d Timetaken: %d\n", CLOCKS_PER_SEC / timeDiff, timeDiff);
-    *start = getTime();
-    return timeDiff;
-}
-
 void highScoreHandler(uint32_t highscore) {
     highscores[0] = 64;highscores[1] = 128;
     highscores[screen->screenId] = highscore;
@@ -62,25 +55,23 @@ int main(int argc, char *argv[]) {
     #ifdef FORMPU
     stdio_init_all();
     sleep_ms(3000);
-    const uint LED_PIN = PICO_DEFAULT_LED_PIN;
-    gpio_init(LED_PIN);
-    gpio_set_dir(LED_PIN, GPIO_OUT);
     #endif
 
     readHighScoreData(); 
     Display *display = new Display();
     display->clear(Color(255, 255, 255));
 
-    screen = new SplashScreen(*backHandler, *highScoreHandler, 0);
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();
+    screen = new SplashScreen(*backHandler, *highScoreHandler, 0);
 
-    timetype start = getTime();
+    timetype lastUpdate = getTime();
     bool close = false;
     while (!close) {
-        uint16_t duration = printDuration(&start);
-        // gpio_xor_mask(1<<LED_PIN);
-        screen->update();
+        uint16_t deltaTimeMS = getTimeDiffMS(lastUpdate);
+        lastUpdate = getTime();
+
+        screen->update(deltaTimeMS);
         keyboard->checkKeyState(screen);
 
         screen->draw(display);

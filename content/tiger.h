@@ -1,6 +1,6 @@
-uint16_t tiger_img_width = 128;
-uint16_t tiger_img_height = 128;
-uint16_t tiger_color_count = 64;
+const uint16_t tiger_img_width = 128;
+const uint16_t tiger_img_height = 128;
+const uint16_t tiger_color_count = 64;
 
 const uint8_t tiger_palette[] = {
  0x0, 0x0, 0x0, 0x0,

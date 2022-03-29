@@ -1,6 +1,4 @@
 #include "snakescreen.h"
-#include "../content/font2.h"
-#include "../content/gameover.h"
 
 SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t hs) {
     this->screenId = 2;
@@ -58,7 +56,7 @@ void SnakeScreen::moveSnake() {
     }
 }
 
-void SnakeScreen::update() {
+void SnakeScreen::update(uint16_t deltaTimeMS) {
     uint16_t timeDiff = getTimeDiffMS(this->lastUpdate);
     if(this->gameState == PLAYING && timeDiff > 350 - this->gameSpeed*25) {
         this->lastUpdate = getTime();

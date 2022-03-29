@@ -191,14 +191,12 @@ void Display::clear(Color c) {
 #define div_255_fast(x)    (((x) + (((x) + 257) >> 8)) >> 8)
 
 void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
-    if (x < 0 || x >= this->width || y < 0 || y >= this->height)
+    if (x < 0 || x >= this->width || y < 0 || y >= this->height || alpha == 0)
         return;
     
     int index = (y * this->width) + x;
-    alpha = (alpha & 0xc0) | (alpha | 0x3f);
-    if(alpha > 192) {
+    if(alpha > 250) {
         this->buffer[index] = c;
-    } else if(alpha < 64) {
     } else {
         uint8_t ralpha = 255 - alpha;
         this->buffer[index].red = div_255_fast(c.red * alpha + this->buffer[index].red * ralpha);

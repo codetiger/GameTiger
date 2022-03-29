@@ -18,8 +18,6 @@ add_executable(${PROJECT_NAME}
     core/image.cpp
     core/battery.cpp
     core/keyboard.cpp
-    content/font.cpp
-    content/font2.cpp
     screens/splashscreen.cpp
     screens/menuscreen.cpp
     screens/snakescreen.cpp

@@ -1,5 +1,4 @@
 #include "tetrisscreen.h"
-#include "../content/font2.h"
 
 TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t hs) {
     this->screenId = 4;
@@ -15,6 +14,7 @@ TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highs
 
     gameState = WAITING;
     this->font2 = new Image(font2_img_width, font2_img_height, font2_color_count, (uint8_t*)font2_palette, (uint8_t*)font2_pixel_data, font2_sprite_data);
+    this->gameOver = new Image(gameover_img_width, gameover_img_height, gameover_color_count, (uint8_t*)gameover_palette, (uint8_t*)gameover_pixel_data);
 
     srand((unsigned int)time(0));
     this->lastUpdate = getTime();
@@ -27,7 +27,7 @@ TetrisScreen::~TetrisScreen() {
 
 }
 
-void TetrisScreen::update() {
+void TetrisScreen::update(uint16_t deltaTimeMS) {
     uint16_t timeDiff = getTimeDiffMS(this->lastUpdate);
     if(this->gameState == PLAYING && timeDiff > 750 - this->gameSpeed*25) {
         this->lastUpdate = getTime();
@@ -40,10 +40,13 @@ void TetrisScreen::update() {
                         board[(r + currentBlockY) * BOARD_WIDTH + (c + currentBlockX)] = (uint8_t)currentBlock.type;
             
             checkColFull();
-            createNewBlock();
+            if(isGameOver())
+                gameState = LOST;
+            else
+                createNewBlock();
         }
     }
-    printBoard();
+    // printBoard();
 }
 
 void TetrisScreen::draw(Display *display) {
@@ -61,13 +64,16 @@ void TetrisScreen::draw(Display *display) {
                 display->fillRect(50+12*c, 12*r, 11, 11, blockColors[cellValue]);
         }
     }
-    this->font2->drawSprites(display, std::to_string(this->score), 240, 220);
+    this->font2->drawSprites(display, std::to_string(this->score), 240, 200);
 
-    display->fillRect(240, 40, 70, 70, Color(146, 130, 115));
+    display->fillRect(220, 30, 70, 70, Color(146, 130, 115));
     for (int r = 0; r < BLOCK_SIZE; r++)
         for (int c = 0; c < BLOCK_SIZE; c++)
             if(nextBlock.cells[r * BLOCK_SIZE + c])
-                display->fillRect(250+12*c, 50+12*r, 11, 11, blockColors[nextBlock.type]);
+                display->fillRect(235+12*c, 45+12*r, 11, 11, blockColors[nextBlock.type]);
+
+    if(this->gameState == LOST)
+        this->gameOver->draw(display, 96, 80);
 }
 
 void TetrisScreen::printBoard() {
@@ -89,7 +95,6 @@ void TetrisScreen::createNewBlock() {
     currentBlockY = 0;
     currentBlockX = (BOARD_WIDTH / 2) - 2;
     BLOCKTYPE currentBlockType = static_cast<BLOCKTYPE>(1 + (rand() % totalBlockTypes));
-    printf("New Block: %d\n", currentBlockType);
     currentBlock = nextBlock;
     nextBlock = Block(currentBlockType);
 }
@@ -111,6 +116,14 @@ bool TetrisScreen::canMove(int8_t newPosX, int8_t newPosY, bool rotate) {
     }
 
     return true;
+}
+
+bool TetrisScreen::isGameOver() {
+    for (int c = 0; c < BOARD_WIDTH; c++)
+        if(board[c] != 0)
+            return true;
+
+    return false;
 }
 
 void TetrisScreen::checkColFull() {
@@ -142,20 +155,20 @@ void TetrisScreen::keyPressed(uint8_t key) {
         this->gameState = PLAYING;
         return;
     }
-    if(key == KEY_LEFT) {
-        if (canMove(currentBlockX - 1, currentBlockY, false))
-            currentBlockX--;
-    } else if(key == KEY_DOWN) {
-        if(canMove(currentBlockX, currentBlockY+1, false))
-            this->currentBlockY++;
-    } else if(key == KEY_RIGHT) {
-        if (canMove(currentBlockX + 1, currentBlockY, false))
-            currentBlockX++;
-    } else if(key == KEY_A) {
-        if(canMove(currentBlockX, currentBlockY, true))
-            currentBlock.rotate();
-    } else if(key == KEY_B)
+
+    if(key == KEY_B)
         this->returnCallBack(-1);
+
+    if(this->gameState == PLAYING) {
+        if(key == KEY_LEFT && canMove(currentBlockX - 1, currentBlockY, false))
+            currentBlockX--;
+        else if(key == KEY_RIGHT && canMove(currentBlockX + 1, currentBlockY, false))
+            currentBlockX++;
+        else if(key == KEY_DOWN && canMove(currentBlockX, currentBlockY+1, false))
+            currentBlockY++;
+        else if(key == KEY_A && canMove(currentBlockX, currentBlockY, true))
+            currentBlock.rotate();
+    }
 }
 
 void TetrisScreen::keyReleased(uint8_t key) {

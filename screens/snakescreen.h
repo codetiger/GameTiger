@@ -38,7 +38,7 @@ public:
     SnakeScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
     ~SnakeScreen();
 
-    void update();
+    void update(uint16_t deltaTimeMS);
     void draw(Display *display);
     void keyPressed(uint8_t key);
     void keyReleased(uint8_t key);

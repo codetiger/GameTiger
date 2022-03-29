@@ -18,7 +18,6 @@ enum BLOCKTYPE {
 #define BLOCK_SIZE 4
 #define totalBlockTypes 7
 
-
 struct Block{
     bool cells[16];
     uint8_t size;
@@ -146,7 +145,7 @@ private:
     uint16_t score = 0;
 
     timetype lastUpdate;
-    Image *font2;
+    Image *font2, *gameOver;
 
     int8_t currentBlockX, currentBlockY;
     Color blockColors[8] = {
@@ -168,15 +167,14 @@ private:
     void printBoard();
 
     void checkColFull();
-    void checkGameOver();
+    bool isGameOver();
 public:
     TetrisScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
     ~TetrisScreen();
 
-    void update();
+    void update(uint16_t deltaTimeMS);
     void draw(Display *display);
     void keyPressed(uint8_t key);
     void keyReleased(uint8_t key);
     void keyDown(uint8_t key);
-
 };

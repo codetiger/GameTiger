@@ -1,6 +1,6 @@
-uint16_t tetris_img_width = 96;
-uint16_t tetris_img_height = 96;
-uint16_t tetris_color_count = 245;
+const uint16_t tetris_img_width = 96;
+const uint16_t tetris_img_height = 96;
+const uint16_t tetris_color_count = 245;
 
 const uint8_t tetris_palette[] = {
  0x0, 0x0, 0x0, 0x0,

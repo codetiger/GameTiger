@@ -1,6 +1,4 @@
 #include "splashscreen.h"
-#include "../content/tiger.h"
-#include "../content/font.h"
 
 SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
     this->screenId = 0;
@@ -12,25 +10,29 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highs
     this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);
     this->tiger->setAlpha(this->imageAlpha);
     this->font->setAlpha(this->imageAlpha);
-    this->startTime = getTime();
+    accDeltaTimeMS = 0;
 }
 
 SplashScreen::~SplashScreen() {
 }
 
-void SplashScreen::update() {
-    this->tileMoveX += 3;
+void SplashScreen::update(uint16_t deltaTimeMS) {
+    totalDuration += deltaTimeMS;
+    if(totalDuration > 3000)
+        this->returnCallBack(-1);
+
+    accDeltaTimeMS += deltaTimeMS;
+    uint8_t frameQuotient = accDeltaTimeMS / 16;
+    accDeltaTimeMS -= 16 * frameQuotient;
+
+    this->tileMoveX += frameQuotient;
     if(this->tileMoveX >= 80)
         this->tileMoveX = 0;
     this->tileMoveY = 40 * sin(this->tileMoveX * 2 * M_PI / 80);
-    if(this->imageAlpha < 255)
-        this->imageAlpha += 15;
+    if(this->imageAlpha < 255 - frameQuotient * 3)
+        this->imageAlpha += frameQuotient * 3;    
     this->tiger->setAlpha(this->imageAlpha);
     this->font->setAlpha(this->imageAlpha);
-    
-    uint8_t timeDiffSec = getTimeDiffMS(this->startTime) / 1000;
-    if(timeDiffSec > 3)
-        this->returnCallBack(-1);
 }
 
 void SplashScreen::draw(Display *display) {

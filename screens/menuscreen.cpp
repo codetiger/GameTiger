@@ -1,8 +1,4 @@
 #include "menuscreen.h"
-#include "../content/font.h"
-#include "../content/snake.h"
-#include "../content/tetris.h"
-#include "../content/g2048.h"
 #include "../core/keyboard.h"
 
 MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
@@ -24,7 +20,7 @@ MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore
 MenuScreen::~MenuScreen() {
 }
 
-void MenuScreen::update() {
+void MenuScreen::update(uint16_t deltaTimeMS) {
     if(this->isAnimating) {
         this->animationCounter += 16;
         if(this->animationCounter > this->menuItemGap) {

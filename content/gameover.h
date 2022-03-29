@@ -1,6 +1,6 @@
-uint16_t gameover_img_width = 128;
-uint16_t gameover_img_height = 75;
-uint16_t gameover_color_count = 16;
+const uint16_t gameover_img_width = 128;
+const uint16_t gameover_img_height = 75;
+const uint16_t gameover_color_count = 16;
 
 const uint8_t gameover_palette[] = {
  0xa, 0x6, 0x5, 0xd,

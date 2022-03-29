@@ -1,6 +1,6 @@
-uint16_t snake_img_width = 96;
-uint16_t snake_img_height = 96;
-uint16_t snake_color_count = 64;
+const uint16_t snake_img_width = 96;
+const uint16_t snake_img_height = 96;
+const uint16_t snake_color_count = 64;
 
 const uint8_t snake_palette[] = {
  0x0, 0x0, 0x0, 0x0,

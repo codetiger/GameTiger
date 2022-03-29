@@ -34,6 +34,14 @@
 #ifndef _GAME_TIGER_COMMON_H
 #define _GAME_TIGER_COMMON_H
 
+#include "../content/font.h"
+#include "../content/font2.h"
+#include "../content/tiger.h"
+#include "../content/snake.h"
+#include "../content/tetris.h"
+#include "../content/g2048.h"
+#include "../content/gameover.h"
+
 enum GameState {WAITING, PLAYING, LOST};
 timetype getTime();
 uint16_t getTimeDiffMS(timetype start);
