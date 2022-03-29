@@ -5,8 +5,6 @@
 #include <map>
 #include <vector>
 
-enum GameState {WAITING, PLAYING, LOST};
-
 class SnakeScreen : public Screen
 {
 private:
@@ -29,7 +27,7 @@ private:
     uint8_t foodPos[2] = {0, 0};
     uint16_t snakeLength = 3;
     uint8_t snakeBlocks[600][2];
-    uint32_t lastUpdate = 0;
+    timetype lastUpdate;
 
     void createNewFood();
     bool checkFoodCaptured();

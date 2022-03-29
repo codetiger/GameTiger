@@ -14,6 +14,23 @@ private:
     int8_t direction;
     Image *font;
 
+    Color colors[12] = {
+        Color(180, 165, 147),
+        Color(233, 221, 209),
+        Color(233, 217, 187),
+        Color(237, 162, 102),
+
+        Color(241, 129, 80),
+        Color(241, 101, 78),
+        Color(240, 70, 45),
+        Color(232, 198, 96),
+
+        Color(231, 195, 80),
+        Color(232, 190, 64),
+        Color(231, 186, 49),
+        Color(231, 182, 36),
+    };
+
     void addRandomBlock();
     void updateBoard();
     void move(bool& valid_step);

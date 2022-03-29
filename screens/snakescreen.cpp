@@ -18,7 +18,7 @@ SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highsco
     this->gameState = WAITING;
     this->createNewFood();
 
-    this->lastUpdate = TimeSinceBoot;
+    this->lastUpdate = getTime();
     this->gameSpeed = 1;
 }
 
@@ -59,9 +59,9 @@ void SnakeScreen::moveSnake() {
 }
 
 void SnakeScreen::update() {
-    uint16_t timeDiff = TimeSinceBoot - this->lastUpdate;
+    uint16_t timeDiff = getTimeDiffMS(this->lastUpdate);
     if(this->gameState == PLAYING && timeDiff > 350 - this->gameSpeed*25) {
-        this->lastUpdate = TimeSinceBoot;
+        this->lastUpdate = getTime();
         this->moveSnake();
     }
 }

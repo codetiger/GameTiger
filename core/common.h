@@ -8,13 +8,15 @@
     #include "hardware/flash.h"
     #include "hardware/sync.h"
 
-    #define TimeSinceBoot to_ms_since_boot(get_absolute_time())
-    #define CLOCKS_PER_SEC 1000
+    #define timetype uint32_t
 #else
     #include <cstdint>
     #include <SDL.h>
+    #include <chrono>
 
-    #define TimeSinceBoot clock()
+    typedef std::chrono::high_resolution_clock Clock;
+    typedef std::chrono::milliseconds milliseconds;
+    #define timetype Clock::time_point
     #define FLASH_PAGE_SIZE (1u << 8)
 #endif
 
@@ -27,3 +29,13 @@
 #include <string> 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
+#ifndef _GAME_TIGER_COMMON_H
+#define _GAME_TIGER_COMMON_H
+
+enum GameState {WAITING, PLAYING, LOST};
+timetype getTime();
+uint16_t getTimeDiffMS(timetype start);
+
+#endif

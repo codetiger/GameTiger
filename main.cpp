@@ -6,6 +6,7 @@
 #include "screens/menuscreen.h"
 #include "screens/snakescreen.h"
 #include "screens/g2048screen.h"
+#include "screens/tetrisscreen.h"
 
 #define HIGHSCORESIZE (FLASH_PAGE_SIZE/4)
 #define FLASH_TARGET_OFFSET (1536 * 1024)
@@ -13,10 +14,10 @@
 Screen *screen;
 uint32_t highscores[HIGHSCORESIZE];
 
-uint16_t printDuration(uint32_t *start) {
-    uint16_t timeDiff = TimeSinceBoot - *start;
+uint16_t printDuration(timetype *start) {
+    uint16_t timeDiff = getTimeDiffMS(*start);
     // printf("FPS: %d Timetaken: %d\n", CLOCKS_PER_SEC / timeDiff, timeDiff);
-    *start = TimeSinceBoot;
+    *start = getTime();
     return timeDiff;
 }
 
@@ -52,6 +53,8 @@ void backHandler(int8_t menu) {
             screen = new SnakeScreen(*backHandler, *highScoreHandler, highscores[2]);
         else if(menu == 1)
             screen = new G2048Screen(*backHandler, *highScoreHandler, highscores[3]);
+        else if(menu == 2)
+            screen = new TetrisScreen(*backHandler, *highScoreHandler, highscores[4]);
     }
 }
 
@@ -72,7 +75,7 @@ int main(int argc, char *argv[]) {
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();
 
-    uint32_t start = TimeSinceBoot;
+    timetype start = getTime();
     bool close = false;
     while (!close) {
         uint16_t duration = printDuration(&start);

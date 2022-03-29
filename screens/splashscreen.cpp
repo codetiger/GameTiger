@@ -12,7 +12,7 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highs
     this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);
     this->tiger->setAlpha(this->imageAlpha);
     this->font->setAlpha(this->imageAlpha);
-    this->startTime = TimeSinceBoot;
+    this->startTime = getTime();
 }
 
 SplashScreen::~SplashScreen() {
@@ -27,7 +27,8 @@ void SplashScreen::update() {
         this->imageAlpha += 15;
     this->tiger->setAlpha(this->imageAlpha);
     this->font->setAlpha(this->imageAlpha);
-    uint8_t timeDiffSec = (TimeSinceBoot - this->startTime) / CLOCKS_PER_SEC;
+    
+    uint8_t timeDiffSec = getTimeDiffMS(this->startTime) / 1000;
     if(timeDiffSec > 3)
         this->returnCallBack(-1);
 }

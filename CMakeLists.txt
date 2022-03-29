@@ -13,15 +13,18 @@ endif(FORCPU)
 project(GameTiger VERSION 1.0.0)
  
 add_executable(${PROJECT_NAME} 
+    core/common.cpp
     core/display.cpp
     core/image.cpp
     core/battery.cpp
     core/keyboard.cpp
     content/font.cpp
+    content/font2.cpp
     screens/splashscreen.cpp
     screens/menuscreen.cpp
     screens/snakescreen.cpp
     screens/g2048screen.cpp
+    screens/tetrisscreen.cpp
     main.cpp
 )
 

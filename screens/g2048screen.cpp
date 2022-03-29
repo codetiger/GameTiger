@@ -181,11 +181,11 @@ void G2048Screen::printBoard() {
 }
 
 void G2048Screen::draw(Display *display) {
-    display->clear(Color(170, 170, 170));
+    display->clear(Color(156, 140, 125));
     for (uint8_t i = 0; i < BOARDSIZE; i++) {
         for (uint8_t j = 0; j < BOARDSIZE; j++) {
-            display->fillRect(8 + 80*j, 8 + 60*i, 70, 50, Color(255-(board[i*BOARDSIZE+j]+1)*16, 96, 96));
-            display->fillRect(5 + 80*j, 5 + 60*i, 70, 50, Color(255-board[i*BOARDSIZE+j]*16, 96, 96));
+            Color c = board[i*BOARDSIZE+j] < 12 ? colors[board[i*BOARDSIZE+j]] : Color(32, 32, 32);
+            display->fillRect(5 + 80*j, 5 + 60*i, 70, 50, c);
             if (board[i*BOARDSIZE+j]) {
                 std::string str = std::to_string((uint16_t)pow(2, board[i*BOARDSIZE+j]));
                 uint16_t width = this->font->getWidth(str);
