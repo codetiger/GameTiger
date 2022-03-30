@@ -11,6 +11,7 @@ private:
     uint8_t highestValue = 2;
     uint32_t score;
     int8_t direction;
+    GameState gameState;
 
     Color colors[12] = {
         Color(180, 165, 147),
@@ -33,6 +34,7 @@ private:
     void updateBoard();
     void move(bool& valid_step);
     void combine(bool& valid_step);
+    bool checkGameOver();
     void printBoard();
 public:
     G2048Screen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);

@@ -11,6 +11,7 @@ G2048Screen::G2048Screen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highsco
     this->highestValue = 2;
     this->score = 0;
     this->direction = -1;
+    this->gameState = PLAYING;
 
     for (uint8_t i = 0; i < BOARDSIZE*BOARDSIZE; i++)
         board[i] = 0;
@@ -164,6 +165,8 @@ void G2048Screen::update(uint16_t deltaTimeMS) {
         if(valid_step) {
             move(valid_step);
             this->addRandomBlock();
+            if(checkGameOver())
+                this->gameState = LOST;
         }
         this->direction = -1;
         // printBoard();
@@ -193,6 +196,30 @@ void G2048Screen::draw(Display *display) {
             }
         }
     }
+
+    if(this->gameState == LOST)
+        gameOver.draw(display, 96, 80);
+}
+
+bool G2048Screen::checkGameOver() {
+    bool isGameOver = true;
+    for(int i = 0; i < BOARDSIZE; i++) {
+        for(int j = 0; j < BOARDSIZE-1; j++) {
+            if(board[i*BOARDSIZE+j] == 0 || board[i*BOARDSIZE+j+1] == 0 || board[i*BOARDSIZE+j] == board[i*BOARDSIZE+j+1]) {
+                isGameOver = 0;
+                break;
+            }
+        }
+    }
+    for(int j = 0; j < BOARDSIZE; j++) {
+        for(int i = 0; i < BOARDSIZE-1; i++) {
+            if(board[i*BOARDSIZE+j] == 0 || board[(i+1)*BOARDSIZE+j] == 0 || board[i*BOARDSIZE+j] == board[(i+1)*BOARDSIZE+j]){
+                isGameOver = 0;
+                break;
+            }
+        }
+    }
+    return isGameOver;
 }
 
 void G2048Screen::keyPressed(uint8_t key) {
