@@ -1,29 +1,32 @@
 #include "splashscreen.h"
 
 SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+    printf("Splash screen loading...");
     this->screenId = 0;
     this->type = Type::SPLASH;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
     this->imageAlpha = 0;
-    this->tiger = new Image(tiger_img_width, tiger_img_height, tiger_color_count, (uint8_t*)tiger_palette, (uint8_t*)tiger_pixel_data);
-    this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);
-    this->tiger->setAlpha(this->imageAlpha);
-    this->font->setAlpha(this->imageAlpha);
-    accDeltaTimeMS = 0;
+    tiger.setAlpha(this->imageAlpha);
+    font.setAlpha(this->imageAlpha);
+    this->accDeltaTimeMS = 0;
+    this->totalDuration = 0;
+    printf("Done\n");
 }
 
 SplashScreen::~SplashScreen() {
 }
 
 void SplashScreen::update(uint16_t deltaTimeMS) {
-    totalDuration += deltaTimeMS;
-    if(totalDuration > 3000)
+    this->totalDuration += deltaTimeMS;
+    if(this->totalDuration > 3000) {
         this->returnCallBack(-1);
+        return;
+    }
 
-    accDeltaTimeMS += deltaTimeMS;
+    this->accDeltaTimeMS += deltaTimeMS;
     uint8_t frameQuotient = accDeltaTimeMS / 16;
-    accDeltaTimeMS -= 16 * frameQuotient;
+    this->accDeltaTimeMS -= 16 * frameQuotient;
 
     this->tileMoveX += frameQuotient;
     if(this->tileMoveX >= 80)
@@ -31,8 +34,8 @@ void SplashScreen::update(uint16_t deltaTimeMS) {
     this->tileMoveY = 40 * sin(this->tileMoveX * 2 * M_PI / 80);
     if(this->imageAlpha < 255 - frameQuotient * 3)
         this->imageAlpha += frameQuotient * 3;    
-    this->tiger->setAlpha(this->imageAlpha);
-    this->font->setAlpha(this->imageAlpha);
+    tiger.setAlpha(this->imageAlpha);
+    font.setAlpha(this->imageAlpha);
 }
 
 void SplashScreen::draw(Display *display) {
@@ -45,8 +48,8 @@ void SplashScreen::draw(Display *display) {
         }
         colorFlip = !colorFlip;
     }
-    this->tiger->draw(display, 92, 56);
-    this->font->drawSprites(display, "GAMETIGER", 98, 190);
+    tiger.draw(display, 92, 56);
+    font.drawSprites(display, "GAMETIGER", 98, 190);
 }
 
 void SplashScreen::keyPressed(uint8_t key) {

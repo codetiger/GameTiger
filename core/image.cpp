@@ -24,13 +24,10 @@ void Image::setAlpha(uint8_t a) {
 }
 
 void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t spriteX, uint16_t spriteY, uint16_t spriteWidth, uint16_t spriteHeight) {
-    if(this->alpha == 0)
-        return;
-
     spriteWidth = (spriteWidth == 0) ? this->width : spriteWidth;
     spriteHeight = (spriteHeight == 0) ? this->height : spriteHeight;
 
-    if(screenX+spriteWidth <= 0 || screenX > display->width || screenY+spriteHeight <= 0 || screenY > display->height)
+    if(this->alpha == 0 || screenX+spriteWidth <= 0 || screenX >= display->width || screenY+spriteHeight <= 0 || screenY >= display->height)
         return;
 
     for (int y = 0; y < spriteHeight; y++) {
@@ -40,10 +37,12 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
 
             int pixIndex = (y+spriteY) * this->width + (x+spriteX);
             int colIndex = this->pixelData[pixIndex] * 4;
-            Color c = Color(this->palette[colIndex], this->palette[colIndex+1], this->palette[colIndex+2]);
-            uint8_t alpha = std::min(this->palette[colIndex+3], this->alpha);
-            if(alpha > 0)
+            uint8_t alpha = this->palette[colIndex+3];
+            if(alpha > 0) {
+                Color c = Color(this->palette[colIndex], this->palette[colIndex+1], this->palette[colIndex+2]);
+                alpha = alpha > this->alpha ? this->alpha : alpha;
                 display->setPixel(x+screenX, y+screenY, c, alpha);
+            }
         }
     }
 }
@@ -71,9 +70,4 @@ uint16_t Image::getWidth(std::string indices) {
     for(char& index : indices)
         width += this->spriteData[index][2] - 1;
     return width;
-}
-
-Image::~Image() {
-    delete[] this->palette;
-    delete[] this->pixelData;
 }

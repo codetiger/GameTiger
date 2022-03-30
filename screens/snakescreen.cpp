@@ -1,13 +1,12 @@
 #include "snakescreen.h"
 
 SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t hs) {
+    printf("Snake screen loading...");
     this->screenId = 2;
     this->type = Type::GAME;
     this->highScore = hs;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
-    this->font2 = new Image(font2_img_width, font2_img_height, font2_color_count, (uint8_t*)font2_palette, (uint8_t*)font2_pixel_data, font2_sprite_data);
-    this->gameOver = new Image(gameover_img_width, gameover_img_height, gameover_color_count, (uint8_t*)gameover_palette, (uint8_t*)gameover_pixel_data);
 
     this->snakeBlocks[0][0] = 15, this->snakeBlocks[0][1] = 12;
     this->snakeBlocks[1][0] = 14, this->snakeBlocks[1][1] = 12;
@@ -18,6 +17,7 @@ SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highsco
 
     this->lastUpdate = getTime();
     this->gameSpeed = 1;
+    printf("Done\n");
 }
 
 SnakeScreen::~SnakeScreen() {
@@ -90,10 +90,10 @@ void SnakeScreen::draw(Display *display) {
         this->drawBlock(display, 10 + this->snakeBlocks[i][0]*10, 30 + this->snakeBlocks[i][1]*10);
 
     this->drawBlock(display, 10 + this->foodPos[0]*10, 30 + this->foodPos[1]*10);
-    this->font2->drawSprites(display, std::to_string(this->snakeLength-3), 200, 8);
-    this->font2->drawSprites(display, std::to_string(this->highScore), 12, 8);
+    font2.drawSprites(display, std::to_string(this->snakeLength-3), 200, 8);
+    font2.drawSprites(display, std::to_string(this->highScore), 12, 8);
     if(this->gameState == LOST)
-        this->gameOver->draw(display, 96, 80);
+        gameOver.draw(display, 96, 80);
 }
 
 void SnakeScreen::keyPressed(uint8_t key) {

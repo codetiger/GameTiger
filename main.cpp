@@ -40,7 +40,7 @@ void readHighScoreData() {
 void backHandler(int8_t menu) {
     if(screen->type == Type::SPLASH || screen->type == Type::GAME) {
         delete screen;
-        screen = new MenuScreen(*backHandler, *highScoreHandler, 0);
+        screen = new MenuScreen(*backHandler, *highScoreHandler, menu);
     } else if(screen->type == Type::MENU) {
         delete screen;
         if(menu == 0)
@@ -77,8 +77,8 @@ int main(int argc, char *argv[]) {
 
         screen->update(deltaTimeMS);
         keyboard->checkKeyState(screen);
-
         screen->draw(display);
+
         battery->drawLevel(display);
         display->update();
     }

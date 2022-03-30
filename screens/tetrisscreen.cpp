@@ -1,6 +1,7 @@
 #include "tetrisscreen.h"
 
 TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t hs) {
+    printf("Tetris screen loading...");
     this->screenId = 4;
     this->type = Type::GAME;
     this->highScore = hs;
@@ -13,13 +14,12 @@ TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highs
             this->board[i * BOARD_WIDTH + j] = 0;
 
     gameState = WAITING;
-    this->font2 = new Image(font2_img_width, font2_img_height, font2_color_count, (uint8_t*)font2_palette, (uint8_t*)font2_pixel_data, font2_sprite_data);
-    this->gameOver = new Image(gameover_img_width, gameover_img_height, gameover_color_count, (uint8_t*)gameover_palette, (uint8_t*)gameover_pixel_data);
 
     this->lastUpdate = getTime();
     createNewBlock();
     createNewBlock();
     createNewBlock();
+    printf("Done\n");
 }
 
 TetrisScreen::~TetrisScreen() {
@@ -63,7 +63,7 @@ void TetrisScreen::draw(Display *display) {
                 display->fillRect(50+12*c, 12*r, 11, 11, blockColors[cellValue]);
         }
     }
-    this->font2->drawSprites(display, std::to_string(this->score), 240, 200);
+    font2.drawSprites(display, std::to_string(this->score), 240, 200);
 
     display->fillRect(220, 30, 70, 70, Color(146, 130, 115));
     for (int r = 0; r < BLOCK_SIZE; r++)
@@ -72,7 +72,7 @@ void TetrisScreen::draw(Display *display) {
                 display->fillRect(235+12*c, 45+12*r, 11, 11, blockColors[nextBlock.type]);
 
     if(this->gameState == LOST)
-        this->gameOver->draw(display, 96, 80);
+        gameOver.draw(display, 96, 80);
 }
 
 void TetrisScreen::printBoard() {

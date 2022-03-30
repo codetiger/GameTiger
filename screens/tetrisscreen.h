@@ -1,6 +1,5 @@
 #include "../core/common.h"
 #include "../core/screen.h"
-#include "../core/image.h"
 #include "../core/keyboard.h"
 
 enum BLOCKTYPE {
@@ -145,7 +144,6 @@ private:
     uint16_t score = 0;
 
     timetype lastUpdate;
-    Image *font2, *gameOver;
 
     int8_t currentBlockX, currentBlockY;
     Color blockColors[8] = {

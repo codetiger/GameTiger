@@ -1,6 +1,7 @@
 #include "keyboard.h"
 
 KeyBoard::KeyBoard() {
+    printf("Keyboard driver loading...");
 #ifdef FORMPU
     for (int i = 0; i < 6; i++) {
         this->prevKeyState[i] = false;
@@ -9,6 +10,7 @@ KeyBoard::KeyBoard() {
         gpio_pull_down(this->gpioPins[i]);
     }
 #endif
+    printf("Done\n");
 }
 
 KeyBoard::~KeyBoard() {

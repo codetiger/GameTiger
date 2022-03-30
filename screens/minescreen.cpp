@@ -1,6 +1,7 @@
 #include "minescreen.h"
 
 MineScreen::MineScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+    printf("MineSweeper screen loading...");
     this->screenId = 5;
     this->type = Type::GAME;
     this->returnCallBack = rcb;
@@ -8,12 +9,11 @@ MineScreen::MineScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore
 
     this->selectedX = 0;
     this->selectedY = 0;
-    this->sweeper = new Image(sweeper_img_width, sweeper_img_height, sweeper_color_count, (uint8_t*)sweeper_palette, (uint8_t*)sweeper_pixel_data, sweeper_sprite_data);
-    this->gameOver = new Image(gameover_img_width, gameover_img_height, gameover_color_count, (uint8_t*)gameover_palette, (uint8_t*)gameover_pixel_data);
     this->gameState = PLAYING;
 
     resetBoard();
-    printBoard();
+    // printBoard();
+    printf("Done\n");
 }
 
 MineScreen::~MineScreen() {
@@ -28,22 +28,22 @@ void MineScreen::draw(Display *display) {
     for (int y = 0; y < MINE_BOARD_HEIGHT; y++) {
         for (int x = 0; x < MINE_BOARD_WIDTH; x++) {
             if(state[y*MINE_BOARD_WIDTH+x] == CLOSE)
-                this->sweeper->drawSprite(display, 'a', x*16, y*16);
+                sweeper.drawSprite(display, 'a', x*16, y*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == FLAG)
-                this->sweeper->drawSprite(display, 'c', x*16, y*16);
+                sweeper.drawSprite(display, 'c', x*16, y*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == DOUBT)
-                this->sweeper->drawSprite(display, 'e', x*16, y*16);
+                sweeper.drawSprite(display, 'e', x*16, y*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == OPEN) {
                 if(board[y*MINE_BOARD_WIDTH+x] >= 0 && board[y*MINE_BOARD_WIDTH+x] <= 8)
-                    this->sweeper->drawSprite(display, '0'+board[y*MINE_BOARD_WIDTH+x], x*16, y*16);
+                    sweeper.drawSprite(display, '0'+board[y*MINE_BOARD_WIDTH+x], x*16, y*16);
                 else if(board[y*MINE_BOARD_WIDTH+x] == 9)
-                    this->sweeper->drawSprite(display, 'b', x*16, y*16);
+                    sweeper.drawSprite(display, 'b', x*16, y*16);
             }
         }
     }
 
     if(this->gameState == LOST)
-        this->gameOver->draw(display, 96, 80);
+        gameOver.draw(display, 96, 80);
     else 
         display->rect(selectedX*16, selectedY*16, 16, 16, Color(255, 0, 0));
 }

@@ -3,6 +3,7 @@
 #include <algorithm>
 
 Display::Display() {
+    printf("Display driver loading... ");
 #ifdef FORMPU
     this->initHardware();
     this->initSequence();
@@ -28,6 +29,7 @@ Display::Display() {
     SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
     SDL_RenderClear(this->renderer);
 #endif
+    printf("Done\n");
 }
 
 #ifdef FORMPU
@@ -64,7 +66,7 @@ void Display::initHardware() {
     this->setBrightness(50);
 
     int br = spi_init(spi1, 62.5 * 1000 * 1000);
-    printf("Display baudrate: %d\n", br);
+    // printf("Display baudrate: %d\n", br);
 
     gpio_set_function(SCK_PIN, GPIO_FUNC_SPI);
     gpio_set_function(MOSI_PIN, GPIO_FUNC_SPI);
@@ -188,10 +190,10 @@ void Display::clear(Color c) {
 #endif
 }
 
-#define div_255_fast(x)    (((x) + (((x) + 257) >> 8)) >> 8)
+#define div_255_fast(x) (((x) + (((x) + 257) >> 8)) >> 8)
 
 void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
-    if (x < 0 || x >= this->width || y < 0 || y >= this->height || alpha == 0)
+    if (alpha == 0 || x < 0 || x >= this->width || y < 0 || y >= this->height)
         return;
     
     int index = (y * this->width) + x;

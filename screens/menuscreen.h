@@ -1,22 +1,20 @@
 #include "../core/common.h"
 #include "../core/screen.h"
-#include "../core/image.h"
 
 class MenuScreen : public Screen
 {
 private:
-    Image *font;
-    Image *menuItemLogo[5];
-    const uint8_t menuCount = 5;
-    const std::string menuItemNames[5] = {
+    const uint8_t menuCount = 6;
+    const std::string menuItemNames[6] = {
         "SNAKE", 
         "2048",
         "TETRIS",
         "MINESWEEPER",
-        "EMPTY"
+        "SETTINGS",
+        "ABOUT"
     };
     uint8_t selectedMenuItem, currentMenuItem, animationCounter;
-    bool isAnimating;
+    bool isAnimating = false;;
     const uint8_t menuItemGap = 160;
 public:
     MenuScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);

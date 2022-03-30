@@ -2,19 +2,16 @@
 #include "../core/keyboard.h"
 
 MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+    printf("Menu screen loading...");
     this->screenId = 1;
     this->type = Type::MENU;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
-    this->currentMenuItem = this->selectedMenuItem = 0;
+    this->currentMenuItem = 0;
+    this->selectedMenuItem = 0;
     this->isAnimating = false;
     this->animationCounter = 0;
-    this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);
-    this->menuItemLogo[0] = new Image(snake_img_width, snake_img_height, snake_color_count, (uint8_t*)snake_palette, (uint8_t*)snake_pixel_data);
-    this->menuItemLogo[1] = new Image(g2048_img_width, g2048_img_height, g2048_color_count, (uint8_t*)g2048_palette, (uint8_t*)g2048_pixel_data);
-    this->menuItemLogo[2] = new Image(tetris_img_width, tetris_img_height, tetris_color_count, (uint8_t*)tetris_palette, (uint8_t*)tetris_pixel_data);
-    this->menuItemLogo[3] = new Image(mine_img_width, mine_img_height, mine_color_count, (uint8_t*)mine_palette, (uint8_t*)mine_pixel_data);
-    this->menuItemLogo[4] = new Image(snake_img_width, snake_img_height, snake_color_count, (uint8_t*)snake_palette, (uint8_t*)snake_pixel_data);
+    printf("Done\n");
 }
 
 MenuScreen::~MenuScreen() {
@@ -41,18 +38,18 @@ void MenuScreen::draw(Display *display) {
         }
         colorFlip = !colorFlip;
     }
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < menuCount; i++) {
         uint8_t alpha = (i == this->currentMenuItem) ? 255 : 64;
-        this->menuItemLogo[i]->setAlpha(alpha);
-        this->font->setAlpha(alpha);
+        menuItemLogo[i].setAlpha(alpha);
+        font.setAlpha(alpha);
 
         int posx = (i-this->currentMenuItem) * this->menuItemGap;
         if(isAnimating)
             posx += (this->currentMenuItem - this->selectedMenuItem) * this->animationCounter;
 
-        uint16_t width = this->font->getWidth(this->menuItemNames[i]);
-        this->font->drawSprites(display, this->menuItemNames[i], posx + (display->width - width)/2, 170);
-        this->menuItemLogo[i]->draw(display, posx + (display->width - this->menuItemLogo[i]->width)/2, 64);
+        uint16_t width = font.getWidth(this->menuItemNames[i]);
+        font.drawSprites(display, this->menuItemNames[i], posx + (display->width - width)/2, 170);
+        menuItemLogo[i].draw(display, posx + (display->width - menuItemLogo[i].width)/2, 64);
     }
 }
 

@@ -1,6 +1,5 @@
 #include "../core/common.h"
 #include "../core/screen.h"
-#include "../core/image.h"
 #include "../core/keyboard.h"
 
 #define BOARDSIZE 4
@@ -12,7 +11,6 @@ private:
     uint8_t highestValue = 2;
     uint32_t score;
     int8_t direction;
-    Image *font;
 
     Color colors[12] = {
         Color(180, 165, 147),

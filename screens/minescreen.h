@@ -1,6 +1,5 @@
 #include "../core/common.h"
 #include "../core/screen.h"
-#include "../core/image.h"
 #include "../core/keyboard.h"
 
 #define MINE_BOARD_WIDTH 20
@@ -21,7 +20,6 @@ private:
     STATETYPE state[MINE_BOARD_WIDTH*MINE_BOARD_HEIGHT];
     uint8_t selectedX, selectedY;
     GameState gameState;
-    Image *sweeper, *gameOver;
 
     void resetBoard();
     void printBoard();

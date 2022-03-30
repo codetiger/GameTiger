@@ -4,6 +4,7 @@
 #include <algorithm>
 
 Battery::Battery(/* args */) {
+    printf("Battery driver loading...");
 #ifdef FORMPU
     this->lastCachedTime = to_ms_since_boot(get_absolute_time()) - 12000;
     gpio_init(POWER_PIN);
@@ -14,6 +15,7 @@ Battery::Battery(/* args */) {
     adc_gpio_init(VSYS_PIN);
     adc_select_input(3);
 #endif
+    printf("Done\n");
 }
 
 uint8_t Battery::getLevel() {

@@ -2,8 +2,8 @@ import struct
 from PIL import Image
 from collections import defaultdict
 
-color_count = 32
-image_name = "sweeper"
+color_count = 64
+image_name = "about"
 
 im = Image.open(image_name + '.png').convert('RGBA')
 # im = im.resize((70,28), Image.NEAREST)

@@ -3,6 +3,7 @@
 /* Board move/combine code is copied from https://github.com/yerzhan7/2048/blob/master/2048/game.cpp */
 
 G2048Screen::G2048Screen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+    printf("2048 screen loading...");
     this->screenId = 3;
     this->type = Type::GAME;
     this->returnCallBack = rcb;
@@ -10,12 +11,12 @@ G2048Screen::G2048Screen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highsco
     this->highestValue = 2;
     this->score = 0;
     this->direction = -1;
-    this->font = new Image(font_img_width, font_img_height, font_color_count, (uint8_t*)font_palette, (uint8_t*)font_pixel_data, font_sprite_data);
 
     for (uint8_t i = 0; i < BOARDSIZE*BOARDSIZE; i++)
         board[i] = 0;
     this->addRandomBlock();
     this->addRandomBlock();
+    printf("Done\n");
 }
 
 G2048Screen::~G2048Screen() {
@@ -187,8 +188,8 @@ void G2048Screen::draw(Display *display) {
             display->fillRect(5 + 80*j, 5 + 60*i, 70, 50, c);
             if (board[i*BOARDSIZE+j]) {
                 std::string str = std::to_string((uint16_t)pow(2, board[i*BOARDSIZE+j]));
-                uint16_t width = this->font->getWidth(str);
-                this->font->drawSprites(display, str, 5 + (70-width)/2 + 80*j, 22 + 60*i);
+                uint16_t width = font.getWidth(str);
+                font.drawSprites(display, str, 5 + (70-width)/2 + 80*j, 22 + 60*i);
             }
         }
     }

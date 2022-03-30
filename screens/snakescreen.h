@@ -1,6 +1,5 @@
 #include "../core/common.h"
 #include "../core/screen.h"
-#include "../core/image.h"
 #include "../core/keyboard.h"
 #include <map>
 #include <vector>
@@ -8,7 +7,6 @@
 class SnakeScreen : public Screen
 {
 private:
-    Image *font2, *gameOver;
     uint8_t snakeDir = KEY_RIGHT;
     GameState gameState;
     uint8_t gameSpeed = 1;

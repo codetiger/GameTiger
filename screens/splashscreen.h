@@ -1,13 +1,11 @@
 #include "../core/common.h"
 #include "../core/screen.h"
-#include "../core/image.h"
 
 class SplashScreen : public Screen
 {
 private:
     int8_t tileMoveX = 0;
     int8_t tileMoveY = 0;
-    Image *tiger, *font;
     uint8_t imageAlpha = 0;
     uint16_t totalDuration, accDeltaTimeMS;
 public:
