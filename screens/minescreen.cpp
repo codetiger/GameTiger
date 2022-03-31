@@ -130,7 +130,7 @@ void MineScreen::keyPressed(uint8_t key) {
         }
     } else if(key == KEY_B) {
         if(this->gameState == LOST) 
-            this->returnCallBack(-1);
+            this->returnCallBack(3);
         else if(this->gameState == PLAYING) {
             if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == CLOSE)
                 state[selectedY*MINE_BOARD_WIDTH+selectedX] = FLAG;

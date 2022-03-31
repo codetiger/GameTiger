@@ -8,6 +8,7 @@
 #include "screens/g2048screen.h"
 #include "screens/tetrisscreen.h"
 #include "screens/minescreen.h"
+#include "screens/ticscreen.h"
 
 #define HIGHSCORESIZE (FLASH_PAGE_SIZE/4)
 #define FLASH_TARGET_OFFSET (1536 * 1024)
@@ -51,6 +52,8 @@ void backHandler(int8_t menu) {
             screen = new TetrisScreen(*backHandler, *highScoreHandler, highscores[4]);
         else if(menu == 3)
             screen = new MineScreen(*backHandler, *highScoreHandler, highscores[5]);
+        else if(menu == 4)
+            screen = new TicScreen(*backHandler, *highScoreHandler, highscores[6]);
     }
 }
 

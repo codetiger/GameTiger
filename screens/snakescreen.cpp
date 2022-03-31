@@ -109,7 +109,7 @@ void SnakeScreen::keyPressed(uint8_t key) {
             this->gameSpeed = (this->gameSpeed < 12) ? this->gameSpeed+1 : this->gameSpeed;
     } else if(key == KEY_B) {
         if(this->gameState == LOST) 
-            this->returnCallBack(-1);
+            this->returnCallBack(0);
         else if(this->gameState == PLAYING)
             this->gameSpeed = (this->gameSpeed > 1) ? this->gameSpeed-1 : this->gameSpeed;
     }

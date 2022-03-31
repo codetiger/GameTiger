@@ -12,6 +12,7 @@ G2048Screen::G2048Screen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highsco
     this->score = 0;
     this->direction = -1;
     this->gameState = PLAYING;
+    font.setAlpha(255);
 
     for (uint8_t i = 0; i < BOARDSIZE*BOARDSIZE; i++)
         board[i] = 0;
@@ -226,7 +227,7 @@ void G2048Screen::keyPressed(uint8_t key) {
     if(key == KEY_DOWN || key == KEY_UP || key == KEY_LEFT || key == KEY_RIGHT)
         this->direction = key;
     else if(key == KEY_B)
-        this->returnCallBack(-1);
+        this->returnCallBack(1);
 }
 
 void G2048Screen::keyReleased(uint8_t key) {

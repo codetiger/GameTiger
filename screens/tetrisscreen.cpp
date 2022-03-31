@@ -156,7 +156,7 @@ void TetrisScreen::keyPressed(uint8_t key) {
     }
 
     if(key == KEY_B)
-        this->returnCallBack(-1);
+        this->returnCallBack(2);
 
     if(this->gameState == PLAYING) {
         if(key == KEY_LEFT && canMove(currentBlockX - 1, currentBlockY, false))

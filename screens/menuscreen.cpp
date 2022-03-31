@@ -7,8 +7,8 @@ MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore
     this->type = Type::MENU;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
-    this->currentMenuItem = 0;
-    this->selectedMenuItem = 0;
+    this->currentMenuItem = highscore;
+    this->selectedMenuItem = highscore;
     this->isAnimating = false;
     this->animationCounter = 0;
     printf("Done\n");
