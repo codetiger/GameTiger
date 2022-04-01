@@ -9,13 +9,14 @@ TicScreen::TicScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore),
     this->gameState = PLAYING;
     this->turn = ((rand() % 100) % 2) == 0 ? O_TIC : X_TIC;
     this->won = E_TIC;
-    this->selectedX = this->selectedY = 0;
+    this->moveCount = 0;
+    this->sx = this->sy = 0;
 
-    for (uint8_t i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++)
-        board[i] = E_TIC;
-
+    for (uint8_t y = 0; y < TIC_BOARDSIZE; y++)
+        for (uint8_t x = 0; x < TIC_BOARDSIZE; x++)
+            board.setCellValue(x, y, E_TIC);
+    printBoard();
     font.setAlpha(255);
-    this->totalDuration = 0;
     printf("Done\n");
 }
 
@@ -24,40 +25,31 @@ TicScreen::~TicScreen() {
 }
 
 void TicScreen::update(uint16_t deltaTimeMS) {
-    this->totalDuration += deltaTimeMS;
-    if(turn == X_TIC && this->gameState == PLAYING && this->totalDuration > 1500) {
-        uint8_t x, y;
-        for (uint8_t i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++) {
-            x = rand() % TIC_BOARDSIZE;
-            y = rand() % TIC_BOARDSIZE;
-            if(board[y*TIC_BOARDSIZE + x] == E_TIC) {
-                board[y*TIC_BOARDSIZE + x] = X_TIC;
-                turn = O_TIC;
-                if(checkGameOver())
-                    this->gameState = LOST;
-                break;
-            }
-        }
-        this->totalDuration = 0;
+    if(turn == X_TIC && this->gameState == PLAYING) {
+        board.setCellValue(bestMove(board, this->moveCount), X_TIC);
+        this->moveCount++;
+        turn = O_TIC;
+        if(checkGameOver())
+            this->gameState = LOST;
     }
 }
 
 void TicScreen::draw(Display *display) {
     display->clear(Color(100, 71, 195));
-    for (uint8_t i = 0; i < TIC_BOARDSIZE; i++) {
-        for (uint8_t j = 0; j < TIC_BOARDSIZE; j++) {
-            if(board[i*TIC_BOARDSIZE+j] == E_TIC)
-                tttblocks.drawSprite(display, 'e', 30+j*60, 30+i*60);
-            else if(board[i*TIC_BOARDSIZE+j] == O_TIC)
-                tttblocks.drawSprite(display, 'o', 30+j*60, 30+i*60);
-            else if(board[i*TIC_BOARDSIZE+j] == X_TIC)
-                tttblocks.drawSprite(display, 'x', 30+j*60, 30+i*60);
+    for (uint8_t y = 0; y < TIC_BOARDSIZE; y++) {
+        for (uint8_t x = 0; x < TIC_BOARDSIZE; x++) {
+            if(board.getCellValue(x, y) == E_TIC)
+                tttblocks.drawSprite(display, 'e', 30+x*60, 30+y*60);
+            else if(board.getCellValue(x, y) == O_TIC)
+                tttblocks.drawSprite(display, 'o', 30+x*60, 30+y*60);
+            else if(board.getCellValue(x, y) == X_TIC)
+                tttblocks.drawSprite(display, 'x', 30+x*60, 30+y*60);
         }
     }
 
     font.drawSprites(display, "TIC TAC TOE", 90, 10);
     if(turn == O_TIC)
-        display->rect(30+this->selectedX*60, 30+this->selectedY*60, 60, 60, Color(0, 255, 0));
+        display->rect(30+this->sx*60, 30+this->sy*60, 60, 60, Color(0, 255, 0));
     
     if(this->gameState == PLAYING) {
         font.drawSprites(display, "TURN", 240, 140);
@@ -79,66 +71,77 @@ void TicScreen::draw(Display *display) {
 }
 
 bool TicScreen::checkGameOver() {
-    if(board[0*TIC_BOARDSIZE+0] != E_TIC && 
-        board[1*TIC_BOARDSIZE+1] == board[0*TIC_BOARDSIZE+0] &&
-        board[2*TIC_BOARDSIZE+2] == board[1*TIC_BOARDSIZE+1]) {
-        won = board[0];
+    won = board.getWinner();
+    if(won != E_TIC)
         return true;
-    }
-    if(board[2*TIC_BOARDSIZE+0] != E_TIC && 
-        board[1*TIC_BOARDSIZE+1] == board[2*TIC_BOARDSIZE+0] &&
-        board[0*TIC_BOARDSIZE+2] == board[1*TIC_BOARDSIZE+1]) {
-        won = board[1*TIC_BOARDSIZE+1];
-        return true;
-    }
-    for(int i = 0; i < TIC_BOARDSIZE; i++) {
-        if(board[i*TIC_BOARDSIZE+0] != E_TIC && 
-            board[i*TIC_BOARDSIZE+0] == board[i*TIC_BOARDSIZE+1] && 
-            board[i*TIC_BOARDSIZE+1] == board[i*TIC_BOARDSIZE+2]) {
-            won = board[i*TIC_BOARDSIZE+0];
-            return true;
-        }
-    }
-    for(int j = 0; j < TIC_BOARDSIZE; j++) {
-        if(board[j] != E_TIC && 
-            board[j] == board[TIC_BOARDSIZE+j] && 
-            board[TIC_BOARDSIZE+j] == board[2*TIC_BOARDSIZE+j]) {
-            won = board[j];
-            return true;
-        }
-    }
 
-    for(int i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++)
-        if(board[i] == E_TIC)
-            return false;
+    if(!board.isFull())
+        return false;
 
     won = E_TIC;
     return true;
 }
 
+int16_t TicScreen::minimax(TicBoard b, uint16_t depth, bool isAI) {
+	int16_t score = 0, bestScore = isAI ? -999 : 999;
+	if (board.getWinner() != E_TIC)
+        return isAI ? -1 : 1;
+	else if(depth < 9) {
+        for(int i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++) {
+            if (board.getCellValue(i) == E_TIC) {
+                board.setCellValue(i, isAI ? X_TIC : O_TIC);
+                score = minimax(board, depth + 1, !isAI);
+                board.setCellValue(i, E_TIC);
+                if((isAI && score > bestScore) || (!isAI && score < bestScore))
+                    bestScore = score;
+            }
+        }
+        return bestScore;
+    } else
+        return 0;
+}
+
+uint8_t TicScreen::bestMove(TicBoard b, uint8_t moveCount) {
+	uint8_t index = 0;
+	int16_t score = 0, bestScore = -999;
+    for(int i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++) {
+        if (board.getCellValue(i) == E_TIC) {
+            board.setCellValue(i, X_TIC);
+            score = minimax(board, moveCount+1, false);
+            board.setCellValue(i, E_TIC);
+            if(score > bestScore) {
+                bestScore = score;
+                index = i;
+            }
+        }
+    }
+    return index;
+}
+
 void TicScreen::printBoard() {
-    for (uint8_t i = 0; i < TIC_BOARDSIZE; i++) {
-        for (uint8_t j = 0; j < TIC_BOARDSIZE; j++) {
-            printf("%d\t", board[i*TIC_BOARDSIZE+j]);
+    for (uint8_t y = 0; y < TIC_BOARDSIZE; y++) {
+        for (uint8_t x = 0; x < TIC_BOARDSIZE; x++) {
+            printf("%d\t", board.getCellValue(x, y));
         }
         printf("\n");
     }
-    printf("\n");
+    printf("Value %d\n", board.value);
 }
 
 void TicScreen::keyPressed(uint8_t key) {
     if(key == KEY_DOWN) {
-        this->selectedY = (this->selectedY < TIC_BOARDSIZE-1) ? this->selectedY+1 : this->selectedY;
+        this->sy = (this->sy < TIC_BOARDSIZE-1) ? this->sy+1 : this->sy;
     } else if(key == KEY_UP) {
-        this->selectedY = (this->selectedY > 0) ? this->selectedY-1 : this->selectedY;
+        this->sy = (this->sy > 0) ? this->sy-1 : this->sy;
     } else if(key == KEY_RIGHT) {
-        this->selectedX = (this->selectedX < TIC_BOARDSIZE-1) ? this->selectedX+1 : this->selectedX;
+        this->sx = (this->sx < TIC_BOARDSIZE-1) ? this->sx+1 : this->sx;
     } else if(key == KEY_LEFT) {
-        this->selectedX = (this->selectedX > 0) ? this->selectedX-1 : this->selectedX;
+        this->sx = (this->sx > 0) ? this->sx-1 : this->sx;
     } else if(key == KEY_A) {
-        if(this->gameState == PLAYING && turn == O_TIC && board[this->selectedY*TIC_BOARDSIZE+this->selectedX] == E_TIC) {
-            board[this->selectedY*TIC_BOARDSIZE+this->selectedX] = O_TIC;
+        if(this->gameState == PLAYING && turn == O_TIC && board.getCellValue(this->sx, this->sy) == E_TIC) {
+            board.setCellValue(this->sx, this->sy, O_TIC);
             turn = X_TIC;
+            this->moveCount++;
             if(checkGameOver())
                 this->gameState = LOST;
         }
@@ -146,7 +149,7 @@ void TicScreen::keyPressed(uint8_t key) {
         if(this->gameState == LOST)
             this->returnCallBack(4);
     }
-    // printBoard();
+    printBoard();
 }
 
 void TicScreen::keyReleased(uint8_t key) {
