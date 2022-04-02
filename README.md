@@ -99,6 +99,9 @@ The software is well optimised to achieve a target of 30 frames per second. The 
 ### Minesweeper Game
 ![Minesweeper Game GameTiger Console](/docs/minesweeper.png)
 
+### Tic Tac Toe Game
+![Tic Tac Toe Game GameTiger Console](/docs/tictactoe.png)
+
 [![GameTiger Console](https://img.youtube.com/vi/edIZAm9zVC8/0.jpg)](https://youtu.be/edIZAm9zVC8)
 
 
