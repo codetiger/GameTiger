@@ -182,4 +182,6 @@ void TetrisScreen::keyReleased(uint8_t key) {
 }
 
 void TetrisScreen::keyDown(uint8_t key) {
+    if(this->gameState == PLAYING && key == KEY_DOWN && canMove(currentBlockX, currentBlockY+1, false))
+        currentBlockY++;
 }

@@ -234,6 +234,4 @@ void G2048Screen::keyReleased(uint8_t key) {
 }
 
 void G2048Screen::keyDown(uint8_t key) {
-    if(key == KEY_DOWN)
-        this->direction = key;
 }
