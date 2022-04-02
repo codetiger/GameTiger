@@ -147,15 +147,15 @@ private:
 
     int8_t currentBlockX, currentBlockY;
     Color blockColors[8] = {
-        Color(0, 0, 0),
-        Color(190, 0, 192),
-        Color(34, 255, 255),
-        Color(255, 255, 9),
+        Color(210, 47, 48), //
+        Color(133, 50, 239), //
+        Color(145, 195, 206), //
+        Color(234, 223, 48), //
 
-        Color(0, 0, 183),
-        Color(252, 97, 9),
-        Color(251, 0, 6),
-        Color(35, 255, 7),
+        Color(25, 135, 212), //
+        Color(243, 164, 141), //
+        Color(169, 238, 88), //
+        Color(173, 239, 89), //
     };
     
     void initializeBlockTypes();
