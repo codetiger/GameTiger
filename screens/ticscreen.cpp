@@ -1,4 +1,5 @@
 #include "ticscreen.h"
+#include <algorithm> 
 
 TicScreen::TicScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
     printf("Tic screen loading...");
@@ -11,6 +12,7 @@ TicScreen::TicScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore),
     this->won = E_TIC;
     this->moveCount = 0;
     this->sx = this->sy = 0;
+    std::random_shuffle(&pInd[0], &pInd[8]);
 
     for (uint8_t y = 0; y < TIC_BOARDSIZE; y++)
         for (uint8_t x = 0; x < TIC_BOARDSIZE; x++)
@@ -88,10 +90,10 @@ int16_t TicScreen::minimax(TicBoard b, uint16_t depth, bool isAI) {
         return isAI ? -1 : 1;
 	else if(depth < 9) {
         for(int i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++) {
-            if (board.getCellValue(i) == E_TIC) {
-                board.setCellValue(i, isAI ? X_TIC : O_TIC);
+            if (board.getCellValue(pInd[i]) == E_TIC) {
+                board.setCellValue(pInd[i], isAI ? X_TIC : O_TIC);
                 score = minimax(board, depth + 1, !isAI);
-                board.setCellValue(i, E_TIC);
+                board.setCellValue(pInd[i], E_TIC);
                 if((isAI && score > bestScore) || (!isAI && score < bestScore))
                     bestScore = score;
             }
@@ -105,13 +107,13 @@ uint8_t TicScreen::bestMove(TicBoard b, uint8_t moveCount) {
 	uint8_t index = 0;
 	int16_t score = 0, bestScore = -999;
     for(int i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++) {
-        if (board.getCellValue(i) == E_TIC) {
-            board.setCellValue(i, X_TIC);
+        if (board.getCellValue(pInd[i]) == E_TIC) {
+            board.setCellValue(pInd[i], X_TIC);
             score = minimax(board, moveCount+1, false);
-            board.setCellValue(i, E_TIC);
+            board.setCellValue(pInd[i], E_TIC);
             if(score > bestScore) {
                 bestScore = score;
-                index = i;
+                index = pInd[i];
             }
         }
     }
