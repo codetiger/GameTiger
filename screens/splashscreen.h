@@ -8,6 +8,7 @@ private:
     int8_t tileMoveY = 0;
     uint8_t imageAlpha = 0;
     uint16_t totalDuration, accDeltaTimeMS;
+    TileMap *bgLayer;
 public:
     SplashScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
     ~SplashScreen();

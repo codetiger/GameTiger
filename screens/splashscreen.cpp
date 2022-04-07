@@ -11,6 +11,27 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highs
     font.setAlpha(this->imageAlpha);
     this->accDeltaTimeMS = 0;
     this->totalDuration = 0;
+
+    uint16_t tileWidth = 20, tileHeight = 20;
+    uint8_t xCount = 4 + (320 / tileWidth);
+    uint8_t yCount = 4 + (240 / tileHeight);
+    uint8_t *ts = new uint8_t[xCount*yCount];
+    bool colorFlip = true;
+    for (int y = 0; y < yCount; y++) {
+        for (int x = 0; x < xCount; x++) {
+            colorFlip = !colorFlip;
+            ts[y*xCount+x] = colorFlip ? 1 : 2;
+        }
+        colorFlip = !colorFlip;
+    }
+    this->bgLayer = new TileMap(xCount, yCount, tileWidth, tileHeight, ts);
+
+    TileInfo tinfo; 
+    tinfo.color = Color(158, 228, 254);
+    tinfo.type = COLORFILL;
+    this->bgLayer->addTileInfo(1, tinfo);
+    tinfo.color = Color(135, 220, 255);
+    this->bgLayer->addTileInfo(2, tinfo);
     printf("Done\n");
 }
 
@@ -39,15 +60,7 @@ void SplashScreen::update(uint16_t deltaTimeMS) {
 }
 
 void SplashScreen::draw(Display *display) {
-    Color light(158, 228, 254), dark(135, 220, 255);
-    bool colorFlip = true;
-    for (int x = -80; x < display->width + 80; x+=20) {
-        for (int y = -80; y < display->height + 80; y+=20) {
-            colorFlip = !colorFlip;
-            display->fillRect(x+tileMoveX, y+tileMoveY, 20, 20, colorFlip ? light : dark);
-        }
-        colorFlip = !colorFlip;
-    }
+    this->bgLayer->draw(display, this->tileMoveX, this->tileMoveY+40);
     tiger.draw(display, 92, 56);
     font.drawSprites(display, "GAMETIGER", 98, 190);
 }

@@ -59,16 +59,17 @@ void MineScreen::resetBoard() {
     for (int i = 0; i < TOTAL_MINES; i++) {
         uint8_t x = rand() % MINE_BOARD_WIDTH;
         uint8_t y = rand() % MINE_BOARD_HEIGHT;
-        for (int dy = -1; dy <= 1; dy++) {
-            for (int dx = -1; dx <= 1; dx++) {
-                if(dx == 0 && dy == 0)
-                    board[(y+dy)*MINE_BOARD_WIDTH+(x+dx)] = 9;
-                else {
-                    if(x+dx >= 0 && y+dy >= 0 && 
-                        x+dx < MINE_BOARD_WIDTH && y+dy < MINE_BOARD_HEIGHT && 
-                        board[(y+dy)*MINE_BOARD_WIDTH+(x+dx)] != 9) {
+        if(board[y*MINE_BOARD_WIDTH+x] != 9) {
+            board[y*MINE_BOARD_WIDTH+x] = 9;
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dx = -1; dx <= 1; dx++) {
+                    if(dx != 0 || dy != 0) {
+                        if(x+dx >= 0 && y+dy >= 0 && 
+                          x+dx < MINE_BOARD_WIDTH && y+dy < MINE_BOARD_HEIGHT && 
+                          board[(y+dy)*MINE_BOARD_WIDTH+(x+dx)] != 9) {
                             board[(y+dy)*MINE_BOARD_WIDTH+(x+dx)]++;
                         }
+                    }
                 }
             }
         }
@@ -140,7 +141,7 @@ void MineScreen::keyPressed(uint8_t key) {
                 state[selectedY*MINE_BOARD_WIDTH+selectedX] = CLOSE;
         }
     }
-    printBoard();
+    // printBoard();
 }
 
 void MineScreen::keyReleased(uint8_t key) {

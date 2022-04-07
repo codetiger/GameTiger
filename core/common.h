@@ -49,6 +49,7 @@
 #include "../content/tttblocks.h"
 
 #include "../core/image.h"
+#include "tilemap.h"
 
 enum GameState {WAITING, PLAYING, LOST};
 timetype getTime();

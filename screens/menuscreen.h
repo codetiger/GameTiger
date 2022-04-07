@@ -17,6 +17,8 @@ private:
     uint8_t selectedMenuItem, currentMenuItem, animationCounter;
     bool isAnimating = false;;
     const uint8_t menuItemGap = 160;
+    TileMap *bgLayer;
+
 public:
     MenuScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
     ~MenuScreen();

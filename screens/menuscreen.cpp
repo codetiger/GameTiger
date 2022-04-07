@@ -11,6 +11,27 @@ MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore
     this->selectedMenuItem = highscore;
     this->isAnimating = false;
     this->animationCounter = 0;
+
+    uint16_t tileWidth = 40, tileHeight = 40;
+    uint8_t xCount = (320 / tileWidth);
+    uint8_t yCount = (240 / tileHeight);
+    uint8_t *ts = new uint8_t[xCount*yCount];
+    bool colorFlip = true;
+    for (int y = 0; y < yCount; y++) {
+        for (int x = 0; x < xCount; x++) {
+            colorFlip = !colorFlip;
+            ts[y*xCount+x] = colorFlip ? 1 : 2;
+        }
+        colorFlip = !colorFlip;
+    }
+    this->bgLayer = new TileMap(xCount, yCount, tileWidth, tileHeight, ts);
+
+    TileInfo tinfo; 
+    tinfo.color = Color(253, 201, 48);
+    tinfo.type = COLORFILL;
+    this->bgLayer->addTileInfo(1, tinfo);
+    tinfo.color = Color(252, 183, 35);
+    this->bgLayer->addTileInfo(2, tinfo);
     printf("Done\n");
 }
 
@@ -29,15 +50,7 @@ void MenuScreen::update(uint16_t deltaTimeMS) {
 }
 
 void MenuScreen::draw(Display *display) {
-    Color light(253, 201, 48), dark(252, 183, 35);
-    bool colorFlip = true;
-    for (int x = 0; x < display->width; x+=40) {
-        for (int y = 0; y < display->height; y+=40) {
-            colorFlip = !colorFlip;
-            display->fillRect(x, y, 40, 40, colorFlip ? light : dark);
-        }
-        colorFlip = !colorFlip;
-    }
+    this->bgLayer->draw(display, 0, 0);
     for (int i = 0; i < menuCount; i++) {
         uint8_t alpha = (i == this->currentMenuItem) ? 255 : 64;
         menuItemLogo[i].setAlpha(alpha);
