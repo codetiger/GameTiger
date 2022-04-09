@@ -86,14 +86,14 @@ private:
     TicBoard board;
     TICTYPE turn, won;
     GameState gameState;
-    uint8_t sx, sy, moveCount;
+    uint8_t sx, sy, moveCount, maxDepth;
     uint8_t option;
     uint8_t pInd[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
     void printBoard();
     bool checkGameOver();
     uint8_t bestMove(TicBoard b, uint8_t moveIndex);
-    int16_t minimax(TicBoard b, uint16_t depth, bool isAI);
+    int16_t minimax(TicBoard b, uint8_t origDepth, uint8_t curDepth, bool isAI);
 public:
     TicScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~TicScreen();

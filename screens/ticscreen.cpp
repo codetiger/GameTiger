@@ -13,6 +13,13 @@ TicScreen::TicScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint
     this->moveCount = 0;
     this->sx = this->sy = 0;
     this->option = option;
+    if(this->option == 3)
+        this->maxDepth = 9;
+    else if(this->option == 2)
+        this->maxDepth = 5;
+    else if(this->option == 1)
+        this->maxDepth = 2;
+
     std::random_shuffle(&pInd[0], &pInd[8]);
 
     for (uint8_t y = 0; y < TIC_BOARDSIZE; y++)
@@ -85,15 +92,15 @@ bool TicScreen::checkGameOver() {
     return true;
 }
 
-int16_t TicScreen::minimax(TicBoard b, uint16_t depth, bool isAI) {
+int16_t TicScreen::minimax(TicBoard b, uint8_t origDepth, uint8_t curDepth, bool isAI) {
 	int16_t score = 0, bestScore = isAI ? -999 : 999;
 	if (board.getWinner() != E_TIC)
         return isAI ? -1 : 1;
-	else if(depth < 9) {
+	else if(curDepth < 9 && curDepth - origDepth < this->maxDepth) {
         for(int i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++) {
             if (board.getCellValue(pInd[i]) == E_TIC) {
                 board.setCellValue(pInd[i], isAI ? X_TIC : O_TIC);
-                score = minimax(board, depth + 1, !isAI);
+                score = minimax(board, origDepth, curDepth + 1, !isAI);
                 board.setCellValue(pInd[i], E_TIC);
                 if((isAI && score > bestScore) || (!isAI && score < bestScore))
                     bestScore = score;
@@ -110,7 +117,7 @@ uint8_t TicScreen::bestMove(TicBoard b, uint8_t moveCount) {
     for(int i = 0; i < TIC_BOARDSIZE*TIC_BOARDSIZE; i++) {
         if (board.getCellValue(pInd[i]) == E_TIC) {
             board.setCellValue(pInd[i], X_TIC);
-            score = minimax(board, moveCount+1, false);
+            score = minimax(board, moveCount, moveCount+1, false);
             board.setCellValue(pInd[i], E_TIC);
             if(score > bestScore) {
                 bestScore = score;
@@ -152,7 +159,7 @@ void TicScreen::keyPressed(uint8_t key) {
         if(this->gameState == LOST)
             this->returnCallBack(4, this->option);
     }
-    printBoard();
+    // printBoard();
 }
 
 void TicScreen::keyReleased(uint8_t key) {
