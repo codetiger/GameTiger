@@ -26,6 +26,7 @@ private:
     uint16_t snakeLength = 3;
     uint8_t snakeBlocks[600][2];
     timetype lastUpdate;
+    uint8_t option;
 
     void createNewFood();
     bool checkFoodCaptured();
@@ -33,7 +34,7 @@ private:
     void moveSnake();
     void drawBlock(Display *display, uint16_t x, uint16_t y);
 public:
-    SnakeScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
+    SnakeScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~SnakeScreen();
 
     void update(uint16_t deltaTimeMS);

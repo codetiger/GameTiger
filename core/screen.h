@@ -8,7 +8,7 @@ enum Type { SPLASH, MENU, GAME };
 
 class Screen {
 protected:
-    void (*returnCallBack)(int8_t menu);
+    void (*returnCallBack)(int8_t menu, uint8_t option);
     void (*highScoreCallBack)(uint32_t highscore);
 public:
     virtual void update(uint16_t deltaTimeMS) = 0;

@@ -47,6 +47,7 @@
 #include "../content/settings.h"
 #include "../content/ttt.h"
 #include "../content/tttblocks.h"
+#include "../content/alphanumfont.h"
 
 #include "../core/image.h"
 #include "tilemap.h"
@@ -55,7 +56,7 @@ enum GameState {WAITING, PLAYING, LOST};
 timetype getTime();
 uint16_t getTimeDiffMS(timetype start);
 
-extern Image font, font2, gameOver, tiger, sweeper, ttt, tttblocks;
+extern Image font, font2, alphanumfont, gameOver, tiger, sweeper, ttt, tttblocks;
 extern Image menuItemLogo[7];
 
 #endif

@@ -9,8 +9,9 @@ private:
     uint8_t imageAlpha = 0;
     uint16_t totalDuration, accDeltaTimeMS;
     TileMap *bgLayer;
+    uint8_t option;
 public:
-    SplashScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
+    SplashScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~SplashScreen();
 
     void update(uint16_t deltaTimeMS);

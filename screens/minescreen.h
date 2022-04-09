@@ -4,7 +4,6 @@
 
 #define MINE_BOARD_WIDTH 20
 #define MINE_BOARD_HEIGHT 15
-#define TOTAL_MINES 38
 
 enum STATETYPE {
     CLOSE = 1, 
@@ -20,12 +19,14 @@ private:
     STATETYPE state[MINE_BOARD_WIDTH*MINE_BOARD_HEIGHT];
     uint8_t selectedX, selectedY;
     GameState gameState;
+    uint8_t option;
+    uint8_t TOTAL_MINES = 38;
 
     void resetBoard();
     void printBoard();
     void chainOpen(uint8_t x, uint8_t y);
 public:
-    MineScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
+    MineScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~MineScreen();
 
     void update(uint16_t deltaTimeMS);

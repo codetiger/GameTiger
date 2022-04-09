@@ -1,6 +1,6 @@
 #include "minescreen.h"
 
-MineScreen::MineScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+MineScreen::MineScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("MineSweeper screen loading...");
     this->screenId = 5;
     this->type = Type::GAME;
@@ -10,6 +10,8 @@ MineScreen::MineScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore
     this->selectedX = 0;
     this->selectedY = 0;
     this->gameState = PLAYING;
+    this->option = option;
+    this->TOTAL_MINES = 15 * this->option;
 
     resetBoard();
     // printBoard();
@@ -131,7 +133,7 @@ void MineScreen::keyPressed(uint8_t key) {
         }
     } else if(key == KEY_B) {
         if(this->gameState == LOST) 
-            this->returnCallBack(3);
+            this->returnCallBack(3, this->option);
         else if(this->gameState == PLAYING) {
             if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == CLOSE)
                 state[selectedY*MINE_BOARD_WIDTH+selectedX] = FLAG;

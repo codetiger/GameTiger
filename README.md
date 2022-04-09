@@ -6,15 +6,11 @@
 </p>
 
 ## About GameTiger Console
-
 A Retro style game console designed and built entirely for educational purpose and fun. In the heart of the device is the RP2040 MCU and is built using readily available consumer modules. The whole purpose of the project is to keep everything open source and add more retro games.
-
 
 ![GameTiger Console](/docs/gametiger.jpg)
 
-
 ## Component specification
-
 *  MCU RP2040
     *  32-bit dual ARM Cortex-M0+ Microcontroller
     *  133 MHz Clock speed
@@ -37,9 +33,23 @@ A Retro style game console designed and built entirely for educational purpose a
     *  Voltage: 3.7v
     *  Capacity: 1000 mAh
 
+## Current State
+### Snake Game
+![Snake Game GameTiger Console](/docs/snake.png)
+
+### 2048 Game
+![2048 Game GameTiger Console](/docs/2048.png)
+
+### Tetris Game
+![Tetris Game GameTiger Console](/docs/tetris.png)
+
+### Minesweeper Game
+![Minesweeper Game GameTiger Console](/docs/minesweeper.png)
+
+### Tic Tac Toe Game
+![Tic Tac Toe Game GameTiger Console](/docs/tictactoe.png)
 
 ## Wiring 
-
 The components are based on standard interfaces and thus nothing complicated in wiring. You can feel free to use different GPIO pins based on lot of tutorials but this is what I've used and configured in the software as default. 
 
 | Component | Pin | Pico GPIO | Description |
@@ -84,23 +94,6 @@ The software is build using Pico C++ SDK and has the basic hardware interfacing 
         * Display sleep time after inactivity
 
 The software is well optimised to achieve a target of 30 frames per second. The Snake game achieves more than 44 FPS on a default settings without overclocking. 
-
-## Current State
-
-### Snake Game
-![Snake Game GameTiger Console](/docs/snake.png)
-
-### 2048 Game
-![2048 Game GameTiger Console](/docs/2048.png)
-
-### Tetris Game
-![Tetris Game GameTiger Console](/docs/tetris.png)
-
-### Minesweeper Game
-![Minesweeper Game GameTiger Console](/docs/minesweeper.png)
-
-### Tic Tac Toe Game
-![Tic Tac Toe Game GameTiger Console](/docs/tictactoe.png)
 
 [![GameTiger Console](https://img.youtube.com/vi/edIZAm9zVC8/0.jpg)](https://youtu.be/edIZAm9zVC8)
 

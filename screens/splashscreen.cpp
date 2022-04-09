@@ -1,6 +1,6 @@
 #include "splashscreen.h"
 
-SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Splash screen loading...");
     this->screenId = 0;
     this->type = Type::SPLASH;
@@ -11,6 +11,7 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highs
     font.setAlpha(this->imageAlpha);
     this->accDeltaTimeMS = 0;
     this->totalDuration = 0;
+    this->option = option;
 
     uint16_t tileWidth = 20, tileHeight = 20;
     uint8_t xCount = 4 + (320 / tileWidth);
@@ -41,7 +42,7 @@ SplashScreen::~SplashScreen() {
 void SplashScreen::update(uint16_t deltaTimeMS) {
     this->totalDuration += deltaTimeMS;
     if(this->totalDuration > 3000) {
-        this->returnCallBack(0);
+        this->returnCallBack(0, this->option);
         return;
     }
 

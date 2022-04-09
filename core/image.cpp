@@ -10,7 +10,7 @@ Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd) {
     this->pixelData = pd;
 }
 
-Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd, std::map<char, std::array<uint8_t, 5> > sd){
+Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd, std::map<char, std::array<uint16_t, 5> > sd){
     this->width = w;
     this->height = h;
     this->colorCount = cc;
@@ -60,7 +60,8 @@ void Image::drawSprites(Display *display, std::string indices, int16_t screenX, 
 
     uint16_t posX = screenX;
     for(char& index : indices) {
-        this->draw(display, posX, screenY, this->spriteData[index][0], this->spriteData[index][1], this->spriteData[index][2], this->spriteData[index][3]);
+        if(index != ' ')
+            this->draw(display, posX, screenY, this->spriteData[index][0], this->spriteData[index][1], this->spriteData[index][2], this->spriteData[index][3]);
         posX += this->spriteData[index][2] - 1;
     }
 }

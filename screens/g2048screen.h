@@ -12,6 +12,7 @@ private:
     uint32_t score;
     int8_t direction;
     GameState gameState;
+    uint8_t option;
 
     Color colors[12] = {
         Color(180, 165, 147),
@@ -37,7 +38,7 @@ private:
     bool checkGameOver();
     void printBoard();
 public:
-    G2048Screen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
+    G2048Screen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~G2048Screen();
 
     void update(uint16_t deltaTimeMS);

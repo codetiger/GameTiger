@@ -1,7 +1,7 @@
 #include "menuscreen.h"
 #include "../core/keyboard.h"
 
-MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+MenuScreen::MenuScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Menu screen loading...");
     this->screenId = 1;
     this->type = Type::MENU;
@@ -11,6 +11,8 @@ MenuScreen::MenuScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore
     this->selectedMenuItem = highscore;
     this->isAnimating = false;
     this->animationCounter = 0;
+    this->currentOptionItem = 1;
+    this->option = option;
 
     uint16_t tileWidth = 40, tileHeight = 40;
     uint8_t xCount = (320 / tileWidth);
@@ -45,6 +47,7 @@ void MenuScreen::update(uint16_t deltaTimeMS) {
             this->animationCounter = 0;
             this->isAnimating = false;
             this->currentMenuItem = this->selectedMenuItem;
+            this->currentOptionItem = 1;
         }
     }
 }
@@ -60,15 +63,21 @@ void MenuScreen::draw(Display *display) {
         if(isAnimating)
             posx += (this->currentMenuItem - this->selectedMenuItem) * this->animationCounter;
 
-        uint16_t width = font.getWidth(this->menuItemNames[i]);
-        font.drawSprites(display, this->menuItemNames[i], posx + (display->width - width)/2, 170);
+        uint16_t width = font.getWidth(this->menuItemNames[i][0]);
+        font.drawSprites(display, this->menuItemNames[i][0], posx + (display->width - width)/2, 170);
         menuItemLogo[i].draw(display, posx + (display->width - menuItemLogo[i].width)/2, 64);
+
+    }
+    if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem].length() > 0) {
+        std::string option = this->menuItemNames[this->currentMenuItem][this->currentOptionItem];
+        uint16_t width = alphanumfont.getWidth(option);
+        alphanumfont.drawSprites(display, option, (display->width - width)/2, 190);
     }
 }
 
 void MenuScreen::keyPressed(uint8_t key) {
-    const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
-    printf("Key Pressed: %c\n", c[key]);
+    // const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
+    // printf("Key Pressed: %c\n", c[key]);
     if(this->isAnimating)
         return;
 
@@ -80,17 +89,23 @@ void MenuScreen::keyPressed(uint8_t key) {
         if(this->selectedMenuItem != 0)
             this->selectedMenuItem--;
         this->isAnimating = true;
+    } else if (key == KEY_UP) {
+        if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem-1].length() > 0 && this->currentOptionItem > 1)
+            this->currentOptionItem--;
+    } else if (key == KEY_DOWN) {
+        if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem+1].length() > 0 && this->currentOptionItem < 3)
+            this->currentOptionItem++;
     } else if(key == KEY_A) {
-        this->returnCallBack(this->currentMenuItem);
+        this->returnCallBack(this->currentMenuItem, this->currentOptionItem);
     }
 }
 
 void MenuScreen::keyReleased(uint8_t key) {
-    const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
-    printf("Key Released: %c\n", c[key]);
+    // const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
+    // printf("Key Released: %c\n", c[key]);
 }
 
 void MenuScreen::keyDown(uint8_t key){
-    const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
-    printf("Key Down: %c\n", c[key]);
+    // const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
+    // printf("Key Down: %c\n", c[key]);
 }

@@ -1,12 +1,13 @@
 #include "snakescreen.h"
 
-SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t hs) {
+SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t hs, uint8_t option) {
     printf("Snake screen loading...");
     this->screenId = 2;
     this->type = Type::GAME;
     this->highScore = hs;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
+    this->option = option;
 
     this->snakeBlocks[0][0] = 15, this->snakeBlocks[0][1] = 12;
     this->snakeBlocks[1][0] = 14, this->snakeBlocks[1][1] = 12;
@@ -90,8 +91,13 @@ void SnakeScreen::draw(Display *display) {
         this->drawBlock(display, 10 + this->snakeBlocks[i][0]*10, 30 + this->snakeBlocks[i][1]*10);
 
     this->drawBlock(display, 10 + this->foodPos[0]*10, 30 + this->foodPos[1]*10);
-    font2.drawSprites(display, std::to_string(this->snakeLength-3), 200, 8);
-    font2.drawSprites(display, std::to_string(this->highScore), 12, 8);
+    if(this->option == 1) {
+        font2.drawSprites(display, std::to_string(this->snakeLength-3), 200, 8);
+        font2.drawSprites(display, std::to_string(this->highScore), 12, 8);
+    } else {
+        alphanumfont.drawSprites(display, std::to_string(this->snakeLength-3), 200, 8);
+        alphanumfont.drawSprites(display, std::to_string(this->highScore), 12, 8);
+    }
     if(this->gameState == LOST)
         gameOver.draw(display, 96, 80);
 }
@@ -109,7 +115,7 @@ void SnakeScreen::keyPressed(uint8_t key) {
             this->gameSpeed = (this->gameSpeed < 12) ? this->gameSpeed+1 : this->gameSpeed;
     } else if(key == KEY_B) {
         if(this->gameState == LOST) 
-            this->returnCallBack(0);
+            this->returnCallBack(0, this->option);
         else if(this->gameState == PLAYING)
             this->gameSpeed = (this->gameSpeed > 1) ? this->gameSpeed-1 : this->gameSpeed;
     }

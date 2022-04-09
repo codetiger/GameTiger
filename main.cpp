@@ -38,22 +38,22 @@ void readHighScoreData() {
     #endif
 }
 
-void backHandler(int8_t menu) {
+void backHandler(int8_t menu, uint8_t option) {
     if(screen->type == Type::SPLASH || screen->type == Type::GAME) {
         delete screen;
-        screen = new MenuScreen(*backHandler, *highScoreHandler, menu);
+        screen = new MenuScreen(*backHandler, *highScoreHandler, menu, option);
     } else if(screen->type == Type::MENU) {
         delete screen;
         if(menu == 0)
-            screen = new SnakeScreen(*backHandler, *highScoreHandler, highscores[2]);
+            screen = new SnakeScreen(*backHandler, *highScoreHandler, highscores[2], option);
         else if(menu == 1)
-            screen = new G2048Screen(*backHandler, *highScoreHandler, highscores[3]);
+            screen = new G2048Screen(*backHandler, *highScoreHandler, highscores[3], option);
         else if(menu == 2)
-            screen = new TetrisScreen(*backHandler, *highScoreHandler, highscores[4]);
+            screen = new TetrisScreen(*backHandler, *highScoreHandler, highscores[4], option);
         else if(menu == 3)
-            screen = new MineScreen(*backHandler, *highScoreHandler, highscores[5]);
+            screen = new MineScreen(*backHandler, *highScoreHandler, highscores[5], option);
         else if(menu == 4)
-            screen = new TicScreen(*backHandler, *highScoreHandler, highscores[6]);
+            screen = new TicScreen(*backHandler, *highScoreHandler, highscores[6], option);
     }
 }
 
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();
-    screen = new SplashScreen(*backHandler, *highScoreHandler, 0);
+    screen = new SplashScreen(*backHandler, *highScoreHandler, 0, 1);
 
     timetype lastUpdate = getTime();
     bool close = false;

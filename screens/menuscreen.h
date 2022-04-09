@@ -5,22 +5,24 @@ class MenuScreen : public Screen
 {
 private:
     const uint8_t menuCount = 7;
-    const std::string menuItemNames[7] = {
-        "SNAKE", 
-        "2048",
-        "TETRIS",
-        "MINESWEEPER",
-        "TIC TAC TOE",
-        "SETTINGS",
-        "ABOUT"
+    const std::string menuItemNames[7][4] = {
+        {"SNAKE", "Classic", "Modern", ""},
+        {"2048", "", "", ""},
+        {"TETRIS", "Easy", "Medium", "Hard"},
+        {"MINESWEEPER", "Easy", "Medium", "Hard"},
+        {"TIC TAC TOE", "Easy", "Medium", "Hard"},
+        {"SETTINGS", "", "", ""},
+        {"ABOUT", "", "", ""}
     };
     uint8_t selectedMenuItem, currentMenuItem, animationCounter;
+    uint8_t currentOptionItem;
     bool isAnimating = false;;
     const uint8_t menuItemGap = 160;
     TileMap *bgLayer;
+    uint8_t option;
 
 public:
-    MenuScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
+    MenuScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~MenuScreen();
 
     void update(uint16_t deltaTimeMS);

@@ -142,6 +142,7 @@ private:
     uint8_t gameSpeed = 1;
     uint16_t highScore = 0;
     uint16_t score = 0;
+    uint8_t option;
 
     timetype lastUpdate;
 
@@ -167,7 +168,7 @@ private:
     void checkColFull();
     bool isGameOver();
 public:
-    TetrisScreen(void (*returnCallBack)(int8_t menu), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore);
+    TetrisScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~TetrisScreen();
 
     void update(uint16_t deltaTimeMS);

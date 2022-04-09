@@ -1,7 +1,7 @@
 #include "ticscreen.h"
 #include <algorithm> 
 
-TicScreen::TicScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t highscore) {
+TicScreen::TicScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Tic screen loading...");
     this->screenId = 6;
     this->type = Type::GAME;
@@ -12,6 +12,7 @@ TicScreen::TicScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore),
     this->won = E_TIC;
     this->moveCount = 0;
     this->sx = this->sy = 0;
+    this->option = option;
     std::random_shuffle(&pInd[0], &pInd[8]);
 
     for (uint8_t y = 0; y < TIC_BOARDSIZE; y++)
@@ -149,7 +150,7 @@ void TicScreen::keyPressed(uint8_t key) {
         }
     } else if(key == KEY_B) {
         if(this->gameState == LOST)
-            this->returnCallBack(4);
+            this->returnCallBack(4, this->option);
     }
     printBoard();
 }

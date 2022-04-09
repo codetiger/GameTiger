@@ -1,13 +1,14 @@
 #include "tetrisscreen.h"
 
-TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu), void (*hscb)(uint32_t highscore), uint32_t hs) {
+TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t hs, uint8_t option) {
     printf("Tetris screen loading...");
     this->screenId = 4;
     this->type = Type::GAME;
     this->highScore = hs;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
-    this->gameSpeed = 1;
+    this->option = option;
+    this->gameSpeed = this->option*4;
 
     for (int i = 0; i < BOARD_HEIGHT; i++)
         for (int j = 0; j < BOARD_HEIGHT; j++)
@@ -164,7 +165,7 @@ void TetrisScreen::keyPressed(uint8_t key) {
     }
 
     if(key == KEY_B)
-        this->returnCallBack(2);
+        this->returnCallBack(2, this->option);
 
     if(this->gameState == PLAYING) {
         if(key == KEY_LEFT && canMove(currentBlockX - 1, currentBlockY, false))

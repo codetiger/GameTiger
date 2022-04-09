@@ -3,7 +3,7 @@ from PIL import Image
 from collections import defaultdict
 
 color_count = 32
-image_name = "ttt"
+image_name = "alphanumfont"
 
 im = Image.open(image_name + '.png').convert('RGBA')
 # im = im.resize((70,28), Image.NEAREST)
