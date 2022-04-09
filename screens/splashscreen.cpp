@@ -42,7 +42,7 @@ SplashScreen::~SplashScreen() {
 void SplashScreen::update(uint16_t deltaTimeMS) {
     this->totalDuration += deltaTimeMS;
     if(this->totalDuration > 3000) {
-        this->returnCallBack(0, this->option);
+        this->returnCallBack(this->screenId, this->option);
         return;
     }
 

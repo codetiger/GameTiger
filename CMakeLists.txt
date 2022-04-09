@@ -25,6 +25,8 @@ add_executable(${PROJECT_NAME}
     screens/tetrisscreen.cpp
     screens/minescreen.cpp
     screens/ticscreen.cpp
+    screens/aboutscreen.cpp
+    screens/settingsscreen.cpp
     main.cpp
 )
 

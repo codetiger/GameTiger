@@ -3,7 +3,7 @@
 
 TicScreen::TicScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Tic screen loading...");
-    this->screenId = 6;
+    this->screenId = 4;
     this->type = Type::GAME;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -157,7 +157,7 @@ void TicScreen::keyPressed(uint8_t key) {
         }
     } else if(key == KEY_B) {
         if(this->gameState == LOST)
-            this->returnCallBack(4, this->option);
+            this->returnCallBack(this->screenId, this->option);
     }
     // printBoard();
 }
