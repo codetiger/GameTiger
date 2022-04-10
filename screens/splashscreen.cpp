@@ -33,6 +33,13 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     this->bgLayer->addTileInfo(1, tinfo);
     tinfo.color = Color(135, 220, 255);
     this->bgLayer->addTileInfo(2, tinfo);
+
+    // TileInfo atinfo; 
+    // atinfo.type = ANIMATEDSPRITE;
+    // atinfo.sprite = &sweeper;
+    // atinfo.numFrames = 15;
+    // atinfo.animationFrames = "012345678abcdef";
+    // this->bgLayer->addTileInfo(2, atinfo);
     printf("Done\n");
 }
 

@@ -9,7 +9,7 @@ AboutScreen::AboutScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(
     this->option = option;
     this->scroll = 0;
 
-    uint16_t tileWidth = 10, tileHeight = 10;
+    uint16_t tileWidth = 40, tileHeight = 48;
     uint8_t xCount = (320 / tileWidth);
     uint8_t yCount = (240 / tileHeight);
     uint8_t *ts = new uint8_t[xCount*yCount];
