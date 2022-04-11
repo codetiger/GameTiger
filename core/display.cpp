@@ -13,7 +13,7 @@ Display::Display() {
         exit(EXIT_FAILURE);
 	}
 
-	this->window = SDL_CreateWindow("GameTiger!", 100, 100, 320, 240, SDL_WINDOW_SHOWN);
+	this->window = SDL_CreateWindow("GameTiger!", 100, 100, DISPLAY_WIDTH, DISPLAY_HEIGHT, SDL_WINDOW_SHOWN);
 	if (this->window == NULL) {
 		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
@@ -114,7 +114,7 @@ void Display::initSequence() {
     this->write_cmd(0x11);
     this->write_cmd(0x29);
 
-    this->setWindow(0, 0, this->width, this->height);
+    this->setWindow(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT);
     spi_set_format(spi1, 16, SPI_CPOL_0, SPI_CPHA_0, SPI_MSB_FIRST);
 }
 
@@ -178,12 +178,12 @@ void Display::setBrightness(uint8_t brightness) {
 
 void Display::clear(Color c) {
 #ifdef FORMPU
-    dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer, &c, this->height*this->width, true);
+    dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer, &c, DISPLAY_HEIGHT*DISPLAY_WIDTH, true);
     dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
 #else
-    for (int i = 0; i < this->height; i++) {
-        for (int j = 0; j < this->width; j++) {
-            int index = (i * this->width) + j;
+    for (int i = 0; i < DISPLAY_HEIGHT; i++) {
+        for (int j = 0; j < DISPLAY_WIDTH; j++) {
+            int index = (i * DISPLAY_WIDTH) + j;
             this->buffer[index] = c;
         }
     }
@@ -193,10 +193,10 @@ void Display::clear(Color c) {
 #define div_255_fast(x) (((x) + (((x) + 257) >> 8)) >> 8)
 
 void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
-    if (alpha == 0 || x < 0 || x >= this->width || y < 0 || y >= this->height)
+    if (alpha == 0 || x < 0 || x >= DISPLAY_WIDTH || y < 0 || y >= DISPLAY_HEIGHT)
         return;
     
-    int index = (y * this->width) + x;
+    int index = (y * DISPLAY_WIDTH) + x;
     if(alpha > 250) {
         this->buffer[index] = c;
     } else {
@@ -211,12 +211,12 @@ void Display::update() {
 #ifdef FORMPU
     gpio_put(DC_PIN, 1);
 
-    dma_channel_configure(this->dmaSPIChannel, &this->dmaSPIConfig, &spi_get_hw(spi1)->dr, (uint16_t*)this->buffer, this->width * this->height, true);
+    dma_channel_configure(this->dmaSPIChannel, &this->dmaSPIConfig, &spi_get_hw(spi1)->dr, (uint16_t*)this->buffer, DISPLAY_WIDTH * DISPLAY_HEIGHT, true);
     dma_channel_wait_for_finish_blocking(this->dmaSPIChannel);
 #else
-    for (int i = 0; i < this->height; i++) {
-        for (int j = 0; j < this->width; j++) {
-            int index = (i * this->width) + j;
+    for (int i = 0; i < DISPLAY_HEIGHT; i++) {
+        for (int j = 0; j < DISPLAY_WIDTH; j++) {
+            int index = (i * DISPLAY_WIDTH) + j;
             SDL_SetRenderDrawColor(this->renderer, this->buffer[index].red<<3, this->buffer[index].green<<2, this->buffer[index].blue<<3, 255);
             SDL_RenderDrawPoint(this->renderer, j, i);
         }
@@ -226,11 +226,11 @@ void Display::update() {
 }
 
 void Display::fillRect(int x, int y, int width, int height, Color c, uint8_t alpha) {
-    if(x >= this->width || y >= this->height || x + width < 0 || y + height < 0)
+    if(x >= DISPLAY_WIDTH || y >= DISPLAY_HEIGHT || x + width < 0 || y + height < 0)
         return;
 
-    width = std::min(width, this->width - x);
-    height = std::min(height, this->height - y);
+    width = std::min(width, DISPLAY_WIDTH - x);
+    height = std::min(height, DISPLAY_HEIGHT - y);
     x = std::max(x, 0);
     y = std::max(y, 0);
 
@@ -241,7 +241,7 @@ void Display::fillRect(int x, int y, int width, int height, Color c, uint8_t alp
     } else {
         #ifdef FORMPU
         for (int i = y; i < y + height; i++) {
-            int index = (i * this->width) + x;
+            int index = (i * DISPLAY_WIDTH) + x;
             dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer[index], &c, width, true);
             dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
         }

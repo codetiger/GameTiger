@@ -10,13 +10,13 @@ private:
     uint8_t *palette;
     uint8_t *pixelData;
     uint16_t colorCount;
-    std::map<char, std::array<uint16_t, 5> > spriteData;
+    std::map<int16_t, std::array<uint16_t, 5> > spriteData;
     uint8_t alpha = 255;
 public:
     uint16_t width, height;
 
     Image(uint16_t width, uint16_t height, uint16_t colorCount, uint8_t *palette, uint8_t *pixelData);
-    Image(uint16_t width, uint16_t height, uint16_t colorCount, uint8_t *palette, uint8_t *pixelData, std::map<char, std::array<uint16_t, 5> > spriteData);
+    Image(uint16_t width, uint16_t height, uint16_t colorCount, uint8_t *palette, uint8_t *pixelData, std::map<int16_t, std::array<uint16_t, 5> > spriteData);
 
     void setAlpha(uint8_t alpha);
     void draw(Display *display, int16_t screenX, int16_t screenY, uint16_t spriteX = 0, uint16_t spriteY = 0, uint16_t spriteWidth = 0, uint16_t spriteHeight = 0);

@@ -24,6 +24,8 @@ private:
     std::map<uint8_t, TileInfo> tileInfoList;
     std::map<uint8_t, uint8_t> animationFrame;
 public:
+    uint16_t width, height;
+    
     TileMap(uint8_t xc, uint8_t yc, uint8_t tw, uint8_t th, uint8_t *ts);
     ~TileMap();
     void addTileInfo(uint8_t index, TileInfo tinfo);

@@ -48,15 +48,20 @@
 #include "../content/ttt.h"
 #include "../content/tttblocks.h"
 #include "../content/alphanumfont.h"
+#include "../content/pa2terrain.h"
+#include "../content/pa2bg.h"
 
 #include "../core/image.h"
 #include "tilemap.h"
+
+#define DISPLAY_WIDTH 320
+#define DISPLAY_HEIGHT 240
 
 enum GameState {WAITING, PLAYING, LOST};
 timetype getTime();
 uint16_t getTimeDiffMS(timetype start);
 
 extern Image font, font2, alphanumfont, gameOver, tiger, sweeper, ttt, tttblocks;
-extern Image menuItemLogo[7];
-
+extern Image menuItemLogo[8];
+extern Image pa2terrain, pa2bg;
 #endif

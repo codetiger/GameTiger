@@ -10,8 +10,8 @@ AboutScreen::AboutScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(
     this->scroll = 0;
 
     uint16_t tileWidth = 40, tileHeight = 48;
-    uint8_t xCount = (320 / tileWidth);
-    uint8_t yCount = (240 / tileHeight);
+    uint8_t xCount = (DISPLAY_WIDTH / tileWidth);
+    uint8_t yCount = (DISPLAY_HEIGHT / tileHeight);
     uint8_t *ts = new uint8_t[xCount*yCount];
     bool colorFlip = true;
     for (int y = 0; y < yCount; y++) {
@@ -48,17 +48,17 @@ void AboutScreen::update(uint16_t deltaTimeMS) {
 void AboutScreen::draw(Display *display) {
     this->bgLayer->draw(display, 0, 0);
 
-    int16_t y = display->height;
+    int16_t y = DISPLAY_HEIGHT;
     for (int i = 0; i < 10; i++) {
         std::string title = aboutText[i][0];
         uint16_t width = font.getWidth(title);
-        font.drawSprites(display, title, (display->width - width)/2, y - scroll);
+        font.drawSprites(display, title, (DISPLAY_WIDTH - width)/2, y - scroll);
         y += 24;
         for (int j = 1; j < 5; j++) {
             std::string text = aboutText[i][j];
             if(text.length() > 0) {
                 uint16_t width = alphanumfont.getWidth(text);
-                alphanumfont.drawSprites(display, text, (display->width - width)/2, y - scroll);
+                alphanumfont.drawSprites(display, text, (DISPLAY_WIDTH - width)/2, y - scroll);
                 y += 18;
             }
         }

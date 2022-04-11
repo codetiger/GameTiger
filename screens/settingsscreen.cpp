@@ -10,8 +10,8 @@ SettingsScreen::SettingsScreen(void (*rcb)(int8_t menu, uint8_t option), void (*
     this->scroll = 0;
 
     uint16_t tileWidth = 32, tileHeight = 16;
-    uint8_t xCount = (320 / tileWidth);
-    uint8_t yCount = (240 / tileHeight);
+    uint8_t xCount = (DISPLAY_WIDTH / tileWidth);
+    uint8_t yCount = (DISPLAY_HEIGHT / tileHeight);
     uint8_t *ts = new uint8_t[xCount*yCount];
     bool colorFlip = true;
     for (int y = 0; y < yCount; y++) {

@@ -15,8 +15,8 @@ MenuScreen::MenuScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(ui
     this->option = option;
 
     uint16_t tileWidth = 40, tileHeight = 40;
-    uint8_t xCount = (320 / tileWidth);
-    uint8_t yCount = (240 / tileHeight);
+    uint8_t xCount = (DISPLAY_WIDTH / tileWidth);
+    uint8_t yCount = (DISPLAY_HEIGHT / tileHeight);
     uint8_t *ts = new uint8_t[xCount*yCount];
     bool colorFlip = true;
     for (int y = 0; y < yCount; y++) {
@@ -64,14 +64,14 @@ void MenuScreen::draw(Display *display) {
             posx += (this->currentMenuItem - this->selectedMenuItem) * this->animationCounter;
 
         uint16_t width = font.getWidth(this->menuItemNames[i][0]);
-        font.drawSprites(display, this->menuItemNames[i][0], posx + (display->width - width)/2, 170);
-        menuItemLogo[i].draw(display, posx + (display->width - menuItemLogo[i].width)/2, 64);
+        font.drawSprites(display, this->menuItemNames[i][0], posx + (DISPLAY_WIDTH - width)/2, 170);
+        menuItemLogo[i].draw(display, posx + (DISPLAY_WIDTH - menuItemLogo[i].width)/2, 64);
 
     }
     if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem].length() > 0) {
         std::string option = this->menuItemNames[this->currentMenuItem][this->currentOptionItem];
         uint16_t width = alphanumfont.getWidth(option);
-        alphanumfont.drawSprites(display, option, (display->width - width)/2, 190);
+        alphanumfont.drawSprites(display, option, (DISPLAY_WIDTH - width)/2, 190);
     }
 }
 

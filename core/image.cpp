@@ -10,7 +10,7 @@ Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd) {
     this->pixelData = pd;
 }
 
-Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd, std::map<char, std::array<uint16_t, 5> > sd){
+Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd, std::map<int16_t, std::array<uint16_t, 5> > sd){
     this->width = w;
     this->height = h;
     this->colorCount = cc;
@@ -27,12 +27,12 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
     spriteWidth = (spriteWidth == 0) ? this->width : spriteWidth;
     spriteHeight = (spriteHeight == 0) ? this->height : spriteHeight;
 
-    if(this->alpha == 0 || screenX+spriteWidth <= 0 || screenX >= display->width || screenY+spriteHeight <= 0 || screenY >= display->height)
+    if(this->alpha == 0 || screenX+spriteWidth <= 0 || screenX >= DISPLAY_WIDTH || screenY+spriteHeight <= 0 || screenY >= DISPLAY_HEIGHT)
         return;
 
     for (int y = 0; y < spriteHeight; y++) {
         for (int x = 0; x < spriteWidth; x++) {
-            if (x+screenX < 0 || x+screenX >= display->width || y+screenY < 0 || y+screenY >= display->height) 
+            if (x+screenX < 0 || x+screenX >= DISPLAY_WIDTH || y+screenY < 0 || y+screenY >= DISPLAY_HEIGHT) 
                 continue;
 
             int pixIndex = (y+spriteY) * this->width + (x+spriteX);

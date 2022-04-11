@@ -27,6 +27,7 @@ add_executable(${PROJECT_NAME}
     screens/ticscreen.cpp
     screens/aboutscreen.cpp
     screens/settingsscreen.cpp
+    screens/pa2screen.cpp
     main.cpp
 )
 

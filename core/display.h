@@ -40,8 +40,6 @@ private:
     dma_channel_config dmaMemConfig;
 #endif
 public:
-    const uint16_t width = 320, height = 240;
-
     Display();
     ~Display();
 

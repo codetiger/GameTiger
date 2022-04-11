@@ -14,8 +14,8 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     this->option = option;
 
     uint16_t tileWidth = 20, tileHeight = 20;
-    uint8_t xCount = 4 + (320 / tileWidth);
-    uint8_t yCount = 4 + (240 / tileHeight);
+    uint8_t xCount = 4 + (DISPLAY_WIDTH / tileWidth);
+    uint8_t yCount = 4 + (DISPLAY_HEIGHT / tileHeight);
     uint8_t *ts = new uint8_t[xCount*yCount];
     bool colorFlip = true;
     for (int y = 0; y < yCount; y++) {

@@ -9,6 +9,7 @@
 #include "screens/tetrisscreen.h"
 #include "screens/minescreen.h"
 #include "screens/ticscreen.h"
+#include "screens/pa2screen.h"
 #include "screens/aboutscreen.h"
 #include "screens/settingsscreen.h"
 
@@ -57,9 +58,11 @@ void backHandler(int8_t menu, uint8_t option) {
         else if(menu == 4)
             screen = new TicScreen(*backHandler, *highScoreHandler, highscores[6], option);
         else if(menu == 5)
-            screen = new SettingsScreen(*backHandler, *highScoreHandler, highscores[7], option);
+            screen = new PixelAdventureScreen(*backHandler, *highScoreHandler, highscores[7], option);
         else if(menu == 6)
-            screen = new AboutScreen(*backHandler, *highScoreHandler, highscores[8], option);
+            screen = new SettingsScreen(*backHandler, *highScoreHandler, highscores[8], option);
+        else if(menu == 7)
+            screen = new AboutScreen(*backHandler, *highScoreHandler, highscores[9], option);
     }
 }
 

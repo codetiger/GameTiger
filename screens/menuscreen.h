@@ -4,13 +4,14 @@
 class MenuScreen : public Screen
 {
 private:
-    const uint8_t menuCount = 7;
-    const std::string menuItemNames[7][4] = {
+    const uint8_t menuCount = 8;
+    const std::string menuItemNames[8][4] = {
         {"SNAKE", "Classic", "Modern", ""},
         {"2048", "", "", ""},
         {"TETRIS", "Easy", "Medium", "Hard"},
         {"MINESWEEPER", "Easy", "Medium", "Hard"},
         {"TIC TAC TOE", "Easy", "Medium", "Hard"},
+        {"PIXEL ADV 2", "", "", ""},
         {"SETTINGS", "", "", ""},
         {"ABOUT", "", "", ""}
     };
