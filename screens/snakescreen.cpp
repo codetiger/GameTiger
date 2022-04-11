@@ -91,15 +91,13 @@ void SnakeScreen::draw(Display *display) {
         this->drawBlock(display, 10 + this->snakeBlocks[i][0]*10, 30 + this->snakeBlocks[i][1]*10);
 
     this->drawBlock(display, 10 + this->foodPos[0]*10, 30 + this->foodPos[1]*10);
-    if(this->option == 1) {
-        font2.drawSprites(display, std::to_string(this->snakeLength-3), 200, 8);
-        font2.drawSprites(display, std::to_string(this->highScore), 12, 8);
-    } else {
-        alphanumfont.drawSprites(display, std::to_string(this->snakeLength-3), 200, 8);
-        alphanumfont.drawSprites(display, std::to_string(this->highScore), 12, 8);
+    alphanumfont.drawSprites(display, std::to_string(this->snakeLength-3), 200, 8);
+    alphanumfont.drawSprites(display, std::to_string(this->highScore), 12, 8);
+    if(this->gameState == LOST) {
+        std::string str = "Game Over";
+        uint16_t width = alphanumfont.getWidth(str, 2);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
     }
-    if(this->gameState == LOST)
-        gameOver.draw(display, 96, 80);
 }
 
 void SnakeScreen::keyPressed(uint8_t key) {

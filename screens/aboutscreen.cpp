@@ -39,7 +39,7 @@ void AboutScreen::update(uint16_t deltaTimeMS) {
     uint16_t timeDiff = getTimeDiffMS(this->lastUpdate);
     if(timeDiff > 20) {
         this->scroll++;
-        if(this->scroll >= 800)
+        if(this->scroll >= 1000)
             this->scroll = 0;
         this->lastUpdate = getTime();
     }
@@ -51,20 +51,19 @@ void AboutScreen::draw(Display *display) {
     int16_t y = DISPLAY_HEIGHT;
     for (int i = 0; i < 10; i++) {
         std::string title = aboutText[i][0];
-        uint16_t width = font.getWidth(title);
-        font.drawSprites(display, title, (DISPLAY_WIDTH - width)/2, y - scroll);
-        y += 24;
+        uint16_t width = alphanumfont.getWidth(title, 2);
+        alphanumfont.drawSprites(display, title, (DISPLAY_WIDTH - width)/2, y - scroll, 2);
+        y += 36;
         for (int j = 1; j < 5; j++) {
             std::string text = aboutText[i][j];
             if(text.length() > 0) {
                 uint16_t width = alphanumfont.getWidth(text);
                 alphanumfont.drawSprites(display, text, (DISPLAY_WIDTH - width)/2, y - scroll);
-                y += 18;
+                y += 24;
             }
         }
-        y += 36;
+        y += 48;
     }
-    
 }
 
 void AboutScreen::keyPressed(uint8_t key) {

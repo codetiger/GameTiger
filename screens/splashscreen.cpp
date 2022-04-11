@@ -8,7 +8,6 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     this->highScoreCallBack = hscb;
     this->imageAlpha = 0;
     tiger.setAlpha(this->imageAlpha);
-    font.setAlpha(this->imageAlpha);
     this->accDeltaTimeMS = 0;
     this->totalDuration = 0;
     this->option = option;
@@ -64,13 +63,15 @@ void SplashScreen::update(uint16_t deltaTimeMS) {
     if(this->imageAlpha < 255 - frameQuotient * 3)
         this->imageAlpha += frameQuotient * 3;    
     tiger.setAlpha(this->imageAlpha);
-    font.setAlpha(this->imageAlpha);
+    alphanumfont.setAlpha(this->imageAlpha);
 }
 
 void SplashScreen::draw(Display *display) {
     this->bgLayer->draw(display, this->tileMoveX, this->tileMoveY+40);
     tiger.draw(display, 92, 56);
-    font.drawSprites(display, "GAMETIGER", 98, 190);
+    std::string title = "GameTiger";
+    uint16_t width = alphanumfont.getWidth(title, 2);
+    alphanumfont.drawSprites(display, title, (DISPLAY_WIDTH - width)/2, 190, 2);
 }
 
 void SplashScreen::keyPressed(uint8_t key) {

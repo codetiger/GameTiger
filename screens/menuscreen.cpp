@@ -57,21 +57,21 @@ void MenuScreen::draw(Display *display) {
     for (int i = 0; i < menuCount; i++) {
         uint8_t alpha = (i == this->currentMenuItem) ? 255 : 64;
         menuItemLogo[i].setAlpha(alpha);
-        font.setAlpha(alpha);
+        alphanumfont.setAlpha(alpha);
 
         int posx = (i-this->currentMenuItem) * this->menuItemGap;
         if(isAnimating)
             posx += (this->currentMenuItem - this->selectedMenuItem) * this->animationCounter;
 
-        uint16_t width = font.getWidth(this->menuItemNames[i][0]);
-        font.drawSprites(display, this->menuItemNames[i][0], posx + (DISPLAY_WIDTH - width)/2, 170);
+        uint16_t width = alphanumfont.getWidth(this->menuItemNames[i][0], 2);
+        alphanumfont.drawSprites(display, this->menuItemNames[i][0], posx + (DISPLAY_WIDTH - width)/2, 170, 2);
         menuItemLogo[i].draw(display, posx + (DISPLAY_WIDTH - menuItemLogo[i].width)/2, 64);
-
     }
+    alphanumfont.setAlpha(255);
     if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem].length() > 0) {
         std::string option = this->menuItemNames[this->currentMenuItem][this->currentOptionItem];
         uint16_t width = alphanumfont.getWidth(option);
-        alphanumfont.drawSprites(display, option, (DISPLAY_WIDTH - width)/2, 190);
+        alphanumfont.drawSprites(display, option, (DISPLAY_WIDTH - width)/2, 200);
     }
 }
 

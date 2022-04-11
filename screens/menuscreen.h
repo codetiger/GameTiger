@@ -6,14 +6,14 @@ class MenuScreen : public Screen
 private:
     const uint8_t menuCount = 8;
     const std::string menuItemNames[8][4] = {
-        {"SNAKE", "Classic", "Modern", ""},
+        {"Snake", "", "", ""},
         {"2048", "", "", ""},
-        {"TETRIS", "Easy", "Medium", "Hard"},
-        {"MINESWEEPER", "Easy", "Medium", "Hard"},
-        {"TIC TAC TOE", "Easy", "Medium", "Hard"},
-        {"PIXEL ADV 2", "", "", ""},
-        {"SETTINGS", "", "", ""},
-        {"ABOUT", "", "", ""}
+        {"Tetris", "Easy", "Medium", "Hard"},
+        {"Minesweeper", "Easy", "Medium", "Hard"},
+        {"Tic Tac Toe", "Easy", "Medium", "Hard"},
+        {"Pixel Adv", "", "", ""},
+        {"Settings", "", "", ""},
+        {"About", "", "", ""}
     };
     uint8_t selectedMenuItem, currentMenuItem, animationCounter;
     uint8_t currentOptionItem;

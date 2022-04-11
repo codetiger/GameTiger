@@ -23,7 +23,7 @@ void Image::setAlpha(uint8_t a) {
     this->alpha = a;
 }
 
-void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t spriteX, uint16_t spriteY, uint16_t spriteWidth, uint16_t spriteHeight) {
+void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t spriteX, uint16_t spriteY, uint16_t spriteWidth, uint16_t spriteHeight, int8_t scale) {
     spriteWidth = (spriteWidth == 0) ? this->width : spriteWidth;
     spriteHeight = (spriteHeight == 0) ? this->height : spriteHeight;
 
@@ -41,34 +41,36 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
             if(alpha > 0) {
                 Color c = Color(this->palette[colIndex], this->palette[colIndex+1], this->palette[colIndex+2]);
                 alpha = alpha > this->alpha ? this->alpha : alpha;
-                display->setPixel(x+screenX, y+screenY, c, alpha);
+                for(int sx = 0; sx < scale; sx++)
+                    for(int sy = 0; sy < scale; sy++)
+                        display->setPixel((x*scale)+screenX+sx, (y*scale)+screenY+sy, c, alpha);
             }
         }
     }
 }
 
-void Image::drawSprite(Display *display, char index, int16_t screenX, int16_t screenY) {
+void Image::drawSprite(Display *display, char index, int16_t screenX, int16_t screenY, int8_t scale) {
     if(this->alpha == 0)
         return;
 
-    this->draw(display, screenX, screenY, this->spriteData[index][0], this->spriteData[index][1], this->spriteData[index][2], this->spriteData[index][3]);
+    this->draw(display, screenX, screenY, this->spriteData[index][0], this->spriteData[index][1], this->spriteData[index][2], this->spriteData[index][3], scale);
 }
 
-void Image::drawSprites(Display *display, std::string indices, int16_t screenX, int16_t screenY) {
+void Image::drawSprites(Display *display, std::string indices, int16_t screenX, int16_t screenY, int8_t scale) {
     if(this->alpha == 0)
         return;
 
     uint16_t posX = screenX;
     for(char& index : indices) {
         if(index != ' ')
-            this->draw(display, posX, screenY, this->spriteData[index][0], this->spriteData[index][1], this->spriteData[index][2], this->spriteData[index][3]);
-        posX += this->spriteData[index][2] - 1;
+            this->draw(display, posX, screenY, this->spriteData[index][0], this->spriteData[index][1], this->spriteData[index][2], this->spriteData[index][3], scale);
+        posX += (this->spriteData[index][2] - 1) * scale;
     }
 }
 
-uint16_t Image::getWidth(std::string indices) {
+uint16_t Image::getWidth(std::string indices, int8_t scale) {
     uint16_t width = 0;
     for(char& index : indices)
-        width += this->spriteData[index][2] - 1;
+        width += this->spriteData[index][2] * scale - 1;
     return width;
 }

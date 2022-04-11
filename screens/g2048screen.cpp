@@ -13,7 +13,6 @@ G2048Screen::G2048Screen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(
     this->direction = -1;
     this->gameState = PLAYING;
     this->option = option;
-    font.setAlpha(255);
 
     for (uint8_t i = 0; i < BOARDSIZE*BOARDSIZE; i++)
         board[i] = 0;
@@ -193,14 +192,18 @@ void G2048Screen::draw(Display *display) {
             display->fillRect(5 + 80*j, 5 + 60*i, 70, 50, c);
             if (board[i*BOARDSIZE+j]) {
                 std::string str = std::to_string((uint16_t)pow(2, board[i*BOARDSIZE+j]));
-                uint16_t width = font.getWidth(str);
-                font.drawSprites(display, str, 5 + (70-width)/2 + 80*j, 22 + 60*i);
+                uint16_t width = alphanumfont.getWidth(str, 2);
+                alphanumfont.drawSprites(display, str, 5 + (70-width)/2 + 80*j, 22 + 60*i, 2);
             }
         }
     }
 
-    if(this->gameState == LOST)
-        gameOver.draw(display, 96, 80);
+    if(this->gameState == LOST) {
+        std::string str = "Game Over";
+        uint16_t width = alphanumfont.getWidth(str, 2);
+        display->fillRect((DISPLAY_WIDTH - width)/2, 104, width, 24, Color(0, 0, 0));
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+    }
 }
 
 bool G2048Screen::checkGameOver() {

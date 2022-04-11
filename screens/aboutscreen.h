@@ -11,12 +11,12 @@ private:
     TileMap *bgLayer;
 
     std::string aboutText[10][5] = {
-        {"GAMETIGER", "Retro style gameconsole build using RPi Pico"},
-        {"DESIGN", "Harishankar Narayanan"},
-        {"PROGRAMMER", "Harishankar Narayanan"},
-        {"QUALITY", "Mithila Muralidharan", "Naethraa H M", "Prajan H M"},
-        {"HARDWARE", "Raspberry Pi Pico", "Waveshare 2 inch LCD display module", "Pimoroni LiPo SHIM for Pico", "Witty Fox LiIon Battery"},
-        {"THANK YOU", "Remember that you are not alone", "There are others going through the same thing", "By Adam Levine"},
+        {"GameTiger", "Retro style gameconsole build using RPi Pico"},
+        {"Design", "Harishankar Narayanan"},
+        {"Programmer", "Harishankar Narayanan"},
+        {"Quality", "Mithila Muralidharan", "Naethraa H M", "Prajan H M"},
+        {"Hardware", "Raspberry Pi Pico", "Waveshare 2 inch LCD display module", "Pimoroni LiPo SHIM for Pico", "Witty Fox LiIon Battery"},
+        {"Thank You", "Remember that you are not alone", "There are others going through the same thing", "By Adam Levine"},
     };
 
 public:

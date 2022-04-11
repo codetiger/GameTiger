@@ -34,15 +34,12 @@
 #ifndef _GAME_TIGER_COMMON_H
 #define _GAME_TIGER_COMMON_H
 
-#include "../content/font.h"
-#include "../content/font2.h"
 #include "../content/tiger.h"
 #include "../content/snake.h"
 #include "../content/tetris.h"
 #include "../content/g2048.h"
 #include "../content/mine.h"
 #include "../content/sweeper.h"
-#include "../content/gameover.h"
 #include "../content/about.h"
 #include "../content/settings.h"
 #include "../content/ttt.h"
@@ -61,7 +58,7 @@ enum GameState {WAITING, PLAYING, LOST};
 timetype getTime();
 uint16_t getTimeDiffMS(timetype start);
 
-extern Image font, font2, alphanumfont, gameOver, tiger, sweeper, ttt, tttblocks;
+extern Image alphanumfont, tiger, sweeper, ttt, tttblocks;
 extern Image menuItemLogo[8];
 extern Image pa2terrain, pa2bg;
 #endif

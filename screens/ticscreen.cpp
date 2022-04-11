@@ -25,8 +25,7 @@ TicScreen::TicScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint
     for (uint8_t y = 0; y < TIC_BOARDSIZE; y++)
         for (uint8_t x = 0; x < TIC_BOARDSIZE; x++)
             board.setCellValue(x, y, E_TIC);
-    printBoard();
-    font.setAlpha(255);
+    // printBoard();
     printf("Done\n");
 }
 
@@ -57,16 +56,17 @@ void TicScreen::draw(Display *display) {
         }
     }
 
-    font.drawSprites(display, "TIC TAC TOE", 90, 10);
+    uint8_t width = alphanumfont.getWidth("Tic Tac Toe", 2);
+    alphanumfont.drawSprites(display, "Tic Tac Toe", (DISPLAY_WIDTH-width)/2, 2, 2);
     if(turn == O_TIC)
         display->rect(30+this->sx*60, 30+this->sy*60, 60, 60, Color(0, 255, 0));
     
     if(this->gameState == PLAYING) {
-        font.drawSprites(display, "TURN", 240, 140);
+        alphanumfont.drawSprites(display, "Turn", 236, 130, 2);
         if(turn == O_TIC)
-            font.drawSprites(display, "YOU", 242, 160);
+            alphanumfont.drawSprites(display, "You", 240, 160, 2);
         else
-            font.drawSprites(display, "COMP", 240, 160);
+            alphanumfont.drawSprites(display, "Comp", 238, 160, 2);
     } else {
         std::string str = "";
         if(won == O_TIC)
@@ -75,8 +75,8 @@ void TicScreen::draw(Display *display) {
             str = "COMPUTER WON";
         else
             str = "GAME DRAW";
-        uint8_t width = font.getWidth(str);
-        font.drawSprites(display, str, (240-width)/2, 215);
+        uint8_t width = alphanumfont.getWidth(str, 2);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH-width)/2, 210, 2);
     }
 }
 

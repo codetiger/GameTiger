@@ -68,7 +68,7 @@ void TetrisScreen::draw(Display *display) {
             }
         }
     }
-    font2.drawSprites(display, std::to_string(this->score), 240, 200);
+    alphanumfont.drawSprites(display, std::to_string(this->score), 240, 200, 2);
 
     display->fillRect(215, 25, 80, 80, Color(181, 44, 49));
     display->fillRect(220, 30, 70, 70, Color(210, 47, 48));
@@ -80,8 +80,11 @@ void TetrisScreen::draw(Display *display) {
                 display->rect(235+12*c, 45+12*r, 12, 12, Color(255, 255, 255));
             }
 
-    if(this->gameState == LOST)
-        gameOver.draw(display, 96, 80);
+    if(this->gameState == LOST) {
+        std::string str = "Game Over";
+        uint16_t width = alphanumfont.getWidth(str, 2);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+    }
 }
 
 void TetrisScreen::printBoard() {
