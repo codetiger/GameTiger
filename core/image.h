@@ -23,6 +23,8 @@ public:
     void drawSprite(Display *display, char index, int16_t screenX, int16_t screenY, int8_t scale = 1);
     void drawSprites(Display *display, std::string indices, int16_t screenX, int16_t screenY, int8_t scale = 1);
     uint16_t getWidth(std::string indices, int8_t scale = 1);
+    uint16_t getSpriteWidth(char index);
+    uint16_t getSpriteHeight(char index);
 };
 typedef struct Image Image;
 

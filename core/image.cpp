@@ -74,3 +74,11 @@ uint16_t Image::getWidth(std::string indices, int8_t scale) {
         width += this->spriteData[index][2] * scale - 1;
     return width;
 }
+
+uint16_t Image::getSpriteWidth(char index) {
+    return this->spriteData[index][2];
+}
+
+uint16_t Image::getSpriteHeight(char index) {
+    return this->spriteData[index][3];
+}

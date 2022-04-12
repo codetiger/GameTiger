@@ -17,6 +17,7 @@ Image tttblocks = Image(tttblocks_img_width, tttblocks_img_height, tttblocks_col
 
 Image pa2terrain = Image(pa2terrain_img_width, pa2terrain_img_height, pa2terrain_color_count, (uint8_t*)pa2terrain_palette, (uint8_t*)pa2terrain_pixel_data, pa2terrain_sprite_data);
 Image pa2bg = Image(pa2bg_img_width, pa2bg_img_height, pa2bg_color_count, (uint8_t*)pa2bg_palette, (uint8_t*)pa2bg_pixel_data, pa2bg_sprite_data);
+Image pa2fruits = Image(pa2fruits_img_width, pa2fruits_img_height, pa2fruits_color_count, (uint8_t*)pa2fruits_palette, (uint8_t*)pa2fruits_pixel_data, pa2fruits_sprite_data);
 
 timetype getTime() {
     timetype now;

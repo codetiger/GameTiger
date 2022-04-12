@@ -2,7 +2,7 @@
 
 AboutScreen::AboutScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("About screen loading...");
-    this->screenId = 6;
+    this->screenId = 7;
     this->type = Type::GAME;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;

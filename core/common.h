@@ -47,9 +47,11 @@
 #include "../content/alphanumfont.h"
 #include "../content/pa2terrain.h"
 #include "../content/pa2bg.h"
+#include "../content/pa2fruits.h"
 
 #include "../core/image.h"
 #include "tilemap.h"
+#include "level.h"
 
 #define DISPLAY_WIDTH 320
 #define DISPLAY_HEIGHT 240
@@ -60,5 +62,5 @@ uint16_t getTimeDiffMS(timetype start);
 
 extern Image alphanumfont, tiger, sweeper, ttt, tttblocks;
 extern Image menuItemLogo[8];
-extern Image pa2terrain, pa2bg;
+extern Image pa2terrain, pa2bg, pa2fruits;
 #endif

@@ -1,6 +1,7 @@
 #include "display.h"
 #include <stdio.h>
 #include <algorithm>
+#include <memory>
 
 Display::Display() {
     printf("Display driver loading... ");

@@ -18,6 +18,7 @@ add_executable(${PROJECT_NAME}
     core/battery.cpp
     core/keyboard.cpp
     core/tilemap.cpp
+    core/level.cpp
     screens/splashscreen.cpp
     screens/menuscreen.cpp
     screens/snakescreen.cpp
