@@ -11,7 +11,7 @@ private:
     TileMap *bgLayer;
 
     std::string aboutText[10][5] = {
-        {"GameTiger", "Retro style gameconsole build using RPi Pico"},
+        {"GameTiger", "Retro style game console built using RPi Pico"},
         {"Design", "Harishankar Narayanan"},
         {"Programmer", "Harishankar Narayanan"},
         {"Quality", "Mithila Muralidharan", "Naethraa H M", "Prajan H M"},

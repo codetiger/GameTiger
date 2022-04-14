@@ -22,6 +22,13 @@ struct GameItem {
     const char (*animSeq)[17];
 };
 
+// enum EnemyState {IDLE, MOVING, FOLLOWING, SHOOTING, HIT};
+
+struct Enemy {
+    uint16_t x, y;
+    // EnemyState state;
+};
+
 class Level {
 private:
     TileMap *bgLayer, *gameLayer;

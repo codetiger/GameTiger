@@ -11,7 +11,7 @@ private:
         {"Tetris", "Easy", "Medium", "Hard"},
         {"Minesweeper", "Easy", "Medium", "Hard"},
         {"Tic Tac Toe", "Easy", "Medium", "Hard"},
-        {"Pixel Adv", "", "", ""},
+        {"Ninja Frog", "", "", ""},
         {"Settings", "", "", ""},
         {"About", "", "", ""}
     };

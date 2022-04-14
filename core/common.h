@@ -48,6 +48,7 @@
 #include "../content/pa2terrain.h"
 #include "../content/pa2bg.h"
 #include "../content/pa2fruits.h"
+#include "../content/ninjafrog.h"
 
 #include "../core/image.h"
 #include "tilemap.h"

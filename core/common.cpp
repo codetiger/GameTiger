@@ -7,7 +7,7 @@ Image menuItemLogo[8] = {
     Image(tetris_img_width, tetris_img_height, tetris_color_count, (uint8_t*)tetris_palette, (uint8_t*)tetris_pixel_data),
     Image(mine_img_width, mine_img_height, mine_color_count, (uint8_t*)mine_palette, (uint8_t*)mine_pixel_data),
     Image(ttt_img_width, ttt_img_height, ttt_color_count, (uint8_t*)ttt_palette, (uint8_t*)ttt_pixel_data),
-    Image(ttt_img_width, ttt_img_height, ttt_color_count, (uint8_t*)ttt_palette, (uint8_t*)ttt_pixel_data),
+    Image(ninjafrog_img_width, ninjafrog_img_height, ninjafrog_color_count, (uint8_t*)ninjafrog_palette, (uint8_t*)ninjafrog_pixel_data),
     Image(settings_img_width, settings_img_height, settings_color_count, (uint8_t*)settings_palette, (uint8_t*)settings_pixel_data),
     Image(about_img_width, about_img_height, about_color_count, (uint8_t*)about_palette, (uint8_t*)about_pixel_data),
 };
