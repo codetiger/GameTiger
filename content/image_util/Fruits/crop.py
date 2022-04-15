@@ -1,7 +1,7 @@
+import enum
 from PIL import Image, ImageChops
 import os
 
-folder = "Fruits"
 origTileSize = 32
 
 def are_images_equal(img1, img2):
@@ -19,6 +19,13 @@ def are_images_equal(img1, img2):
     ).getbbox()
 
     return equal_size and equal_alphas and equal_content
+
+def image_in_array(tiles, image):
+    for (i, tile) in enumerate(tiles):
+        if(are_images_equal(tile, image)):
+            return i
+    return None
+
 
 imageList = [
     ("Apple", 8, 8, 5, 9),
@@ -41,19 +48,20 @@ posx = 0
 posy = 0
 for props in imageList:
     filename, cropLeft, cropRight, cropTop, cropBottom = props
-    img = Image.open(os.path.join(folder, filename + ".png"))
+    img = Image.open(filename + ".png")
     width, height = img.size
     tileWidth = origTileSize-cropLeft-cropRight
     tileHeight = origTileSize-cropTop-cropBottom
-    prevTileImg = None
     animSeq = []
     sprites = []
     for i in range(0, width, origTileSize):
         imgTile = img.crop((i + cropLeft, cropTop, i + origTileSize - cropRight, height - cropBottom))
-        if(prevTileImg == None or not are_images_equal(prevTileImg, imgTile)):
+        index = image_in_array(sprites, imgTile)
+        if(index == None):
             sprites.append(imgTile)
-        animSeq.append(tileCount + len(sprites) - 1)
-        prevTileImg = imgTile.copy()
+            animSeq.append(tileCount + len(sprites) - 1)
+        else:
+            animSeq.append(tileCount + index)
 
     posx = 0
     spriteWidth = tileWidth*len(sprites)
@@ -65,7 +73,7 @@ for props in imageList:
         spriteData += "\t{" + hex(tileCount) + ", {{" + str(posx) + ", " + str(posy) + ", " + str(tileWidth) + ", " + str(tileHeight) + "}}},\n"
         posx += tileWidth
         tileCount += 1
-    print(filename.lower() + "AnimSeq =", animSeq, ";")
+    print("\t{", *animSeq, "},", sep=',')
     spriteSheet.append(sprite)
     posy += tileHeight
 
@@ -80,4 +88,4 @@ for ssImg in spriteSheet:
     width, height = ssImg.size
     pos += height
 
-spriteSheetImg.save(os.path.join(folder, "fruits.png"))
+spriteSheetImg.save("fruits.png")

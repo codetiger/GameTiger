@@ -22,11 +22,16 @@ struct GameItem {
     const char (*animSeq)[17];
 };
 
-// enum EnemyState {IDLE, MOVING, FOLLOWING, SHOOTING, HIT};
+enum EnemyState {IDLE, MOVING, FOLLOWING, SHOOTING, HITKILL, DEAD};
 
 struct Enemy {
     uint16_t x, y;
-    // EnemyState state;
+    uint8_t width, height;
+    EnemyState state;
+    Image *sprite;
+    uint8_t curFrameIndex;
+    uint8_t deltaHealth;
+    uint8_t numIdleFrames, numHitFrames;
 };
 
 class Level {

@@ -3,10 +3,10 @@ from PIL import Image
 from collections import defaultdict
 
 color_count = 64
-image_name = "ninjafrog"
+image_name = "pa2fruits"
 
 im = Image.open(image_name + '.png').convert('RGBA')
-im = im.resize((96, 96), Image.NEAREST)
+# im = im.resize((96, 96), Image.NEAREST)
 im = im.convert('P', palette=Image.ADAPTIVE, colors=color_count)
 im = im.convert('RGBA')
 im.save(image_name + '2.png')

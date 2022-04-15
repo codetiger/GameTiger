@@ -18,9 +18,15 @@ void Level::update(uint16_t deltaTimeMS) {
             this->bgScroll--;
 
         for(GameItem &item : gameItems) {
-            item.curFrameIndex++;
-            uint8_t maxFrames = (item.state == FRESH) ? item.numIdleFrames : item.numHitFrames;
-            if(item.curFrameIndex >= maxFrames)
+            if(item.state != PICKED)
+                item.curFrameIndex++;
+            else 
+                continue;
+
+            if(item.state == HIT && item.curFrameIndex >= item.numHitFrames) {
+                item.curFrameIndex = 0;
+                item.state = PICKED;
+            } else if(item.state == FRESH && item.curFrameIndex >= item.numIdleFrames)
                 item.curFrameIndex = 0;
         }
         this->lastUpdate = getTime();
@@ -31,8 +37,10 @@ void Level::draw(Display *display) {
     this->bgLayer->draw(display, this->isHorizontalScroll ? this->bgScroll : 0, this->isHorizontalScroll ? 0 : this->bgScroll);
     this->gameLayer->draw(display, this->gameScrollX, this->gameScrollY);
     for(GameItem item : gameItems) {
-        char frame = (item.state == FRESH) ? item.animSeq[item.idleSeqIndex][item.curFrameIndex] : item.animSeq[item.hitSeqIndex][item.curFrameIndex];
-        item.sprite->drawSprite(display, frame, item.x-this->gameScrollX, item.y-this->gameScrollY);
+        if(item.state != PICKED) {
+            char frame = (item.state == FRESH) ? item.animSeq[item.idleSeqIndex][item.curFrameIndex] : item.animSeq[item.hitSeqIndex][item.curFrameIndex];
+            item.sprite->drawSprite(display, frame, item.x-this->gameScrollX, item.y-this->gameScrollY);
+        }
     }
 }
 
