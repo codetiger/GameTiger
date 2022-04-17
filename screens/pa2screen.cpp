@@ -9,11 +9,11 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->highScoreCallBack = hscb;
     this->option = option;
 
-    this->level = new Level();
-    this->level->setBGLayer(&pa2bg, rand() % 6, false);
-    this->level->setGameLayer(&pa2terrain, level01XCount, level01YCount, (uint8_t*)level01);
-    for (int i = 0; i < level01GoodiesCount; i++)
-        this->level->addGoodie(level01Goodies[i][0], level01Goodies[i][1], &pa2fruits, level01Goodies[i][2], level01Goodies[i][3], 17, level01Goodies[i][4], 6, level01Goodies[i][5], fruitsAnimSeq);
+    // this->level = new Level();
+    // this->level->setBGLayer(&pa2bg, rand() % 6, false);
+    // this->level->setGameLayer(&pa2terrain, level01XCount, level01YCount, (uint8_t*)level01);
+    // for (int i = 0; i < level01GoodiesCount; i++)
+    //     this->level->addGoodie(level01Goodies[i][0], level01Goodies[i][1], &pa2fruits, level01Goodies[i][2], level01Goodies[i][3], 17, level01Goodies[i][4], 6, level01Goodies[i][5], fruitsAnimSeq);
     printf("Done\n");
 }
 

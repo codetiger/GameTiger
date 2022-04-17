@@ -3,7 +3,7 @@ from PIL import Image
 from collections import defaultdict
 
 color_count = 64
-image_name = "pa2fruits"
+image_name = "pa2enemies"
 
 im = Image.open(image_name + '.png').convert('RGBA')
 # im = im.resize((96, 96), Image.NEAREST)

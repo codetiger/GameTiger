@@ -15,9 +15,7 @@ Image tiger = Image(tiger_img_width, tiger_img_height, tiger_color_count, (uint8
 Image sweeper = Image(sweeper_img_width, sweeper_img_height, sweeper_color_count, (uint8_t*)sweeper_palette, (uint8_t*)sweeper_pixel_data, sweeper_sprite_data);
 Image tttblocks = Image(tttblocks_img_width, tttblocks_img_height, tttblocks_color_count, (uint8_t*)tttblocks_palette, (uint8_t*)tttblocks_pixel_data, tttblocks_sprite_data);
 
-Image pa2terrain = Image(pa2terrain_img_width, pa2terrain_img_height, pa2terrain_color_count, (uint8_t*)pa2terrain_palette, (uint8_t*)pa2terrain_pixel_data, pa2terrain_sprite_data);
-Image pa2bg = Image(pa2bg_img_width, pa2bg_img_height, pa2bg_color_count, (uint8_t*)pa2bg_palette, (uint8_t*)pa2bg_pixel_data, pa2bg_sprite_data);
-Image pa2fruits = Image(pa2fruits_img_width, pa2fruits_img_height, pa2fruits_color_count, (uint8_t*)pa2fruits_palette, (uint8_t*)pa2fruits_pixel_data, pa2fruits_sprite_data);
+Image ninjafrogSprite = Image(ninjafrogSprite_img_width, ninjafrogSprite_img_height, ninjafrogSprite_color_count, (uint8_t*)ninjafrogSprite_palette, (uint8_t*)ninjafrogSprite_pixel_data, ninjafrogSprite_sprite_data);
 
 timetype getTime() {
     timetype now;

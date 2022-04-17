@@ -45,10 +45,8 @@
 #include "../content/ttt.h"
 #include "../content/tttblocks.h"
 #include "../content/alphanumfont.h"
-#include "../content/pa2terrain.h"
-#include "../content/pa2bg.h"
-#include "../content/pa2fruits.h"
 #include "../content/ninjafrog.h"
+#include "../content/ninjafrogSprite.h"
 
 #include "../core/image.h"
 #include "tilemap.h"
@@ -63,5 +61,5 @@ uint16_t getTimeDiffMS(timetype start);
 
 extern Image alphanumfont, tiger, sweeper, ttt, tttblocks;
 extern Image menuItemLogo[8];
-extern Image pa2terrain, pa2bg, pa2fruits;
+extern Image ninjafrogSprite;
 #endif
