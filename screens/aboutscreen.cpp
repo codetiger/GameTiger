@@ -12,7 +12,7 @@ AboutScreen::AboutScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(
     uint16_t tileWidth = 40, tileHeight = 48;
     uint8_t xCount = (DISPLAY_WIDTH / tileWidth);
     uint8_t yCount = (DISPLAY_HEIGHT / tileHeight);
-    uint8_t *ts = new uint8_t[xCount*yCount];
+    uint16_t *ts = new uint16_t[xCount*yCount];
     bool colorFlip = true;
     for (int y = 0; y < yCount; y++) {
         for (int x = 0; x < xCount; x++) {

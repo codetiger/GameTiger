@@ -48,11 +48,11 @@ void TicScreen::draw(Display *display) {
     for (uint8_t y = 0; y < TIC_BOARDSIZE; y++) {
         for (uint8_t x = 0; x < TIC_BOARDSIZE; x++) {
             if(board.getCellValue(x, y) == E_TIC)
-                tttblocks.drawSprite(display, 'e', 30+x*60, 30+y*60);
+                allGameSprite.drawSprite(display, tttBlockFrames[0], 30+x*60, 30+y*60);
             else if(board.getCellValue(x, y) == O_TIC)
-                tttblocks.drawSprite(display, 'o', 30+x*60, 30+y*60);
+                allGameSprite.drawSprite(display, tttBlockFrames[1], 30+x*60, 30+y*60);
             else if(board.getCellValue(x, y) == X_TIC)
-                tttblocks.drawSprite(display, 'x', 30+x*60, 30+y*60);
+                allGameSprite.drawSprite(display, tttBlockFrames[2], 30+x*60, 30+y*60);
         }
     }
 

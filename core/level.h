@@ -18,8 +18,7 @@ struct GameItem {
     uint8_t curFrameIndex;
     uint8_t deltaScore, deltaHealth;
     uint8_t numIdleFrames, numHitFrames;
-    uint8_t idleSeqIndex, hitSeqIndex;
-    const char (*animSeq)[17];
+    uint16_t *idleSeq, *hitSeq;
 };
 
 enum EnemyState {IDLE, MOVING, FOLLOWING, SHOOTING, HITKILL, DEAD};
@@ -46,9 +45,9 @@ public:
     Level();
     ~Level();
 
-    void setBGLayer(Image *sprite, char spriteID, bool isHorizontalScroll);
-    void setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint8_t *ts);
-    void addGoodie(uint16_t x, uint16_t y, Image *sprite, uint8_t deltaScore, uint8_t deltaHealth, uint8_t numIdleFrames, uint8_t idleSeqIndex, uint8_t numHitFrames, uint8_t hitSeqIndex, const char (*animSeq)[17]);
+    void setBGLayer(Image *sprite, uint16_t spriteID, bool isHorizontalScroll);
+    void setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint16_t *ts, uint16_t emptyTileIndex);
+    void addGoodie(uint16_t x, uint16_t y, Image *sprite, uint8_t deltaScore, uint8_t deltaHealth, uint8_t numIdleFrames, uint16_t *idleSeq, uint8_t numHitFrames, uint16_t *hitSeq);
 
     void update(uint16_t deltaTimeMS);
     void draw(Display *display);

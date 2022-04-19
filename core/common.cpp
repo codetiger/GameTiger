@@ -1,21 +1,8 @@
 #include "common.h"
 
 Image alphanumfont = Image(alphanumfont_img_width, alphanumfont_img_height, alphanumfont_color_count, (uint8_t*)alphanumfont_palette, (uint8_t*)alphanumfont_pixel_data, alphanumfont_sprite_data);
-Image menuItemLogo[8] = {
-    Image(snake_img_width, snake_img_height, snake_color_count, (uint8_t*)snake_palette, (uint8_t*)snake_pixel_data),
-    Image(g2048_img_width, g2048_img_height, g2048_color_count, (uint8_t*)g2048_palette, (uint8_t*)g2048_pixel_data),
-    Image(tetris_img_width, tetris_img_height, tetris_color_count, (uint8_t*)tetris_palette, (uint8_t*)tetris_pixel_data),
-    Image(mine_img_width, mine_img_height, mine_color_count, (uint8_t*)mine_palette, (uint8_t*)mine_pixel_data),
-    Image(ttt_img_width, ttt_img_height, ttt_color_count, (uint8_t*)ttt_palette, (uint8_t*)ttt_pixel_data),
-    Image(ninjafrog_img_width, ninjafrog_img_height, ninjafrog_color_count, (uint8_t*)ninjafrog_palette, (uint8_t*)ninjafrog_pixel_data),
-    Image(settings_img_width, settings_img_height, settings_color_count, (uint8_t*)settings_palette, (uint8_t*)settings_pixel_data),
-    Image(about_img_width, about_img_height, about_color_count, (uint8_t*)about_palette, (uint8_t*)about_pixel_data),
-};
-Image tiger = Image(tiger_img_width, tiger_img_height, tiger_color_count, (uint8_t*)tiger_palette, (uint8_t*)tiger_pixel_data);
-Image sweeper = Image(sweeper_img_width, sweeper_img_height, sweeper_color_count, (uint8_t*)sweeper_palette, (uint8_t*)sweeper_pixel_data, sweeper_sprite_data);
-Image tttblocks = Image(tttblocks_img_width, tttblocks_img_height, tttblocks_color_count, (uint8_t*)tttblocks_palette, (uint8_t*)tttblocks_pixel_data, tttblocks_sprite_data);
-
-Image ninjafrogSprite = Image(ninjafrogSprite_img_width, ninjafrogSprite_img_height, ninjafrogSprite_color_count, (uint8_t*)ninjafrogSprite_palette, (uint8_t*)ninjafrogSprite_pixel_data, ninjafrogSprite_sprite_data);
+Image allGameSprite = Image(allGameSprite_img_width, allGameSprite_img_height, allGameSprite_color_count, (uint8_t*)allGameSprite_palette, (uint8_t*)allGameSprite_pixel_data, allGameSprite_sprite_data);
+Image menuSprite = Image(menuSprite_img_width, menuSprite_img_height, menuSprite_color_count, (uint8_t*)menuSprite_palette, (uint8_t*)menuSprite_pixel_data, menuSprite_sprite_data);
 
 timetype getTime() {
     timetype now;

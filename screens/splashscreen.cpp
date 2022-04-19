@@ -14,7 +14,7 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     uint16_t tileWidth = 20, tileHeight = 20;
     uint8_t xCount = 4 + (DISPLAY_WIDTH / tileWidth);
     uint8_t yCount = 4 + (DISPLAY_HEIGHT / tileHeight);
-    uint8_t *ts = new uint8_t[xCount*yCount];
+    uint16_t *ts = new uint16_t[xCount*yCount];
     bool colorFlip = true;
     for (int y = 0; y < yCount; y++) {
         for (int x = 0; x < xCount; x++) {
@@ -31,13 +31,6 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     this->bgLayer->addTileInfo(1, tinfo);
     tinfo.color = Color(135, 220, 255);
     this->bgLayer->addTileInfo(2, tinfo);
-
-    // TileInfo atinfo; 
-    // atinfo.type = ANIMATEDSPRITE;
-    // atinfo.sprite = &sweeper;
-    // atinfo.numFrames = 15;
-    // atinfo.animationFrames = "012345678abcdef";
-    // this->bgLayer->addTileInfo(2, atinfo);
     printf("Done\n");
 }
 
@@ -65,7 +58,7 @@ void SplashScreen::update(uint16_t deltaTimeMS) {
 
 void SplashScreen::draw(Display *display) {
     this->bgLayer->draw(display, this->tileMoveX, this->tileMoveY+40);
-    tiger.draw(display, 92, 56, 0, 0, 0, 0, 1, this->imageAlpha, false, false);
+    menuSprite.drawSprite(display, tigerFrame, 92, 56, 1, this->imageAlpha);
     std::string title = "GameTiger";
     uint16_t width = alphanumfont.getWidth(title, 2);
     alphanumfont.drawSprites(display, title, (DISPLAY_WIDTH - width)/2, 190, 2, this->imageAlpha, false, false);

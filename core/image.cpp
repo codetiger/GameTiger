@@ -45,7 +45,7 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
     }
 }
 
-void Image::drawSprite(Display *display, char index, int16_t screenX, int16_t screenY, int8_t scale, uint8_t alpha, bool flipH, bool flipV) {
+void Image::drawSprite(Display *display, uint16_t index, int16_t screenX, int16_t screenY, int8_t scale, uint8_t alpha, bool flipH, bool flipV) {
     if(alpha == 0)
         return;
 
@@ -71,10 +71,10 @@ uint16_t Image::getWidth(std::string indices, int8_t scale) {
     return width;
 }
 
-uint16_t Image::getSpriteWidth(char index) {
+uint16_t Image::getSpriteWidth(uint16_t index) {
     return this->spriteData[index][2];
 }
 
-uint16_t Image::getSpriteHeight(char index) {
+uint16_t Image::getSpriteHeight(uint16_t index) {
     return this->spriteData[index][3];
 }

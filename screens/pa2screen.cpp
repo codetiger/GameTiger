@@ -9,11 +9,33 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->highScoreCallBack = hscb;
     this->option = option;
 
-    // this->level = new Level();
-    // this->level->setBGLayer(&pa2bg, rand() % 6, false);
-    // this->level->setGameLayer(&pa2terrain, level01XCount, level01YCount, (uint8_t*)level01);
-    // for (int i = 0; i < level01GoodiesCount; i++)
-    //     this->level->addGoodie(level01Goodies[i][0], level01Goodies[i][1], &pa2fruits, level01Goodies[i][2], level01Goodies[i][3], 17, level01Goodies[i][4], 6, level01Goodies[i][5], fruitsAnimSeq);
+    this->level = new Level();
+    this->level->setBGLayer(&allGameSprite, bgFrames[rand() % 7], false);
+
+    uint16_t *levelMap = new uint16_t[level01XCount*level01YCount];
+    for (int i = 0; i < level01XCount*level01YCount; i++)
+        levelMap[i] = terrainFrames[level01[i]-1];
+    this->level->setGameLayer(&allGameSprite, level01XCount, level01YCount, levelMap, 157);
+    for (int i = 0; i < level01GoodiesCount; i++) {
+        uint16_t *anim = 0;
+        if(level01Goodies[i][4] == 0)
+            anim = (uint16_t*)AppleAnimSeq;
+        else if(level01Goodies[i][4] == 1)
+            anim = (uint16_t*)BananasAnimSeq;
+        else if(level01Goodies[i][4] == 2)
+            anim = (uint16_t*)CherriesAnimSeq;
+        else if(level01Goodies[i][4] == 3)
+            anim = (uint16_t*)KiwiAnimSeq;
+        else if(level01Goodies[i][4] == 4)
+            anim = (uint16_t*)MelonAnimSeq;
+        else if(level01Goodies[i][4] == 5)
+            anim = (uint16_t*)OrangeAnimSeq;
+        else if(level01Goodies[i][4] == 6)
+            anim = (uint16_t*)PineappleAnimSeq;
+        else if(level01Goodies[i][4] == 7)
+            anim = (uint16_t*)StrawberryAnimSeq;
+        this->level->addGoodie(level01Goodies[i][0], level01Goodies[i][1], &allGameSprite, level01Goodies[i][2], level01Goodies[i][3], 17, anim, 6, (uint16_t*)CollectedAnimSeq);
+    }
     printf("Done\n");
 }
 

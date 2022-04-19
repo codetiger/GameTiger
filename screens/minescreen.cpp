@@ -30,16 +30,16 @@ void MineScreen::draw(Display *display) {
     for (int y = 0; y < MINE_BOARD_HEIGHT; y++) {
         for (int x = 0; x < MINE_BOARD_WIDTH; x++) {
             if(state[y*MINE_BOARD_WIDTH+x] == CLOSE)
-                sweeper.drawSprite(display, 'a', x*16, y*16);
+                allGameSprite.drawSprite(display, sweeperFrames[9], x*16, y*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == FLAG)
-                sweeper.drawSprite(display, 'c', x*16, y*16);
+                allGameSprite.drawSprite(display, sweeperFrames[11], x*16, y*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == DOUBT)
-                sweeper.drawSprite(display, 'e', x*16, y*16);
+                allGameSprite.drawSprite(display, sweeperFrames[13], x*16, y*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == OPEN) {
                 if(board[y*MINE_BOARD_WIDTH+x] >= 0 && board[y*MINE_BOARD_WIDTH+x] <= 8)
-                    sweeper.drawSprite(display, '0'+board[y*MINE_BOARD_WIDTH+x], x*16, y*16);
+                    allGameSprite.drawSprite(display, sweeperFrames[0]+board[y*MINE_BOARD_WIDTH+x], x*16, y*16);
                 else if(board[y*MINE_BOARD_WIDTH+x] == 9)
-                    sweeper.drawSprite(display, 'b', x*16, y*16);
+                    allGameSprite.drawSprite(display, sweeperFrames[10], x*16, y*16);
             }
         }
     }
