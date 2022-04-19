@@ -17,11 +17,11 @@
 #define FLASH_TARGET_OFFSET (1536 * 1024)
 
 Screen *screen;
-uint32_t highscores[HIGHSCORESIZE];
+uint32_t highscores[64];
 
 void highScoreHandler(uint32_t highscore) {
     highscores[0] = 64;highscores[1] = 128;
-    highscores[screen->screenId] = highscore;
+    highscores[screen->screenId+2] = highscore;
     #ifdef FORMPU
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);

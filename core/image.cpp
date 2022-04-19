@@ -10,7 +10,7 @@ Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd) {
     this->pixelData = pd;
 }
 
-Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd, std::map<int16_t, std::array<uint16_t, 5> > sd){
+Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd, uint16_t *sd) {
     this->width = w;
     this->height = h;
     this->colorCount = cc;
@@ -49,7 +49,7 @@ void Image::drawSprite(Display *display, uint16_t index, int16_t screenX, int16_
     if(alpha == 0)
         return;
 
-    this->draw(display, screenX, screenY, this->spriteData[index][0], this->spriteData[index][1], this->spriteData[index][2], this->spriteData[index][3], scale, alpha, flipH, flipV);
+    this->draw(display, screenX, screenY, this->spriteData[index*4+0], this->spriteData[index*4+1], this->spriteData[index*4+2], this->spriteData[index*4+3], scale, alpha, flipH, flipV);
 }
 
 void Image::drawSprites(Display *display, std::string indices, int16_t screenX, int16_t screenY, int8_t scale, uint8_t alpha, bool flipH, bool flipV) {
@@ -58,23 +58,26 @@ void Image::drawSprites(Display *display, std::string indices, int16_t screenX, 
 
     uint16_t posX = screenX;
     for(char& index : indices) {
+        uint16_t i = ref.find(index);
         if(index != ' ')
-            this->draw(display, posX, screenY, this->spriteData[index][0], this->spriteData[index][1], this->spriteData[index][2], this->spriteData[index][3], scale, alpha, flipH, flipV);
-        posX += (this->spriteData[index][2] - 1) * scale;
+            this->draw(display, posX, screenY, this->spriteData[i*4+0], this->spriteData[i*4+1], this->spriteData[i*4+2], this->spriteData[i*4+3], scale, alpha, flipH, flipV);
+        posX += (this->spriteData[i*4+2] - 1) * scale;
     }
 }
 
 uint16_t Image::getWidth(std::string indices, int8_t scale) {
     uint16_t width = 0;
-    for(char& index : indices)
-        width += this->spriteData[index][2] * scale - 1;
+    for(char& index : indices) {
+        uint16_t i = ref.find(index);
+        width += this->getSpriteWidth(i) * scale - 1;
+    }
     return width;
 }
 
 uint16_t Image::getSpriteWidth(uint16_t index) {
-    return this->spriteData[index][2];
+    return this->spriteData[index*4+2];
 }
 
 uint16_t Image::getSpriteHeight(uint16_t index) {
-    return this->spriteData[index][3];
+    return this->spriteData[index*4+3];
 }

@@ -2,12 +2,12 @@ from PIL import Image, ImageChops
 from rectpack import newPacker
 
 class Sprite:
-    tiles = {}
+    tiles = []
     packer = None
     animSeq = {}
 
     def __init__(self):
-        self.tiles = {}
+        self.tiles = []
         self.packer = newPacker(rotation=False)
         self.animSeq = {}
 
@@ -25,7 +25,7 @@ class Sprite:
         return equal_size and equal_alphas and equal_content
 
     def imageExists(self, image):
-        for i, tile in self.tiles.items():
+        for i, tile in enumerate(self.tiles):
             if(self.areImagesSame(tile, image)):
                 return i
         return None
@@ -34,9 +34,8 @@ class Sprite:
         index = self.imageExists(img)
         if(index == None):
             index = len(self.tiles)
-            self.tiles[index] = img
+            self.tiles.append(img)
             self.packer.add_rect(img.size[0], img.size[1], index)
-            # img.save("temp/" + str(index) + ".png")
         return index
 
     def addImages(self, images, name):
@@ -49,21 +48,23 @@ class Sprite:
     def save(self, width, height, filename):
         self.packer.add_bin(width, height)
         self.packer.pack()
-        rects = self.packer.rect_list()
+        rects = {}
+        for rect in self.packer.rect_list():
+            b, x, y, w, h, rid = rect
+            rects[rid] = (x, y, w, h)
         spriteImg = None
         spriteData = ""
         if(len(rects) == len(self.tiles)):
             spriteImg = Image.new(mode='RGBA', size=(width, height), color=(0,0,0,0))
-            for rect in rects:
-                b, x, y, w, h, rid = rect
-                spriteData += "\t{" + str(rid) + ", {{" + str(x) + ", " + str(y) + ", " + str(w) + ", " + str(h) + "}}},\n"
+            for rid in range(len(rects)):
+                x, y, w, h = rects[rid]
+                spriteData += "\t" + str(x) + ", " + str(y) + ", " + str(w) + ", " + str(h) + ",\n"
                 spriteImg.paste(self.tiles[rid], (x, y))
             spriteImg.save(filename + ".png")
         else:
             print("Unable to fit")
             exit(0)
 
-        # spriteImg = spriteImg.convert('P', palette=Image.ADAPTIVE, colors=128)
         spriteImg = spriteImg.convert('RGBA')
 
         palette = []
@@ -90,7 +91,7 @@ class Sprite:
         file.write("const uint16_t " + filename + "_color_count = " + str(color_count) + ";\n\n")
         file.write(paletteStr)
         file.write(pixelStr)
-        file.write("\nconst std::map<int16_t, std::array<uint16_t, 5> > " + filename + "_sprite_data = {\n")
+        file.write("\nconst uint16_t " + filename + "SpriteData[] = {\n")
         file.write(spriteData)
         file.write("};\n")
         for key, seq in self.animSeq.items():
@@ -108,7 +109,8 @@ def processSprite(imageList, image_name, image_width, image_height):
         img = Image.open(filename).convert('RGBA')
         width, height = img.size
         origColorCount = 0 if img.getcolors() == None else len(img.getcolors())
-        img = img.convert('P', palette=Image.ADAPTIVE, colors=colorCount)
+        if(origColorCount != colorCount):
+            img = img.convert('P', palette=Image.ADAPTIVE, colors=colorCount)
         img = img.convert('RGBA')
         colorCount = 0 if img.getcolors() == None else len(img.getcolors())
         print(filename, origColorCount, colorCount, "colours")
@@ -144,13 +146,13 @@ allGameSpriteList = [
     ("ninjafrog/enemies/rinoHit.png", "rinoHitAnimSeq", 52, 34, 10, 0, 0, 4, 0),
     ("ninjafrog/enemies/rinoIdle.png", "rinoIdleAnimSeq", 52, 34, 10, 0, 0, 4, 0),
     ("ninjafrog/enemies/rinoRun.png", "rinoRunAnimSeq", 52, 34, 10, 0, 0, 4, 0),
-    ("ninjafrog/background/Blue.png", "bgFrames", 64, 64, 4, 0, 0, 0, 0),
-    ("ninjafrog/background/Brown.png", "bgFrames", 64, 64, 4, 0, 0, 0, 0),
-    ("ninjafrog/background/Gray.png", "bgFrames", 64, 64, 4, 0, 0, 0, 0),
-    ("ninjafrog/background/Green.png", "bgFrames", 64, 64, 4, 0, 0, 0, 0),
-    ("ninjafrog/background/Pink.png", "bgFrames", 64, 64, 4, 0, 0, 0, 0),
-    ("ninjafrog/background/Purple.png", "bgFrames", 64, 64, 4, 0, 0, 0, 0),
-    ("ninjafrog/background/Yellow.png", "bgFrames", 64, 64, 4, 0, 0, 0, 0),
+    ("ninjafrog/background/Blue.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
+    ("ninjafrog/background/Brown.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
+    ("ninjafrog/background/Gray.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
+    ("ninjafrog/background/Green.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
+    ("ninjafrog/background/Pink.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
+    ("ninjafrog/background/Purple.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
+    ("ninjafrog/background/Yellow.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
     ("ninjafrog/terrain/terrain.png", "terrainFrames", 16, 16, 48, 0, 0, 0, 0),
     ("ninjafrog/hero/doublejump.png", "heroDoubleJumpAnimSeq", 32, 32, 12, 0, 0, 0, 0),
     ("ninjafrog/hero/jump.png", "heroJumpFrame", 32, 32, 12, 0, 0, 0, 0),
@@ -161,7 +163,7 @@ allGameSpriteList = [
     ("sweeper.png", "sweeperFrames", 16, 16, 32, 0, 0, 0, 0),
     ("tttblocks.png", "tttBlockFrames", 60, 60, 32, 0, 0, 0, 0),
 ]
-# processSprite(allGameSpriteList, "allGameSprite", 480, 480)
+processSprite(allGameSpriteList, "allGameSprite", 480, 480)
 
 menuSpriteList = [
     ("menu/snake.png", "menuItemFrames", 96, 96, 16, 0, 0, 0, 0),
