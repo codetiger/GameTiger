@@ -203,6 +203,16 @@ void G2048Screen::draw(Display *display) {
         uint16_t width = alphanumfont.getWidth(str, 2);
         display->fillRect((DISPLAY_WIDTH - width)/2, 104, width, 24, Color(0, 0, 0));
         alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+    } else if(this->gameState == PAUSED) {
+        std::string str = "Game Paused";
+        uint16_t width = alphanumfont.getWidth(str, 2);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+        str = "Press A to continue";
+        width = alphanumfont.getWidth(str, 1);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 140, 1);
+        str = "Press B to quit";
+        width = alphanumfont.getWidth(str, 1);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 160, 1);
     }
 }
 

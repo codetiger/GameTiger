@@ -44,7 +44,7 @@
 #define DISPLAY_WIDTH 320
 #define DISPLAY_HEIGHT 240
 
-enum GameState {WAITING, PLAYING, LOST};
+enum GameState {WAITING, PLAYING, PAUSED, LOST};
 timetype getTime();
 uint16_t getTimeDiffMS(timetype start);
 

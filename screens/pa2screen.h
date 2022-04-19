@@ -5,6 +5,7 @@
 class PixelAdventureScreen : public Screen
 {
 private:
+    GameState gameState;
     uint8_t option;
     Level *level;
 

@@ -84,6 +84,16 @@ void TetrisScreen::draw(Display *display) {
         std::string str = "Game Over";
         uint16_t width = alphanumfont.getWidth(str, 2);
         alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+    } else if(this->gameState == PAUSED) {
+        std::string str = "Game Paused";
+        uint16_t width = alphanumfont.getWidth(str, 2);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+        str = "Press A to continue";
+        width = alphanumfont.getWidth(str, 1);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 140, 1);
+        str = "Press B to quit";
+        width = alphanumfont.getWidth(str, 1);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 160, 1);
     }
 }
 
@@ -162,15 +172,13 @@ void TetrisScreen::removeRow(uint8_t row) {
 }
 
 void TetrisScreen::keyPressed(uint8_t key) {
-    if(this->gameState == WAITING) {
-        this->gameState = PLAYING;
-        return;
-    }
-
-    if(key == KEY_B)
+    if(key == KEY_B && this->gameState == PLAYING)
+        this->gameState = PAUSED;
+    else if(key == KEY_B && this->gameState == PAUSED)
         this->returnCallBack(this->screenId, this->option);
-
-    if(this->gameState == PLAYING) {
+    else if(key == KEY_A && (this->gameState == WAITING || this->gameState == PAUSED))
+        this->gameState = PLAYING;
+    else if(this->gameState == PLAYING) {
         if(key == KEY_LEFT && canMove(currentBlockX - 1, currentBlockY, false))
             currentBlockX--;
         else if(key == KEY_RIGHT && canMove(currentBlockX + 1, currentBlockY, false))

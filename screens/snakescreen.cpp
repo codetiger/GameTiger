@@ -97,6 +97,16 @@ void SnakeScreen::draw(Display *display) {
         std::string str = "Game Over";
         uint16_t width = alphanumfont.getWidth(str, 2);
         alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+    } else if(this->gameState == PAUSED) {
+        std::string str = "Game Paused";
+        uint16_t width = alphanumfont.getWidth(str, 2);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+        str = "Press A to continue";
+        width = alphanumfont.getWidth(str, 1);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 140, 1);
+        str = "Press B to quit";
+        width = alphanumfont.getWidth(str, 1);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 160, 1);
     }
 }
 
@@ -107,15 +117,15 @@ void SnakeScreen::keyPressed(uint8_t key) {
         (key == KEY_RIGHT && this->snakeDir != KEY_LEFT)) {
         this->snakeDir = key;
     } else if(key == KEY_A) {
-        if(this->gameState == WAITING)
+        if(this->gameState == WAITING || this->gameState == PAUSED)
             this->gameState = PLAYING;
         else if(this->gameState == PLAYING) 
             this->gameSpeed = (this->gameSpeed < 12) ? this->gameSpeed+1 : this->gameSpeed;
     } else if(key == KEY_B) {
-        if(this->gameState == LOST) 
+        if(this->gameState == LOST || this->gameState == PAUSED)
             this->returnCallBack(this->screenId, this->option);
         else if(this->gameState == PLAYING)
-            this->gameSpeed = (this->gameSpeed > 1) ? this->gameSpeed-1 : this->gameSpeed;
+            this->gameState = PAUSED;
     }
 }
 

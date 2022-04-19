@@ -8,6 +8,7 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
     this->option = option;
+    this->gameState = PLAYING;
 
     this->level = new Level();
     this->level->setBGLayer(&allGameSprite, bgFrames[rand() % 7], false);
@@ -48,12 +49,31 @@ void PixelAdventureScreen::update(uint16_t deltaTimeMS) {
 
 void PixelAdventureScreen::draw(Display *display) {
     this->level->draw(display);
+
+    if(this->gameState == PAUSED) {
+        std::string str = "Game Paused";
+        uint16_t width = alphanumfont.getWidth(str, 2);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+        str = "Press A to continue";
+        width = alphanumfont.getWidth(str, 1);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 140, 1);
+        str = "Press B to quit";
+        width = alphanumfont.getWidth(str, 1);
+        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 160, 1);
+    }
 }
 
 void PixelAdventureScreen::keyPressed(uint8_t key) {
-    this->level->keyPressed(key);
-    if(key == KEY_B)
-        this->returnCallBack(this->screenId, this->option);
+    if(this->gameState == PAUSED) {
+        if(key == KEY_B)
+            this->returnCallBack(this->screenId, this->option);
+        else if(key == KEY_A)
+            this->gameState = PLAYING;
+    } else if(this->gameState == PLAYING) {
+        this->level->keyPressed(key);
+        if(key == KEY_B)
+            this->gameState = PAUSED;
+    }
 }
 
 void PixelAdventureScreen::keyReleased(uint8_t key) {
