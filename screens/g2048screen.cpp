@@ -201,7 +201,7 @@ void G2048Screen::draw(Display *display) {
     if(this->gameState == LOST) {
         std::string str = "Game Over";
         uint16_t width = alphanumfont.getWidth(str, 2);
-        display->fillRect((DISPLAY_WIDTH - width)/2, 104, width, 24, Color(0, 0, 0));
+        display->fillRect((DISPLAY_WIDTH - width)/2, 104, width, 24, BLACKCOLOR);
         alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
     } else if(this->gameState == PAUSED) {
         std::string str = "Game Paused";

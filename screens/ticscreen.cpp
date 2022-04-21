@@ -59,7 +59,7 @@ void TicScreen::draw(Display *display) {
     uint8_t width = alphanumfont.getWidth("Tic Tac Toe", 2);
     alphanumfont.drawSprites(display, "Tic Tac Toe", (DISPLAY_WIDTH-width)/2, 2, 2);
     if(turn == O_TIC)
-        display->rect(30+this->sx*60, 30+this->sy*60, 60, 60, Color(0, 255, 0));
+        display->rect(30+this->sx*60, 30+this->sy*60, 60, 60, GREENCOLOR);
     
     if(this->gameState == PLAYING) {
         alphanumfont.drawSprites(display, "Turn", 236, 130, 2);

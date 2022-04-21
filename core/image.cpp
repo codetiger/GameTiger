@@ -2,19 +2,21 @@
 #include <iostream>
 #include <fstream>
 
-Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd) {
+Image::Image(uint16_t w, uint16_t h, uint16_t cc, Color *plt, uint8_t *alphas, uint8_t *pd) {
     this->width = w;
     this->height = h;
     this->colorCount = cc;
     this->palette = plt;
+    this->alphas = alphas;
     this->pixelData = pd;
 }
 
-Image::Image(uint16_t w, uint16_t h, uint16_t cc, uint8_t *plt, uint8_t *pd, uint16_t *sd) {
+Image::Image(uint16_t w, uint16_t h, uint16_t cc, Color *plt, uint8_t *alphas, uint8_t *pd, uint16_t *sd) {
     this->width = w;
     this->height = h;
     this->colorCount = cc;
     this->palette = plt;
+    this->alphas = alphas;
     this->pixelData = pd;
     this->spriteData = sd;
 }
@@ -32,14 +34,17 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
                 continue;
 
             int pixIndex = (spriteY+(flipV ? spriteHeight-y-1 : y)) * this->width + (spriteX + (flipH ? spriteWidth-x-1 : x));
-            int colIndex = this->pixelData[pixIndex] * 4;
-            uint8_t a = this->palette[colIndex+3];
+            int colIndex = this->pixelData[pixIndex];
+            uint8_t a = this->alphas[colIndex];
             if(a > 0) {
-                Color c = Color(this->palette[colIndex], this->palette[colIndex+1], this->palette[colIndex+2]);
                 a = a > alpha ? alpha : a;
-                for(int sx = 0; sx < scale; sx++)
-                    for(int sy = 0; sy < scale; sy++)
-                        display->setPixel((x*scale)+screenX+sx, (y*scale)+screenY+sy, c, a);
+                if(scale > 1) {
+                    for(int sx = 0; sx < scale; sx++)
+                        for(int sy = 0; sy < scale; sy++)
+                            display->setPixel((x*scale)+screenX+sx, (y*scale)+screenY+sy, this->palette[colIndex], a);
+                } else {
+                    display->setPixel(x+screenX, y+screenY, this->palette[colIndex], a);
+                }
             }
         }
     }

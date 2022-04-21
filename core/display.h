@@ -30,7 +30,7 @@ private:
     SDL_Window* window;
 #endif
 
-    Color buffer[320*240];
+    Color *buffer;
 
 #ifdef FORMPU
     int dmaSPIChannel = 0;
@@ -38,6 +38,9 @@ private:
 
     int dmaMemChannel = 0;
     dma_channel_config dmaMemConfig;
+
+    int dmaBufferChannel = 0;
+    dma_channel_config dmaBufferConfig;
 #endif
 public:
     Display();
@@ -47,11 +50,11 @@ public:
     void clear(Color c);
     void setBrightness(uint8_t brightness);
 
-    void setPixel(int x, int y, Color c, uint8_t alpha);
-    void fillRect(int x, int y, int width, int height, Color c, uint8_t alpha = 255);
-    void hLine(int x, int y, int width, Color c, uint8_t alpha = 255);
-    void vLine(int x, int y, int height, Color c, uint8_t alpha = 255);
-    void rect(int x, int y, int width, int height, Color c, uint8_t alpha = 255);
+    void setPixel(int x, int y, Color &c, uint8_t alpha);
+    void fillRect(int x, int y, int width, int height, Color &c, uint8_t alpha = 255);
+    void hLine(int x, int y, int width, Color &c, uint8_t alpha = 255);
+    void vLine(int x, int y, int height, Color &c, uint8_t alpha = 255);
+    void rect(int x, int y, int width, int height, Color &c, uint8_t alpha = 255);
 };
 
 #endif

@@ -137,6 +137,8 @@ class TetrisScreen : public Screen
 private:
     uint8_t board[BOARD_HEIGHT*BOARD_WIDTH];
     struct Block currentBlock, nextBlock;
+    Color DARKBG = Color(181, 44, 49);
+    Color LIGHTBG = Color(210, 47, 48);
     
     GameState gameState;
     uint8_t gameSpeed = 1;

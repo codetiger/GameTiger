@@ -5,6 +5,7 @@
 
 Display::Display() {
     printf("Display driver loading... ");
+    this->buffer = new Color[DISPLAY_WIDTH * DISPLAY_HEIGHT];
 #ifdef FORMPU
     this->initHardware();
     this->initSequence();
@@ -49,6 +50,13 @@ void Display::initHardware() {
     channel_config_set_read_increment(&this->dmaMemConfig, false);
     channel_config_set_write_increment(&this->dmaMemConfig, true);
     channel_config_set_ring(&this->dmaMemConfig, false, 0);
+
+    this->dmaBufferChannel = dma_claim_unused_channel(true);
+    this->dmaBufferConfig = dma_channel_get_default_config(this->dmaBufferChannel);
+    channel_config_set_transfer_data_size(&this->dmaBufferConfig, DMA_SIZE_16);
+    channel_config_set_read_increment(&this->dmaBufferConfig, true);
+    channel_config_set_write_increment(&this->dmaBufferConfig, true);
+    channel_config_set_ring(&this->dmaBufferConfig, false, 0);
 
     gpio_init(CS_PIN);
     gpio_set_dir(CS_PIN, GPIO_OUT);
@@ -179,7 +187,7 @@ void Display::setBrightness(uint8_t brightness) {
 
 void Display::clear(Color c) {
 #ifdef FORMPU
-    dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer, &c, DISPLAY_HEIGHT*DISPLAY_WIDTH, true);
+    dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, this->buffer, &c, DISPLAY_HEIGHT*DISPLAY_WIDTH, true);
     dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
 #else
     for (int i = 0; i < DISPLAY_HEIGHT; i++) {
@@ -193,7 +201,7 @@ void Display::clear(Color c) {
 
 #define div_255_fast(x) (((x) + (((x) + 257) >> 8)) >> 8)
 
-void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
+void Display::setPixel(int x, int y, Color &c, uint8_t alpha) {
     if (alpha == 0 || x < 0 || x >= DISPLAY_WIDTH || y < 0 || y >= DISPLAY_HEIGHT)
         return;
     
@@ -202,9 +210,10 @@ void Display::setPixel(int x, int y, Color c, uint8_t alpha) {
         this->buffer[index] = c;
     } else {
         uint8_t ralpha = 255 - alpha;
-        this->buffer[index].red = div_255_fast(c.red * alpha + this->buffer[index].red * ralpha);
-        this->buffer[index].green = div_255_fast(c.green * alpha + this->buffer[index].green * ralpha);
-        this->buffer[index].blue = div_255_fast(c.blue * alpha + this->buffer[index].blue * ralpha);
+
+        this->buffer[index].Colors.red = div_255_fast(c.Colors.red * alpha + this->buffer[index].Colors.red * ralpha);
+        this->buffer[index].Colors.green = div_255_fast(c.Colors.green * alpha + this->buffer[index].Colors.green * ralpha);
+        this->buffer[index].Colors.blue = div_255_fast(c.Colors.blue * alpha + this->buffer[index].Colors.blue * ralpha);
     }
 }
 
@@ -218,7 +227,7 @@ void Display::update() {
     for (int i = 0; i < DISPLAY_HEIGHT; i++) {
         for (int j = 0; j < DISPLAY_WIDTH; j++) {
             int index = (i * DISPLAY_WIDTH) + j;
-            SDL_SetRenderDrawColor(this->renderer, this->buffer[index].red<<3, this->buffer[index].green<<2, this->buffer[index].blue<<3, 255);
+            SDL_SetRenderDrawColor(this->renderer, this->buffer[index].Colors.red<<3, this->buffer[index].Colors.green<<2, this->buffer[index].Colors.blue<<3, 255);
             SDL_RenderDrawPoint(this->renderer, j, i);
         }
     }
@@ -226,7 +235,7 @@ void Display::update() {
 #endif
 }
 
-void Display::fillRect(int x, int y, int width, int height, Color c, uint8_t alpha) {
+void Display::fillRect(int x, int y, int width, int height, Color &c, uint8_t alpha) {
     if(x >= DISPLAY_WIDTH || y >= DISPLAY_HEIGHT || x + width < 0 || y + height < 0)
         return;
 
@@ -243,7 +252,7 @@ void Display::fillRect(int x, int y, int width, int height, Color c, uint8_t alp
         #ifdef FORMPU
         for (int i = y; i < y + height; i++) {
             int index = (i * DISPLAY_WIDTH) + x;
-            dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &this->buffer[index], &c, width, true);
+            dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &(this->buffer)[index], &c, width, true);
             dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
         }
         #else
@@ -257,15 +266,15 @@ void Display::fillRect(int x, int y, int width, int height, Color c, uint8_t alp
 Display::~Display() {
 }
 
-void Display::hLine(int x, int y, int width, Color c, uint8_t alpha) {
+void Display::hLine(int x, int y, int width, Color &c, uint8_t alpha) {
     this->fillRect(x, y, width, 1, c, alpha);
 }
 
-void Display::vLine(int x, int y, int height, Color c, uint8_t alpha) {
+void Display::vLine(int x, int y, int height, Color &c, uint8_t alpha) {
     this->fillRect(x, y, 1, height, c, alpha);
 }
 
-void Display::rect(int x, int y, int width, int height, Color c, uint8_t alpha) {
+void Display::rect(int x, int y, int width, int height, Color &c, uint8_t alpha) {
     this->hLine(x, y, width, c, alpha);
     this->hLine(x, y + height, width, c, alpha);
     this->vLine(x, y, height, c, alpha);

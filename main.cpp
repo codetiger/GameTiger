@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
         screen->draw(display);
 
         battery->drawLevel(display);
+        printf("FPS: %d\n", int(1000 / deltaTimeMS));
         display->update();
     }
 

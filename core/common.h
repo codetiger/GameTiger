@@ -33,6 +33,7 @@
 #ifndef _GAME_TIGER_COMMON_H
 #define _GAME_TIGER_COMMON_H
 
+#include "color.h"
 #include "../content/allGameSprite.h"
 #include "../content/menuSprite.h"
 #include "../content/alphanumfont.h"
@@ -47,6 +48,11 @@
 enum GameState {WAITING, PLAYING, PAUSED, LOST};
 timetype getTime();
 uint16_t getTimeDiffMS(timetype start);
+
+extern Color BLACKCOLOR;
+extern Color WHITECOLOR;
+extern Color REDCOLOR;
+extern Color GREENCOLOR;
 
 extern Image alphanumfont;
 extern Image allGameSprite;

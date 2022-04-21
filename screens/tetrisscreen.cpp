@@ -51,9 +51,9 @@ void TetrisScreen::update(uint16_t deltaTimeMS) {
 
 void TetrisScreen::draw(Display *display) {
     display->clear(Color(247, 72, 69));
-    display->fillRect(45, 0, 5, 240, Color(181, 44, 49));
-    display->fillRect(194, 0, 5, 240, Color(181, 44, 49));
-    display->fillRect(50, 0, 144, 240, Color(210, 47, 48));
+    display->fillRect(45, 0, 5, 240, DARKBG);
+    display->fillRect(194, 0, 5, 240, DARKBG);
+    display->fillRect(50, 0, 144, 240, LIGHTBG);
     
     for (int r = 0; r < BOARD_HEIGHT; r++) {
         for (int c = 0; c < BOARD_WIDTH; c++) {
@@ -64,20 +64,20 @@ void TetrisScreen::draw(Display *display) {
                     cellValue = currentBlock.type;
             if(cellValue != 0) {
                 display->fillRect(50+12*c, 12*r, 11, 11, blockColors[cellValue]);
-                display->rect(50+12*c, 12*r, 12, 12, Color(255, 255, 255));
+                display->rect(50+12*c, 12*r, 12, 12, WHITECOLOR);
             }
         }
     }
     alphanumfont.drawSprites(display, std::to_string(this->score), 240, 200, 2);
 
-    display->fillRect(215, 25, 80, 80, Color(181, 44, 49));
-    display->fillRect(220, 30, 70, 70, Color(210, 47, 48));
+    display->fillRect(215, 25, 80, 80, DARKBG);
+    display->fillRect(220, 30, 70, 70, LIGHTBG);
 
     for (int r = 0; r < BLOCK_SIZE; r++)
         for (int c = 0; c < BLOCK_SIZE; c++)
             if(nextBlock.cells[r * BLOCK_SIZE + c]) {
                 display->fillRect(235+12*c, 45+12*r, 11, 11, blockColors[nextBlock.type]);
-                display->rect(235+12*c, 45+12*r, 12, 12, Color(255, 255, 255));
+                display->rect(235+12*c, 45+12*r, 12, 12, WHITECOLOR);
             }
 
     if(this->gameState == LOST) {

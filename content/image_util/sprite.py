@@ -68,19 +68,22 @@ class Sprite:
         spriteImg = spriteImg.convert('RGBA')
 
         palette = []
-        pixelStr = "const uint8_t " + filename + "_pixel_data[] = {\n"
-        paletteStr = "const uint8_t " + filename + "_palette[] = {\n"
+        pixelStr = "const uint8_t " + filename + "PixelData[] = {\n"
+        paletteStr = "const Color " + filename + "PaletteColors[] = {\n"
+        alphaStr = "const uint8_t " + filename + "PaletteAlphas[] = {\n"
 
         pix = spriteImg.load()
         for i in range(height):
             for j in range(width):
                 if pix[j,i] not in palette:
                     palette.append(pix[j,i])
-                    paletteStr += " " + hex(pix[j,i][0]) + ", " + hex(pix[j,i][1]) + ", " + hex(pix[j,i][2]) + ", " + hex(pix[j,i][3]) + ",\n"
+                    paletteStr += "\tColor(" + hex(pix[j,i][0]) + ", " + hex(pix[j,i][1]) + ", " + hex(pix[j,i][2]) + "),\n"
+                    alphaStr += "\t" + hex(pix[j,i][3]) + ",\n"
                 pixelStr += " " + hex(palette.index(pix[j,i])) + ","
             pixelStr += "\n"
 
         paletteStr += "};\n"
+        alphaStr += "};\n"
         pixelStr += "};\n"
         color_count = len(palette)
 
@@ -90,6 +93,7 @@ class Sprite:
         file.write("const uint16_t " + filename + "_img_height = " + str(height) + ";\n")
         file.write("const uint16_t " + filename + "_color_count = " + str(color_count) + ";\n\n")
         file.write(paletteStr)
+        file.write(alphaStr)
         file.write(pixelStr)
         file.write("\nconst uint16_t " + filename + "SpriteData[] = {\n")
         file.write(spriteData)
