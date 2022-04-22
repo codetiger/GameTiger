@@ -16,7 +16,7 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     uint16_t *levelMap = new uint16_t[level01XCount*level01YCount];
     for (int i = 0; i < level01XCount*level01YCount; i++)
         levelMap[i] = terrainFrames[level01[i]-1];
-    this->level->setGameLayer(&allGameSprite, level01XCount, level01YCount, levelMap, 157);
+    this->level->setGameLayer(&allGameSprite, level01XCount, level01YCount, levelMap, 24);
     for (int i = 0; i < level01GoodiesCount; i++) {
         uint16_t *anim = 0;
         if(level01Goodies[i][4] == 0)
@@ -35,7 +35,7 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
             anim = (uint16_t*)PineappleAnimSeq;
         else if(level01Goodies[i][4] == 7)
             anim = (uint16_t*)StrawberryAnimSeq;
-        this->level->addGoodie(level01Goodies[i][0], level01Goodies[i][1], &allGameSprite, level01Goodies[i][2], level01Goodies[i][3], 17, anim, 6, (uint16_t*)CollectedAnimSeq);
+        this->level->addGoodie(level01Goodies[i][0], level01Goodies[i][1], &allGameAlphaSprite, level01Goodies[i][2], level01Goodies[i][3], 17, anim, 6, (uint16_t*)CollectedAnimSeq);
     }
     printf("Done\n");
 }

@@ -51,6 +51,7 @@ public:
     void setBrightness(uint8_t brightness);
 
     void setPixel(int x, int y, Color &c, uint8_t alpha);
+    void drawBitmapRow(int x, int y, int width, Color *c);
     void fillRect(int x, int y, int width, int height, Color &c, uint8_t alpha = 255);
     void hLine(int x, int y, int width, Color &c, uint8_t alpha = 255);
     void vLine(int x, int y, int height, Color &c, uint8_t alpha = 255);

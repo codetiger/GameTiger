@@ -217,6 +217,17 @@ void Display::setPixel(int x, int y, Color &c, uint8_t alpha) {
     }
 }
 
+void Display::drawBitmapRow(int x, int y, int width, Color *c) {
+#ifdef FORMPU
+    int index = (y * DISPLAY_WIDTH) + x;
+    dma_channel_configure(this->dmaBufferChannel, &this->dmaBufferConfig, &this->buffer[index], c, width, true);
+    dma_channel_wait_for_finish_blocking(this->dmaBufferChannel);
+#else
+    for (int i = 0; i < width; i++)
+        this->setPixel(x+i, y, c[i], 255);
+#endif
+}
+
 void Display::update() {
 #ifdef FORMPU
     gpio_put(DC_PIN, 1);

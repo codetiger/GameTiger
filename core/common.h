@@ -35,6 +35,7 @@
 
 #include "color.h"
 #include "../content/allGameSprite.h"
+#include "../content/allGameAlphaSprite.h"
 #include "../content/menuSprite.h"
 #include "../content/alphanumfont.h"
 
@@ -44,6 +45,8 @@
 
 #define DISPLAY_WIDTH 320
 #define DISPLAY_HEIGHT 240
+
+enum ImageType {INDEXEDCOLORS, PIXELCOLOR};
 
 enum GameState {WAITING, PLAYING, PAUSED, LOST};
 timetype getTime();
@@ -56,5 +59,6 @@ extern Color GREENCOLOR;
 
 extern Image alphanumfont;
 extern Image allGameSprite;
+extern Image allGameAlphaSprite;
 extern Image menuSprite;
 #endif

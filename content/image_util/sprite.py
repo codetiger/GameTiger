@@ -5,11 +5,13 @@ class Sprite:
     tiles = []
     packer = None
     animSeq = {}
+    hasIndexedColor = True
 
-    def __init__(self):
+    def __init__(self, indexed):
         self.tiles = []
         self.packer = newPacker(rotation=False)
         self.animSeq = {}
+        self.hasIndexedColor = indexed
 
     def areImagesSame(self, img1, img2):
         equal_size = img1.height == img2.height and img1.width == img2.width
@@ -44,6 +46,7 @@ class Sprite:
             if name not in self.animSeq:
                 self.animSeq[name] = []
             self.animSeq[name].append(index)
+            # img.save("temp/" + name + str(index) + ".png")
 
     def save(self, width, height, filename):
         self.packer.add_bin(width, height)
@@ -68,32 +71,50 @@ class Sprite:
         spriteImg = spriteImg.convert('RGBA')
 
         palette = []
-        pixelStr = "const uint8_t " + filename + "PixelData[] = {\n"
-        paletteStr = "const Color " + filename + "PaletteColors[] = {\n"
-        alphaStr = "const uint8_t " + filename + "PaletteAlphas[] = {\n"
+        pixelStr = ""
+        paletteStr = ""
+        alphaStr = ""
+
+        if(self.hasIndexedColor):
+            alphaStr = "const uint8_t " + filename + "PaletteAlphas[] = {\n"
+            pixelStr = "const uint8_t " + filename + "PixelData[] = {\n"
+            paletteStr = "const Color " + filename + "PaletteColors[] = {\n"
+        else:
+            pixelStr = "const uint16_t " + filename + "PixelData[] = {\n"
 
         pix = spriteImg.load()
         for i in range(height):
             for j in range(width):
-                if pix[j,i] not in palette:
-                    palette.append(pix[j,i])
-                    paletteStr += "\tColor(" + hex(pix[j,i][0]) + ", " + hex(pix[j,i][1]) + ", " + hex(pix[j,i][2]) + "),\n"
-                    alphaStr += "\t" + hex(pix[j,i][3]) + ",\n"
-                pixelStr += " " + hex(palette.index(pix[j,i])) + ","
+                if(self.hasIndexedColor):
+                    if pix[j,i] not in palette:
+                        palette.append(pix[j,i])
+                        paletteStr += "\tColor(" + hex(pix[j,i][0]) + ", " + hex(pix[j,i][1]) + ", " + hex(pix[j,i][2]) + "),\n"
+                        alphaStr += "\t" + hex(pix[j,i][3]) + ",\n"
+                    pixelStr += " " + hex(palette.index(pix[j,i])) + ","
+                else:
+                    R5 = (pix[j,i][2] >> 3) << 11
+                    G6 = (pix[j,i][1] >> 2) << 5
+                    B5 = (pix[j,i][0] >> 3)
+                    RGB565 = R5 | G6 | B5
+                    pixelStr += " " + str(RGB565) + ","
             pixelStr += "\n"
 
-        paletteStr += "};\n"
-        alphaStr += "};\n"
+        if(self.hasIndexedColor):
+            paletteStr += "};\n"
+            alphaStr += "};\n"
         pixelStr += "};\n"
         color_count = len(palette)
 
         print ("Image Width:%d Height:%d Color Count:%d" % (width, height, color_count))
         file = open("../" + filename + '.h', "w")
-        file.write("const uint16_t " + filename + "_img_width = " + str(width) + ";\n")
-        file.write("const uint16_t " + filename + "_img_height = " + str(height) + ";\n")
-        file.write("const uint16_t " + filename + "_color_count = " + str(color_count) + ";\n\n")
-        file.write(paletteStr)
-        file.write(alphaStr)
+        file.write("const bool " + filename + "hasIndexedColors = " + ("true" if self.hasIndexedColor else "false") + ";\n")
+        file.write("const uint16_t " + filename + "Width = " + str(width) + ";\n")
+        file.write("const uint16_t " + filename + "Height = " + str(height) + ";\n")
+        if(self.hasIndexedColor):
+            file.write("const uint16_t " + filename + "ColorCount = " + str(color_count) + ";\n")
+            file.write(paletteStr)
+            file.write(alphaStr)
+        file.write("\n")
         file.write(pixelStr)
         file.write("\nconst uint16_t " + filename + "SpriteData[] = {\n")
         file.write(spriteData)
@@ -106,8 +127,8 @@ class Sprite:
         file.close()
 
 
-def processSprite(imageList, image_name, image_width, image_height):
-    sprite = Sprite()
+def processSprite(imageList, image_name, image_width, image_height, hasIndexedColor):
+    sprite = Sprite(hasIndexedColor)
     for props in imageList:
         filename, name, origTileWidth, origTileHeight, colorCount, cropLeft, cropRight, cropTop, cropBottom = props
         img = Image.open(filename).convert('RGBA')
@@ -128,7 +149,7 @@ def processSprite(imageList, image_name, image_width, image_height):
     sprite = None
 
 
-allGameSpriteList = [
+allGameAlphaSpriteList = [
     ("ninjafrog/fruits/Apple.png", "AppleAnimSeq", 32, 32, 10, 8, 8, 5, 9),
     ("ninjafrog/fruits/Bananas.png", "BananasAnimSeq", 32, 32, 12, 7, 7, 5, 8),
     ("ninjafrog/fruits/Cherries.png", "CherriesAnimSeq", 32, 32, 8, 7, 7, 7, 7),
@@ -150,6 +171,16 @@ allGameSpriteList = [
     ("ninjafrog/enemies/rinoHit.png", "rinoHitAnimSeq", 52, 34, 10, 0, 0, 4, 0),
     ("ninjafrog/enemies/rinoIdle.png", "rinoIdleAnimSeq", 52, 34, 10, 0, 0, 4, 0),
     ("ninjafrog/enemies/rinoRun.png", "rinoRunAnimSeq", 52, 34, 10, 0, 0, 4, 0),
+    ("ninjafrog/hero/doublejump.png", "heroDoubleJumpAnimSeq", 32, 32, 12, 0, 0, 0, 0),
+    ("ninjafrog/hero/jump.png", "heroJumpFrame", 32, 32, 12, 0, 0, 0, 0),
+    ("ninjafrog/hero/fall.png", "heroFallFrame", 32, 32, 12, 0, 0, 0, 0),
+    ("ninjafrog/hero/hit.png", "heroHitAnimSeq", 32, 32, 12, 0, 0, 0, 0),
+    ("ninjafrog/hero/idle.png", "heroIdleAnimSeq", 32, 32, 12, 0, 0, 0, 0),
+    ("ninjafrog/hero/run.png", "heroRunAnimSeq", 32, 32, 12, 0, 0, 0, 0),
+]
+processSprite(allGameAlphaSpriteList, "allGameAlphaSprite", 380, 380, True)
+
+allGameSpriteList = [
     ("ninjafrog/background/Blue.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
     ("ninjafrog/background/Brown.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
     ("ninjafrog/background/Gray.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
@@ -158,16 +189,10 @@ allGameSpriteList = [
     ("ninjafrog/background/Purple.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
     ("ninjafrog/background/Yellow.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
     ("ninjafrog/terrain/terrain.png", "terrainFrames", 16, 16, 48, 0, 0, 0, 0),
-    ("ninjafrog/hero/doublejump.png", "heroDoubleJumpAnimSeq", 32, 32, 12, 0, 0, 0, 0),
-    ("ninjafrog/hero/jump.png", "heroJumpFrame", 32, 32, 12, 0, 0, 0, 0),
-    ("ninjafrog/hero/fall.png", "heroFallFrame", 32, 32, 12, 0, 0, 0, 0),
-    ("ninjafrog/hero/hit.png", "heroHitAnimSeq", 32, 32, 12, 0, 0, 0, 0),
-    ("ninjafrog/hero/idle.png", "heroIdleAnimSeq", 32, 32, 12, 0, 0, 0, 0),
-    ("ninjafrog/hero/run.png", "heroRunAnimSeq", 32, 32, 12, 0, 0, 0, 0),
     ("sweeper.png", "sweeperFrames", 16, 16, 32, 0, 0, 0, 0),
     ("tttblocks.png", "tttBlockFrames", 60, 60, 32, 0, 0, 0, 0),
 ]
-processSprite(allGameSpriteList, "allGameSprite", 480, 480)
+processSprite(allGameSpriteList, "allGameSprite", 330, 256, False)
 
 menuSpriteList = [
     ("menu/snake.png", "menuItemFrames", 96, 96, 16, 0, 0, 0, 0),
@@ -180,6 +205,6 @@ menuSpriteList = [
     ("menu/about.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
     ("menu/tiger.png", "tigerFrame", 128, 128, 64, 0, 0, 0, 0),
 ]
-processSprite(menuSpriteList, "menuSprite", 320, 320)
+processSprite(menuSpriteList, "menuSprite", 320, 320, True)
 
 

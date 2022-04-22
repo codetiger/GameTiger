@@ -14,7 +14,7 @@ TileMap::~TileMap() {
 }
 
 void TileMap::addTileInfo(uint16_t index, TileInfo tinfo) {
-    this->tileInfoList.insert(std::pair<uint16_t, TileInfo>(index, tinfo));
+    this->tileInfoList[index] = tinfo;
 }
 
 void TileMap::update(uint16_t deltaTimeMS) {

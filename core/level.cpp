@@ -73,10 +73,10 @@ void Level::setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint16_t
     this->gameLayer = new TileMap(xCount, yCount, tileWidth, tileHeight, ts);
     for (int i = 0; i < xCount*yCount; i++) {
         TileInfo tinfo;
-        tinfo.type = (i != emptyTileIndex) ? SPRITE : EMPTY;
+        tinfo.type = (ts[i] != emptyTileIndex) ? SPRITE : EMPTY;
         tinfo.sprite = sprite;
-        tinfo.textureID = i;
-        this->gameLayer->addTileInfo(i, tinfo);
+        tinfo.textureID = ts[i];
+        this->gameLayer->addTileInfo(ts[i], tinfo);
     }
 }
 
