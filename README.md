@@ -10,6 +10,23 @@ A Retro style game console designed and built entirely for educational purpose a
 
 ![GameTiger Console](/docs/gametiger.jpg)
 
+## Current State
+![GameTiger Console](/docs/gametiger.gif)
+### Snake Game
+![Snake Game GameTiger Console](/docs/snake.png)
+
+### 2048 Game
+![2048 Game GameTiger Console](/docs/2048.png)
+
+### Tetris Game
+![Tetris Game GameTiger Console](/docs/tetris.png)
+
+### Minesweeper Game
+![Minesweeper Game GameTiger Console](/docs/minesweeper.png)
+
+### Tic Tac Toe Game
+![Tic Tac Toe Game GameTiger Console](/docs/tictactoe.png)
+
 ## Component specification
 *  MCU RP2040
     *  32-bit dual ARM Cortex-M0+ Microcontroller
@@ -32,22 +49,6 @@ A Retro style game console designed and built entirely for educational purpose a
 *  Witty Fox Li-Ion Battery
     *  Voltage: 3.7v
     *  Capacity: 1000 mAh
-
-## Current State
-### Snake Game
-![Snake Game GameTiger Console](/docs/snake.png)
-
-### 2048 Game
-![2048 Game GameTiger Console](/docs/2048.png)
-
-### Tetris Game
-![Tetris Game GameTiger Console](/docs/tetris.png)
-
-### Minesweeper Game
-![Minesweeper Game GameTiger Console](/docs/minesweeper.png)
-
-### Tic Tac Toe Game
-![Tic Tac Toe Game GameTiger Console](/docs/tictactoe.png)
 
 ## Wiring 
 The components are based on standard interfaces and thus nothing complicated in wiring. You can feel free to use different GPIO pins based on lot of tutorials but this is what I've used and configured in the software as default. 
