@@ -43,8 +43,6 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
         sw += screenX;
         screenX = 0;
     }
-    //  else if(screenX+spriteWidth > DISPLAY_WIDTH)
-    //     sw -= (screenX+spriteWidth) - DISPLAY_WIDTH;
 
     uint16_t sy = spriteY, sh = spriteHeight;
     if(screenY < 0) {
@@ -52,10 +50,13 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
         sh += screenY;
         screenY = 0;
     }
-    //  else if(screenY+spriteHeight > DISPLAY_HEIGHT)
-    //     sh -= (screenY+spriteHeight) - DISPLAY_HEIGHT;
 
     if(!this->hasIndexedColors && !flipH && !flipV && scale == 1) {
+        if(screenX+spriteWidth > DISPLAY_WIDTH)
+            sw -= screenX+spriteWidth-DISPLAY_WIDTH;
+        if(screenY+spriteHeight > DISPLAY_HEIGHT)
+            sh -= screenY+spriteHeight-DISPLAY_HEIGHT;
+
         for (int y = 0; y < sh; y++) {
             int pixIndex = (sy+y) * this->width + sx;
             display->drawBitmapRow(screenX, screenY + y, sw, &this->palette[pixIndex]);

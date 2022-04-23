@@ -39,6 +39,6 @@ const uint16_t level01Fruits[][3] = {
 const uint8_t level01EnemyCount = 3;
 const uint16_t level01EnemyMushroom[][4] = { //y, startx, xmin, xmax
     {200, 235, 160, 324},
-    {190, 90, 160, 260},
-    {360, 122, 320, 448},
+    {190, 91, 160, 260},
+    {360, 123, 320, 448},
 };

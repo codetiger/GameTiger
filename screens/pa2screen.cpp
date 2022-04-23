@@ -2,7 +2,7 @@
 #include "pa2/pa2level.h"
 
 PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("About screen loading...");
+    printf("Pixel screen loading...");
     this->screenId = 5;
     this->type = Type::GAME;
     this->returnCallBack = rcb;
