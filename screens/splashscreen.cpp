@@ -10,6 +10,7 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     this->accDeltaTimeMS = 0;
     this->totalDuration = 0;
     this->option = option;
+    this->state = WAITING;
 
     uint16_t tileWidth = 20, tileHeight = 20;
     uint8_t xCount = 4 + (DISPLAY_WIDTH / tileWidth);
@@ -38,6 +39,9 @@ SplashScreen::~SplashScreen() {
 }
 
 void SplashScreen::update(uint16_t deltaTimeMS) {
+    // if(this->state != PLAYING) // Wait for keystroke for capturing video on Mac
+    //     return;
+       
     this->totalDuration += deltaTimeMS;
     if(this->totalDuration > 3000) {
         this->returnCallBack(this->screenId, this->option);
@@ -67,6 +71,7 @@ void SplashScreen::draw(Display *display) {
 void SplashScreen::keyPressed(uint8_t key) {
     const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
     printf("Key: %c\n", c[key]);
+    this->state = PLAYING;
 }
 
 void SplashScreen::keyReleased(uint8_t key) {

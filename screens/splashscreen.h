@@ -10,6 +10,7 @@ private:
     uint16_t totalDuration, accDeltaTimeMS;
     TileMap *bgLayer;
     uint8_t option;
+    GameState state;
 public:
     SplashScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~SplashScreen();

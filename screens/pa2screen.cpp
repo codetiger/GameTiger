@@ -17,26 +17,66 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     for (int i = 0; i < level01XCount*level01YCount; i++)
         levelMap[i] = terrainFrames[level01[i]-1];
     this->level->setGameLayer(&allGameSprite, level01XCount, level01YCount, levelMap, 24);
-    for (int i = 0; i < level01GoodiesCount; i++) {
+    for (int i = 0; i < level01FruitCount; i++) {
         uint16_t *anim = 0;
-        if(level01Goodies[i][4] == 0)
-            anim = (uint16_t*)AppleAnimSeq;
-        else if(level01Goodies[i][4] == 1)
-            anim = (uint16_t*)BananasAnimSeq;
-        else if(level01Goodies[i][4] == 2)
-            anim = (uint16_t*)CherriesAnimSeq;
-        else if(level01Goodies[i][4] == 3)
-            anim = (uint16_t*)KiwiAnimSeq;
-        else if(level01Goodies[i][4] == 4)
-            anim = (uint16_t*)MelonAnimSeq;
-        else if(level01Goodies[i][4] == 5)
-            anim = (uint16_t*)OrangeAnimSeq;
-        else if(level01Goodies[i][4] == 6)
-            anim = (uint16_t*)PineappleAnimSeq;
-        else if(level01Goodies[i][4] == 7)
-            anim = (uint16_t*)StrawberryAnimSeq;
-        this->level->addGoodie(level01Goodies[i][0], level01Goodies[i][1], &allGameAlphaSprite, level01Goodies[i][2], level01Goodies[i][3], 17, anim, 6, (uint16_t*)CollectedAnimSeq);
+        switch (level01Fruits[i][2]){
+        case 0:
+            anim = (uint16_t*)AppleAnimSeq;break;
+        case 1:
+            anim = (uint16_t*)BananasAnimSeq;break;
+        case 2:
+            anim = (uint16_t*)CherriesAnimSeq;break;
+        case 3:
+            anim = (uint16_t*)KiwiAnimSeq;break;
+        case 4:
+            anim = (uint16_t*)MelonAnimSeq;break;
+        case 5:
+            anim = (uint16_t*)OrangeAnimSeq;break;
+        case 6:
+            anim = (uint16_t*)PineappleAnimSeq;break;
+        case 7:
+            anim = (uint16_t*)StrawberryAnimSeq;break;
+        }
+        GameItem item;
+        item.state = IDLE;
+        item.movementType = STATIC;
+        item.x = level01Fruits[i][0];
+        item.y = level01Fruits[i][1];
+        item.speed = 2;
+        item.width = allGameAlphaSprite.getSpriteWidth(anim[0]);
+        item.height = allGameAlphaSprite.getSpriteHeight(anim[0]);
+        item.sprite = &allGameAlphaSprite;
+        item.deltaHealth = 10;
+        item.deltaScore = 0;
+        item.numIdleFrames = 17;
+        item.idleSeq = anim;
+        item.numHitFrames = 6;
+        item.hitSeq = (uint16_t*)CollectedAnimSeq;
+        item.curFrameIndex = 0;
+        this->level->addGameItem(item);
     }
+
+    for (int i = 0; i < level01EnemyCount; i++) {
+        GameItem item;
+        item.state = IDLE;
+        item.movementType = HORIZONTAL;
+        item.x = level01EnemyMushroom[i][0]; item.y = level01EnemyMushroom[i][1];
+        item.minAxis = level01EnemyMushroom[i][2]; item.maxAxis = level01EnemyMushroom[i][3];
+        item.width = allGameAlphaSprite.getSpriteWidth(mushroomIdleAnimSeq[0]);
+        item.height = allGameAlphaSprite.getSpriteHeight(mushroomIdleAnimSeq[0]);
+        item.sprite = &allGameAlphaSprite;
+        item.deltaHealth = -100;
+        item.deltaScore = 0;
+        item.numIdleFrames = 14;
+        item.idleSeq = (uint16_t*)mushroomIdleAnimSeq;
+        item.numRunFrames = 16;
+        item.runSeq = (uint16_t*)mushroomRunAnimSeq;
+        item.numHitFrames = 5;
+        item.hitSeq = (uint16_t*)mushroomHitAnimSeq;
+        item.curFrameIndex = 0;
+        this->level->addGameItem(item);
+    }
+
     printf("Done\n");
 }
 

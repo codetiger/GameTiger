@@ -37,36 +37,39 @@ void Image::draw(Display *display, int16_t screenX, int16_t screenY, uint16_t sp
 
     if(alpha == 0 || screenX+spriteWidth <= 0 || screenX >= DISPLAY_WIDTH || screenY+spriteHeight <= 0 || screenY >= DISPLAY_HEIGHT)
         return;
+    uint16_t sx = spriteX, sw = spriteWidth;
     if(screenX < 0) {
-        spriteX -= screenX;
-        spriteWidth += screenX;
+        sx -= screenX;
+        sw += screenX;
         screenX = 0;
     }
+    //  else if(screenX+spriteWidth > DISPLAY_WIDTH)
+    //     sw -= (screenX+spriteWidth) - DISPLAY_WIDTH;
+
+    uint16_t sy = spriteY, sh = spriteHeight;
     if(screenY < 0) {
-        spriteY -= screenY;
-        spriteHeight += screenY;
+        sy -= screenY;
+        sh += screenY;
         screenY = 0;
     }
-    if(screenX+spriteWidth > DISPLAY_WIDTH)
-        spriteWidth -= (screenX+spriteWidth) - DISPLAY_WIDTH;
-    if(screenY+spriteHeight > DISPLAY_HEIGHT)
-        spriteHeight -= (screenY+spriteHeight) - DISPLAY_HEIGHT;
+    //  else if(screenY+spriteHeight > DISPLAY_HEIGHT)
+    //     sh -= (screenY+spriteHeight) - DISPLAY_HEIGHT;
 
     if(!this->hasIndexedColors && !flipH && !flipV && scale == 1) {
-        for (int y = 0; y < spriteHeight; y++) {
-            int pixIndex = (spriteY+y) * this->width + spriteX;
-            display->drawBitmapRow(screenX, screenY + y, spriteWidth, &this->palette[pixIndex]);
+        for (int y = 0; y < sh; y++) {
+            int pixIndex = (sy+y) * this->width + sx;
+            display->drawBitmapRow(screenX, screenY + y, sw, &this->palette[pixIndex]);
         }
     } else {
-        for (int y = 0; y < spriteHeight; y++) {
-            for (int x = 0; x < spriteWidth; x++) {
-                int pixIndex = (spriteY+(flipV ? spriteHeight-y-1 : y)) * this->width + (spriteX + (flipH ? spriteWidth-x-1 : x));
+        for (int y = 0; y < sh; y++) {
+            for (int x = 0; x < sw; x++) {
+                int pixIndex = (flipV ? (spriteY+(sh-y-1)) : (sy+y)) * this->width + (flipH ? (spriteX+(sw-x-1)) : (sx+x));
                 int colIndex = this->hasIndexedColors ? this->pixelData[pixIndex] : pixIndex;
                 uint8_t a = this->hasIndexedColors ? this->alphas[colIndex] : 255;
                 a = a > alpha ? alpha : a;
-                for(int sx = 0; sx < scale; sx++)
-                    for(int sy = 0; sy < scale; sy++)
-                        display->setPixel((x*scale)+screenX+sx, (y*scale)+screenY+sy, this->palette[colIndex], a);
+                for(int dx = 0; dx < scale; dx++)
+                    for(int dy = 0; dy < scale; dy++)
+                        display->setPixel((x*scale)+screenX+dx, (y*scale)+screenY+dy, this->palette[colIndex], a);
             }
         }
     }

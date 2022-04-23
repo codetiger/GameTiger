@@ -6,31 +6,22 @@
 #ifndef _GAME_TIGER_LEVEL_H
 #define _GAME_TIGER_LEVEL_H
 
-enum ItemType {GOODIE, HURT};
-enum ItemState {FRESH, HIT, PICKED};
+enum GameItemState {IDLE, MOVING, HIT, DEAD};
+enum GameItemMoveType {STATIC, HORIZONTAL, VERTICAL};
 
 struct GameItem {
-    uint16_t x, y;
     uint8_t width, height;
-    ItemType type;
-    ItemState state;
+    uint8_t speed;
+    int8_t deltaHealth, deltaScore;
     Image *sprite;
-    uint8_t curFrameIndex;
-    uint8_t deltaScore, deltaHealth;
-    uint8_t numIdleFrames, numHitFrames;
-    uint16_t *idleSeq, *hitSeq;
-};
+    GameItemMoveType movementType;
+    GameItemState state;
+    uint8_t numIdleFrames, numHitFrames, numRunFrames;
+    uint16_t *idleSeq, *hitSeq, *runSeq;
 
-enum EnemyState {IDLE, MOVING, FOLLOWING, SHOOTING, HITKILL, DEAD};
-
-struct Enemy {
-    uint16_t x, y;
-    uint8_t width, height;
-    EnemyState state;
-    Image *sprite;
+    bool direction;
     uint8_t curFrameIndex;
-    uint8_t deltaHealth;
-    uint8_t numIdleFrames, numHitFrames;
+    uint16_t x, y, minAxis, maxAxis;
 };
 
 class Level {
@@ -47,7 +38,7 @@ public:
 
     void setBGLayer(Image *sprite, uint16_t spriteID, bool isHorizontalScroll);
     void setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint16_t *ts, uint16_t emptyTileIndex);
-    void addGoodie(uint16_t x, uint16_t y, Image *sprite, uint8_t deltaScore, uint8_t deltaHealth, uint8_t numIdleFrames, uint16_t *idleSeq, uint8_t numHitFrames, uint16_t *hitSeq);
+    void addGameItem(GameItem &gi);
 
     void update(uint16_t deltaTimeMS);
     void draw(Display *display);

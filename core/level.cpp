@@ -20,16 +20,37 @@ void Level::update(uint16_t deltaTimeMS) {
             this->bgScroll--;
 
         for(GameItem &item : gameItems) {
-            if(item.state != PICKED)
-                item.curFrameIndex++;
-            else 
+            if(item.state == DEAD)
                 continue;
 
+            item.curFrameIndex++;
             if(item.state == HIT && item.curFrameIndex >= item.numHitFrames) {
                 item.curFrameIndex = 0;
-                item.state = PICKED;
-            } else if(item.state == FRESH && item.curFrameIndex >= item.numIdleFrames)
+                item.state = DEAD;
+            } else if(item.state == IDLE && item.curFrameIndex >= item.numIdleFrames) {
                 item.curFrameIndex = 0;
+                if(item.movementType == HORIZONTAL || item.movementType == VERTICAL) {
+                    item.state = MOVING;
+                    item.direction = !item.direction;
+                }
+            } else if(item.state == MOVING && item.curFrameIndex >= item.numIdleFrames) {
+                item.curFrameIndex = 0;
+            }
+            if(item.state == MOVING) {
+                if(item.movementType == HORIZONTAL) {
+                    int8_t delta = item.speed * (item.direction ? 1 : -1);
+                    item.x = item.x + delta;
+                    if(item.x > item.maxAxis) {
+                        item.x = item.maxAxis;
+                        item.curFrameIndex = 0;
+                        item.state = IDLE;
+                    } else if(item.x < item.minAxis) {
+                        item.x = item.minAxis;
+                        item.curFrameIndex = 0;
+                        item.state = IDLE;
+                    }
+                }
+            }
         }
         this->lastUpdate = getTime();
     }
@@ -41,9 +62,15 @@ void Level::draw(Display *display) {
     if(this->gameLayer)
         this->gameLayer->draw(display, this->gameScrollX, this->gameScrollY);
     for(GameItem item : gameItems) {
-        if(item.state != PICKED) {
-            uint16_t frame = (item.state == FRESH) ? item.idleSeq[item.curFrameIndex] : item.hitSeq[item.curFrameIndex];
-            item.sprite->drawSprite(display, frame, item.x-this->gameScrollX, item.y-this->gameScrollY);
+        if(item.state != DEAD) {
+            uint16_t frame;
+            if(item.state == IDLE)
+                frame = item.idleSeq[item.curFrameIndex];
+            else if(item.state == HIT)
+                frame = item.hitSeq[item.curFrameIndex];
+            else if(item.state == MOVING)
+                frame = item.runSeq[item.curFrameIndex];
+            item.sprite->drawSprite(display, frame, item.x-this->gameScrollX, item.y-this->gameScrollY, 1, 255, item.direction);
         }
     }
 }
@@ -80,22 +107,10 @@ void Level::setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint16_t
     }
 }
 
-void Level::addGoodie(uint16_t x, uint16_t y, Image *sprite, uint8_t dScore, uint8_t dHealth, uint8_t nIdleFrames, uint16_t *idleSeq, uint8_t nHitFrames, uint16_t *hitSeq) {
-    GameItem item;
-    item.state = FRESH;
-    item.type = GOODIE;
-    item.x = x;item.y = y;
-    item.width = sprite->getSpriteWidth(idleSeq[0]);
-    item.height = sprite->getSpriteHeight(idleSeq[0]);
-    item.sprite = sprite;
-    item.deltaHealth = dHealth;
-    item.deltaScore = dScore;
-    item.numIdleFrames = nIdleFrames;
-    item.idleSeq = idleSeq;
-    item.numHitFrames = nHitFrames;
-    item.hitSeq = hitSeq;
-    item.curFrameIndex = 0;
-    gameItems.push_back(item);
+void Level::addGameItem(GameItem &gi) {
+    if(gi.movementType != STATIC)
+        gi.direction = ((rand() % 10) % 2 == 0);
+    gameItems.push_back(gi);
 }
 
 void Level::keyPressed(uint8_t key) {
