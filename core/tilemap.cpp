@@ -24,6 +24,12 @@ void TileMap::update(uint16_t deltaTimeMS) {
     }
 }
 
+bool TileMap::isEmptyTile(uint16_t x, uint16_t y) {
+    uint16_t index = (y/this->tileHeight) * this->xCount + (x/this->tileWidth);
+    uint16_t tile = this->tiles[index];
+    return this->tileInfoList[tile].type == EMPTY;
+}
+
 void TileMap::draw(Display *display, uint16_t screenx, uint16_t screeny) {
     for (int y = 0; y < yCount; y++) {
         int16_t ty = y * this->tileHeight - screeny;

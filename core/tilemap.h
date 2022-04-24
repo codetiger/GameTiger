@@ -29,6 +29,7 @@ public:
     TileMap(uint8_t xc, uint8_t yc, uint8_t tw, uint8_t th, uint16_t *ts);
     ~TileMap();
     void addTileInfo(uint16_t index, TileInfo tinfo);
+    bool isEmptyTile(uint16_t x, uint16_t y);
     void draw(Display *display, uint16_t screenx, uint16_t screeny);
     void update(uint16_t deltaTimeMS);
 };

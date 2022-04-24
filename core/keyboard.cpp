@@ -34,6 +34,20 @@ void KeyBoard::checkKeyState(Screen *screen) {
     while (SDL_PollEvent(&event)) {
         if(event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
             exit(EXIT_SUCCESS);
+        } else if(event.type == SDL_KEYUP) {
+            if(event.key.keysym.sym == SDLK_UP) {
+                screen->keyReleased(KEY_UP);
+            } else if(event.key.keysym.sym == SDLK_DOWN) {
+                screen->keyReleased(KEY_DOWN);
+            } else if(event.key.keysym.sym == SDLK_RIGHT) {
+                screen->keyReleased(KEY_RIGHT);
+            } else if(event.key.keysym.sym == SDLK_LEFT) {
+                screen->keyReleased(KEY_LEFT);
+            } else if(event.key.keysym.sym == SDLK_a) {
+                screen->keyReleased(KEY_A);
+            } else if(event.key.keysym.sym == SDLK_b) {
+                screen->keyReleased(KEY_B);
+            }
         } else if(event.type == SDL_KEYDOWN) {
             if(event.key.keysym.sym == SDLK_UP) {
                 screen->keyPressed(KEY_UP);

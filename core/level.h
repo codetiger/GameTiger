@@ -6,7 +6,7 @@
 #ifndef _GAME_TIGER_LEVEL_H
 #define _GAME_TIGER_LEVEL_H
 
-enum GameItemState {IDLE, MOVING, HIT, DEAD};
+enum GameItemState {IDLE, MOVING, HIT, DISAPPEAR};
 enum GameItemMoveType {STATIC, HORIZONTAL, VERTICAL};
 
 struct GameItem {
@@ -24,6 +24,20 @@ struct GameItem {
     uint16_t x, y, minAxis, maxAxis;
 };
 
+enum HeroState {STANDING, WALKING, JUMPING, DOUBLEJUMPING, FALLING, HURT, DEAD};
+
+struct Hero {
+    uint8_t width, height;
+    Image *sprite;
+    HeroState state;
+    uint8_t numStandingFrames, numHurtFrames, numWalkFrames, jumpFrame, fallFrame, numDoubleJumpFrames;
+    uint16_t *standingSeq, *hurtSeq, *walkSeq, *doubleJumpSeq;
+
+    bool direction;
+    uint8_t curFrameIndex, inertia;
+    int16_t x, y;
+};
+
 class Level {
 private:
     TileMap *bgLayer, *gameLayer;
@@ -32,7 +46,11 @@ private:
     uint16_t gameScrollX, gameScrollY;
     timetype lastUpdate;
     std::vector<GameItem> gameItems;
+
+    const uint8_t JUMPINERTIA = 6;
 public:
+    Hero hero;
+
     Level();
     ~Level();
 
@@ -40,6 +58,10 @@ public:
     void setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint16_t *ts, uint16_t emptyTileIndex);
     void addGameItem(GameItem &gi);
 
+    bool checkHeroMovable(uint8_t direction, int8_t delta);
+    void updateGameItem(GameItem &gi);
+    void updateHero();
+    void updateScreenScroll();
     void update(uint16_t deltaTimeMS);
     void draw(Display *display);
     void keyPressed(uint8_t key);

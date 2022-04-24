@@ -77,6 +77,25 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
         this->level->addGameItem(item);
     }
 
+    this->level->hero.x = 100;
+    this->level->hero.y = 176;
+    this->level->hero.width = allGameAlphaSprite.getSpriteWidth(heroIdleAnimSeq[0]);
+    this->level->hero.height = allGameAlphaSprite.getSpriteHeight(heroIdleAnimSeq[0]);
+    this->level->hero.sprite = &allGameAlphaSprite;
+    this->level->hero.numStandingFrames = 11;
+    this->level->hero.numHurtFrames = 7;
+    this->level->hero.numWalkFrames = 12;
+    this->level->hero.jumpFrame = heroJumpFrame;
+    this->level->hero.fallFrame = heroFallFrame;
+    this->level->hero.numDoubleJumpFrames = 6;
+    this->level->hero.direction = false;
+    this->level->hero.standingSeq = (uint16_t*)heroIdleAnimSeq;
+    this->level->hero.hurtSeq = (uint16_t*)heroHitAnimSeq;
+    this->level->hero.walkSeq = (uint16_t*)heroRunAnimSeq;
+    this->level->hero.doubleJumpSeq = (uint16_t*)heroDoubleJumpAnimSeq;
+    this->level->hero.curFrameIndex = 0;
+    this->level->hero.state = STANDING;
+    this->level->hero.direction = false;
     printf("Done\n");
 }
 
