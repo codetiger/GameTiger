@@ -24,10 +24,10 @@ void TileMap::update(uint16_t deltaTimeMS) {
     }
 }
 
-bool TileMap::isEmptyTile(uint16_t x, uint16_t y) {
+TileCollisionType TileMap::getCollisionTile(uint16_t x, uint16_t y) {
     uint16_t index = (y/this->tileHeight) * this->xCount + (x/this->tileWidth);
     uint16_t tile = this->tiles[index];
-    return this->tileInfoList[tile].type == EMPTY;
+    return this->tileInfoList[tile].collisionType;
 }
 
 void TileMap::draw(Display *display, uint16_t screenx, uint16_t screeny) {

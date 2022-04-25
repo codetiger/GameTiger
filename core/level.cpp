@@ -83,20 +83,28 @@ void Level::updateHeroCollision() {
 
 bool Level::checkHeroMovable(uint8_t direction, int8_t delta) {
     if(direction == 0) {
-        if(this->gameLayer->isEmptyTile(hero.x + delta + hero.width - 6, hero.y + 2) && 
-            this->gameLayer->isEmptyTile(hero.x + delta + hero.width - 6, hero.y + hero.height - 2))
+        if(this->gameLayer->getCollisionTile(hero.x + delta + hero.width - 6, hero.y + 2) == HALLOW && 
+            this->gameLayer->getCollisionTile(hero.x + delta + hero.width - 6, hero.y + hero.height - 2) == HALLOW)
             return true;
     } else if(direction == 1) {
-        if(this->gameLayer->isEmptyTile(hero.x + delta + 4, hero.y + 2) &&
-            this->gameLayer->isEmptyTile(hero.x + delta + 4, hero.y + hero.height - 2))
+        if(this->gameLayer->getCollisionTile(hero.x + delta + 4, hero.y + 2) == HALLOW &&
+            this->gameLayer->getCollisionTile(hero.x + delta + 4, hero.y + hero.height - 2) == HALLOW)
             return true;
     } else if(direction == 2) {
-        if(this->gameLayer->isEmptyTile(hero.x + 4, hero.y + hero.height + 4) &&
-            this->gameLayer->isEmptyTile(hero.x + hero.width - 4, hero.y + hero.height + 4))
+        if(this->gameLayer->getCollisionTile(hero.x + 4, hero.y + hero.height + 4) == HALLOW &&
+            this->gameLayer->getCollisionTile(hero.x + hero.width - 4, hero.y + hero.height + 4) == HALLOW)
             return true;
     } else if(direction == 3) {
-        if(this->gameLayer->isEmptyTile(hero.x + 4, hero.y + delta + 2) && 
-            this->gameLayer->isEmptyTile(hero.x + hero.width - 4, hero.y + delta + 2))
+        TileCollisionType left = this->gameLayer->getCollisionTile(hero.x + 4, hero.y + delta + 2);
+        TileCollisionType right = this->gameLayer->getCollisionTile(hero.x + hero.width - 4, hero.y + delta + 2);
+
+        if(left == HALLOW && right == HALLOW)
+            return true;
+        else if(left == ONEWAY && right == ONEWAY)
+            return true;
+        else if(left == HALLOW && right == ONEWAY)
+            return true;
+        else if(left == ONEWAY && right == HALLOW)
             return true;
     }
     return false;
@@ -254,6 +262,9 @@ void Level::setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint16_t
     this->gameLayer = new TileMap(xCount, yCount, tileWidth, tileHeight, ts);
     for (int i = 0; i < xCount*yCount; i++) {
         TileInfo tinfo;
+        tinfo.collisionType = (ts[i] != emptyTileIndex) ? NOPASS : HALLOW;
+        if(sprite->getSpriteHeight(ts[i]) == 5)
+            tinfo.collisionType = ONEWAY;
         tinfo.type = (ts[i] != emptyTileIndex) ? SPRITE : EMPTY;
         tinfo.sprite = sprite;
         tinfo.textureID = ts[i];

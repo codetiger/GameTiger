@@ -5,10 +5,12 @@
 #define _GAME_TIGER_TILEMAP_H
 
 enum TileType {EMPTY, COLORFILL, SPRITE, ANIMATEDSPRITE};
+enum TileCollisionType {HALLOW, NOPASS, ONEWAY};
 
 struct TileInfo {
     uint16_t textureID;
     TileType type;
+    TileCollisionType collisionType;
     Color color;
     Image *sprite;
     uint8_t numFrames;
@@ -29,7 +31,7 @@ public:
     TileMap(uint8_t xc, uint8_t yc, uint8_t tw, uint8_t th, uint16_t *ts);
     ~TileMap();
     void addTileInfo(uint16_t index, TileInfo tinfo);
-    bool isEmptyTile(uint16_t x, uint16_t y);
+    TileCollisionType getCollisionTile(uint16_t x, uint16_t y);
     void draw(Display *display, uint16_t screenx, uint16_t screeny);
     void update(uint16_t deltaTimeMS);
 };
