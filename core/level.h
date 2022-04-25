@@ -8,12 +8,14 @@
 
 enum GameItemState {IDLE, MOVING, HIT, DISAPPEAR};
 enum GameItemMoveType {STATIC, HORIZONTAL, VERTICAL};
+enum GameItemType {FRIEND, ENEMY};
 
 struct GameItem {
     uint8_t width, height;
     uint8_t speed;
     int8_t deltaHealth, deltaScore;
     Image *sprite;
+    GameItemType type;
     GameItemMoveType movementType;
     GameItemState state;
     uint8_t numIdleFrames, numHitFrames, numRunFrames;
@@ -24,7 +26,7 @@ struct GameItem {
     uint16_t x, y, minAxis, maxAxis;
 };
 
-enum HeroState {STANDING, WALKING, JUMPING, DOUBLEJUMPING, FALLING, HURT, DEAD};
+enum HeroState {STANDING, WALKING, JUMPING, DOUBLEJUMPING, FALLING, HURT};
 
 struct Hero {
     uint8_t width, height;
@@ -35,7 +37,7 @@ struct Hero {
 
     bool direction;
     uint8_t curFrameIndex, inertia;
-    int16_t x, y;
+    uint16_t x, y;
 };
 
 class Level {
@@ -48,6 +50,13 @@ private:
     std::vector<GameItem> gameItems;
 
     const uint8_t JUMPINERTIA = 6;
+
+    bool checkGameItemCollision(GameItem &item);
+    void updateHeroCollision();
+    bool checkHeroMovable(uint8_t direction, int8_t delta);
+    void updateGameItem(GameItem &gi);
+    void updateHero();
+    void updateScreenScroll();
 public:
     Hero hero;
 
@@ -58,10 +67,6 @@ public:
     void setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint16_t *ts, uint16_t emptyTileIndex);
     void addGameItem(GameItem &gi);
 
-    bool checkHeroMovable(uint8_t direction, int8_t delta);
-    void updateGameItem(GameItem &gi);
-    void updateHero();
-    void updateScreenScroll();
     void update(uint16_t deltaTimeMS);
     void draw(Display *display);
     void keyPressed(uint8_t key);

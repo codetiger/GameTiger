@@ -40,6 +40,7 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
         GameItem item;
         item.state = IDLE;
         item.movementType = STATIC;
+        item.type = FRIEND;
         item.x = level01Fruits[i][0];
         item.y = level01Fruits[i][1];
         item.speed = 2;
@@ -60,6 +61,7 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
         GameItem item;
         item.state = IDLE;
         item.movementType = HORIZONTAL;
+        item.type = ENEMY;
         item.x = level01EnemyMushroom[i][0]; item.y = level01EnemyMushroom[i][1];
         item.minAxis = level01EnemyMushroom[i][2]; item.maxAxis = level01EnemyMushroom[i][3];
         item.width = allGameAlphaSprite.getSpriteWidth(mushroomIdleAnimSeq[0]);
@@ -87,7 +89,7 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->level->hero.numWalkFrames = 12;
     this->level->hero.jumpFrame = heroJumpFrame;
     this->level->hero.fallFrame = heroFallFrame;
-    this->level->hero.numDoubleJumpFrames = 6;
+    this->level->hero.numDoubleJumpFrames = 7;
     this->level->hero.direction = false;
     this->level->hero.standingSeq = (uint16_t*)heroIdleAnimSeq;
     this->level->hero.hurtSeq = (uint16_t*)heroHitAnimSeq;

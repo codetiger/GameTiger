@@ -33,6 +33,8 @@ class Sprite:
         return None
 
     def addImage(self, img):
+        if(not self.hasIndexedColor):
+            img = img.crop(img.getbbox())
         index = self.imageExists(img)
         if(index == None):
             index = len(self.tiles)
@@ -172,6 +174,7 @@ allGameAlphaSpriteList = [
     ("ninjafrog/enemies/rinoIdle.png", "rinoIdleAnimSeq", 52, 34, 10, 0, 0, 4, 0),
     ("ninjafrog/enemies/rinoRun.png", "rinoRunAnimSeq", 52, 34, 10, 0, 0, 4, 0),
     ("ninjafrog/hero/doublejump.png", "heroDoubleJumpAnimSeq", 32, 32, 12, 0, 0, 0, 0),
+    ("ninjafrog/hero/jump.png", "heroDoubleJumpAnimSeq", 32, 32, 12, 0, 0, 0, 0),
     ("ninjafrog/hero/jump.png", "heroJumpFrame", 32, 32, 12, 0, 0, 0, 0),
     ("ninjafrog/hero/fall.png", "heroFallFrame", 32, 32, 12, 0, 0, 0, 0),
     ("ninjafrog/hero/hit.png", "heroHitAnimSeq", 32, 32, 12, 0, 0, 0, 0),
