@@ -11,21 +11,23 @@ A Retro style game console designed and built entirely for educational purpose a
 ![GameTiger Console](/docs/gametiger.jpg)
 
 ## Current State
-![GameTiger Console](/docs/gametiger.gif)
 ### Snake Game
-![Snake Game GameTiger Console](/docs/snake.png)
+![Snake Game GameTiger Console](/docs/Snake.gif)
 
 ### 2048 Game
-![2048 Game GameTiger Console](/docs/2048.png)
+![2048 Game GameTiger Console](/docs/2048.gif)
 
 ### Tetris Game
-![Tetris Game GameTiger Console](/docs/tetris.png)
+![Tetris Game GameTiger Console](/docs/Tetris.gif)
 
 ### Minesweeper Game
-![Minesweeper Game GameTiger Console](/docs/minesweeper.png)
+![Minesweeper Game GameTiger Console](/docs/Minesweeper.gif)
 
 ### Tic Tac Toe Game
-![Tic Tac Toe Game GameTiger Console](/docs/tictactoe.png)
+![Tic Tac Toe Game GameTiger Console](/docs/TicTacToe.gif)
+
+### Ninja Frog Game
+![Ninja Frog Game GameTiger Console](/docs/NinjaFrog.gif)
 
 ## Component specification
 *  MCU RP2040
