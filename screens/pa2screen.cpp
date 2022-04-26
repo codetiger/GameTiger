@@ -1,5 +1,5 @@
 #include "pa2screen.h"
-#include "pa2/pa2level.h"
+#include "../content/pa2levels.h"
 
 PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Pixel screen loading...");
@@ -9,17 +9,27 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->highScoreCallBack = hscb;
     this->option = option;
     this->gameState = PLAYING;
+    this->loadLevel(this->option-1);
 
+    printf("Done\n");
+}
+
+PixelAdventureScreen::~PixelAdventureScreen() {
+}
+
+void PixelAdventureScreen::loadLevel(uint8_t level) {
     this->level = new Level();
     this->level->setBGLayer(&allGameSprite, bgFrames[rand() % 7], false);
 
-    uint16_t *levelMap = new uint16_t[level01XCount*level01YCount];
-    for (int i = 0; i < level01XCount*level01YCount; i++)
-        levelMap[i] = terrainFrames[level01[i]-1];
-    this->level->setGameLayer(&allGameSprite, level01XCount, level01YCount, levelMap, 24);
-    for (int i = 0; i < level01FruitCount; i++) {
+    uint8_t xCount = terrainSizes[level*2 + 0];
+    uint8_t yCount = terrainSizes[level*2 + 1];
+    uint16_t *levelMap = new uint16_t[xCount*yCount];
+    for (int i = 0; i < xCount*yCount; i++)
+        levelMap[i] = terrainFrames[terrainIndex[level + i]-1];
+    this->level->setGameLayer(&allGameSprite, xCount, yCount, levelMap, 24);
+    for (int i = 0; i < fruitCounts[level]; i++) {
         uint16_t *anim = 0;
-        switch (level01Fruits[i][2]){
+        switch (fruitIndex[level+i]){
         case 0:
             anim = (uint16_t*)AppleAnimSeq;break;
         case 1:
@@ -41,8 +51,8 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
         item.state = IDLE;
         item.movementType = STATIC;
         item.type = FRIEND;
-        item.x = level01Fruits[i][0];
-        item.y = level01Fruits[i][1];
+        item.x = fruitPos[(level + i)*2 + 0];
+        item.y = fruitPos[(level + i)*2 + 1];
         item.speed = 2;
         item.width = allGameAlphaSprite.getSpriteWidth(anim[0]);
         item.height = allGameAlphaSprite.getSpriteHeight(anim[0]);
@@ -57,13 +67,15 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
         this->level->addGameItem(item);
     }
 
-    for (int i = 0; i < level01EnemyCount; i++) {
+    for (int i = 0; i < enemyCounts[level]; i++) {
         GameItem item;
         item.state = IDLE;
         item.movementType = HORIZONTAL;
         item.type = ENEMY;
-        item.x = level01EnemyMushroom[i][0]; item.y = level01EnemyMushroom[i][1];
-        item.minAxis = level01EnemyMushroom[i][2]; item.maxAxis = level01EnemyMushroom[i][3];
+        item.x = enemyPos[(level + i)*2 + 0];
+        item.y = enemyPos[(level + i)*2 + 1];
+        item.minAxis = enemyLimits[(level + i)*2 + 0];
+        item.maxAxis = enemyLimits[(level + i)*2 + 1];
         item.width = allGameAlphaSprite.getSpriteWidth(mushroomIdleAnimSeq[0]);
         item.height = allGameAlphaSprite.getSpriteHeight(mushroomIdleAnimSeq[0]);
         item.sprite = &allGameAlphaSprite;
@@ -79,8 +91,8 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
         this->level->addGameItem(item);
     }
 
-    this->level->hero.x = 100;
-    this->level->hero.y = 176;
+    this->level->hero.x = heroPos[level*2 + 0];
+    this->level->hero.y = heroPos[level*2 + 1];
     this->level->hero.width = allGameAlphaSprite.getSpriteWidth(heroIdleAnimSeq[0]);
     this->level->hero.height = allGameAlphaSprite.getSpriteHeight(heroIdleAnimSeq[0]);
     this->level->hero.sprite = &allGameAlphaSprite;
@@ -98,10 +110,6 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->level->hero.curFrameIndex = 0;
     this->level->hero.state = STANDING;
     this->level->hero.direction = false;
-    printf("Done\n");
-}
-
-PixelAdventureScreen::~PixelAdventureScreen() {
 }
 
 void PixelAdventureScreen::update(uint16_t deltaTimeMS) {

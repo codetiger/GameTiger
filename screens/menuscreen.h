@@ -11,7 +11,7 @@ private:
         {"Tetris", "Easy", "Medium", "Hard"},
         {"Minesweeper", "Easy", "Medium", "Hard"},
         {"Tic Tac Toe", "Easy", "Medium", "Hard"},
-        {"Ninja Frog", "", "", ""},
+        {"Ninja Frog", "Level 01", "Level 02", "Level 03"},
         {"Settings", "", "", ""},
         {"About", "", "", ""}
     };

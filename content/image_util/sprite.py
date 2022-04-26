@@ -48,7 +48,7 @@ class Sprite:
             if name not in self.animSeq:
                 self.animSeq[name] = []
             self.animSeq[name].append(index)
-            # img.save("temp/" + name + str(index) + ".png")
+            img.save("temp/" + name + str(index) + ".png")
 
     def save(self, width, height, filename):
         self.packer.add_bin(width, height)

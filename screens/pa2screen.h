@@ -9,6 +9,7 @@ private:
     uint8_t option;
     Level *level;
 
+    void loadLevel(uint8_t level);
 public:
     PixelAdventureScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~PixelAdventureScreen();
