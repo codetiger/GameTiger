@@ -58,10 +58,11 @@ void SplashScreen::update(uint16_t deltaTimeMS) {
 
 void SplashScreen::draw(Display *display) {
     this->bgLayer->draw(display, this->tileMoveX, this->tileMoveY+40);
-    menuSprite.drawSprite(display, tigerFrame, 92, 56, 1, this->imageAlpha);
+    uint16_t width = menuSprite.getSpriteWidth(tigerFrame);
+    menuSprite.drawSprite(display, tigerFrame, (DISPLAY_WIDTH - width)/2, 56, this->imageAlpha);
     std::string title = "GameTiger";
-    uint16_t width = alphanumfont.getWidth(title, 2);
-    alphanumfont.drawSprites(display, title, (DISPLAY_WIDTH - width)/2, 190, 2, this->imageAlpha, false, false);
+    width = alphanumfont.getTextWidth(title, 2);
+    alphanumfont.drawText(display, title, (DISPLAY_WIDTH - width)/2, 190, this->imageAlpha, 2);
 }
 
 void SplashScreen::keyPressed(uint8_t key) {

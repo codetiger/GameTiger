@@ -68,7 +68,7 @@ void TetrisScreen::draw(Display *display) {
             }
         }
     }
-    alphanumfont.drawSprites(display, std::to_string(this->score), 240, 200, 2);
+    alphanumfont.drawText(display, std::to_string(this->score), 240, 200, 255, 2);
 
     display->fillRect(215, 25, 80, 80, DARKBG);
     display->fillRect(220, 30, 70, 70, LIGHTBG);
@@ -82,18 +82,18 @@ void TetrisScreen::draw(Display *display) {
 
     if(this->gameState == LOST) {
         std::string str = "Game Over";
-        uint16_t width = alphanumfont.getWidth(str, 2);
-        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+        uint16_t width = alphanumfont.getTextWidth(str, 2);
+        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 108, 255, 2);
     } else if(this->gameState == PAUSED) {
         std::string str = "Game Paused";
-        uint16_t width = alphanumfont.getWidth(str, 2);
-        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+        uint16_t width = alphanumfont.getTextWidth(str, 2);
+        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 108, 255, 2);
         str = "Press A to continue";
-        width = alphanumfont.getWidth(str, 1);
-        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 140, 1);
+        width = alphanumfont.getTextWidth(str);
+        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 140, 255, 1);
         str = "Press B to quit";
-        width = alphanumfont.getWidth(str, 1);
-        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 160, 1);
+        width = alphanumfont.getTextWidth(str);
+        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 160, 255, 1);
     }
 }
 

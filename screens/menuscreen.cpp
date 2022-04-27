@@ -60,14 +60,14 @@ void MenuScreen::draw(Display *display) {
         if(isAnimating)
             posx += (this->currentMenuItem - this->selectedMenuItem) * this->animationCounter;
 
-        uint16_t width = alphanumfont.getWidth(this->menuItemNames[i][0], 2);
-        alphanumfont.drawSprites(display, this->menuItemNames[i][0], posx + (DISPLAY_WIDTH - width)/2, 170, 2, alpha, false, false);
-        menuSprite.drawSprite(display, menuItemFrames[i], posx + (DISPLAY_WIDTH - 96)/2, 64, 1, alpha);
+        uint16_t width = alphanumfont.getTextWidth(this->menuItemNames[i][0], 2);
+        alphanumfont.drawText(display, this->menuItemNames[i][0], posx + (DISPLAY_WIDTH - width)/2, 170, alpha, 2);
+        menuSprite.drawSprite(display, menuItemFrames[i], posx + (DISPLAY_WIDTH - 96)/2, 64, alpha);
     }
     if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem].length() > 0) {
         std::string option = this->menuItemNames[this->currentMenuItem][this->currentOptionItem];
-        uint16_t width = alphanumfont.getWidth(option);
-        alphanumfont.drawSprites(display, option, (DISPLAY_WIDTH - width)/2, 200);
+        uint16_t width = alphanumfont.getTextWidth(option);
+        alphanumfont.drawText(display, option, (DISPLAY_WIDTH - width)/2, 200);
     }
 }
 

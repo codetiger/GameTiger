@@ -6,6 +6,7 @@ Level::Level() {
     this->gameScrollY = 0;
     this->bgLayer = 0;
     this->gameLayer = 0;
+    hero.inertia = 0;
 }
 
 Level::~Level() {

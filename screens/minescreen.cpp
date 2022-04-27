@@ -46,8 +46,8 @@ void MineScreen::draw(Display *display) {
 
     if(this->gameState == LOST) {
         std::string str = "Game Over";
-        uint16_t width = alphanumfont.getWidth(str, 2);
-        alphanumfont.drawSprites(display, str, (DISPLAY_WIDTH - width)/2, 108, 2);
+        uint16_t width = alphanumfont.getTextWidth(str, 2);
+        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 108, 255, 2);
     } else 
         display->rect(selectedX*16, selectedY*16, 16, 16, REDCOLOR);
 }

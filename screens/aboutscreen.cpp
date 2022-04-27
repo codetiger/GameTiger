@@ -51,14 +51,14 @@ void AboutScreen::draw(Display *display) {
     int16_t y = DISPLAY_HEIGHT;
     for (int i = 0; i < 10; i++) {
         std::string title = aboutText[i][0];
-        uint16_t width = alphanumfont.getWidth(title, 2);
-        alphanumfont.drawSprites(display, title, (DISPLAY_WIDTH - width)/2, y - scroll, 2);
+        uint16_t width = alphanumfont.getTextWidth(title, 2);
+        alphanumfont.drawText(display, title, (DISPLAY_WIDTH - width)/2, y - scroll, 255, 2);
         y += 36;
         for (int j = 1; j < 5; j++) {
             std::string text = aboutText[i][j];
             if(text.length() > 0) {
-                uint16_t width = alphanumfont.getWidth(text);
-                alphanumfont.drawSprites(display, text, (DISPLAY_WIDTH - width)/2, y - scroll);
+                uint16_t width = alphanumfont.getTextWidth(text);
+                alphanumfont.drawText(display, text, (DISPLAY_WIDTH - width)/2, y - scroll);
                 y += 24;
             }
         }
