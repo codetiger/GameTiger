@@ -32,10 +32,9 @@ public:
     uint16_t getTextWidth(std::string text);
     uint16_t getTextWidth(std::string text, uint8_t scaleRatio);
 
-    void drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY);
-    void drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint8_t alpha);
-    void drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint16_t destWidth, uint16_t destHeight, uint8_t alpha);
-    void drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint16_t destWidth, uint16_t destHeight, uint8_t alpha, bool flipH, bool flipV);
+    void drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, bool flipH = false, bool flipV = false);
+    void drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint8_t alpha, bool flipH = false, bool flipV = false);
+    void drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint16_t destWidth, uint16_t destHeight, uint8_t alpha, bool flipH = false, bool flipV = false);
     uint16_t getSpriteWidth(uint16_t index);
     uint16_t getSpriteHeight(uint16_t index);
 };

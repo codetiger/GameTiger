@@ -81,18 +81,14 @@ void Image::draw(Display *display, int16_t destX, int16_t destY, uint16_t destWi
     }
 }
 
-void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY) {
-    this->drawSprite(display, index, destX, destY, 255);
+void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, bool flipH, bool flipV) {
+    this->drawSprite(display, index, destX, destY, 255, flipH, flipV);
 }
 
-void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint8_t alpha) {
+void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint8_t alpha, bool flipH, bool flipV) {
     uint16_t spriteWidth = this->getSpriteWidth(index);
     uint16_t spriteHeight = this->getSpriteHeight(index);
-    this->drawSprite(display, index, destX, destY, spriteWidth, spriteHeight, alpha);
-}
-
-void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint16_t destWidth, uint16_t destHeight, uint8_t alpha) {
-    this->drawSprite(display, index, destX, destY, destWidth, destHeight, alpha, false, false);
+    this->drawSprite(display, index, destX, destY, spriteWidth, spriteHeight, alpha, flipH, flipV);
 }
 
 void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint16_t destWidth, uint16_t destHeight, uint8_t alpha, bool flipH, bool flipV) {
