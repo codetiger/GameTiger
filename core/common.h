@@ -1,5 +1,6 @@
 #ifdef FORMPU
     #include "pico/stdlib.h"
+    #include "pico/multicore.h"
     #include "hardware/gpio.h"
     #include "hardware/adc.h"
     #include "hardware/pwm.h"
@@ -7,6 +8,7 @@
     #include "hardware/dma.h"
     #include "hardware/flash.h"
     #include "hardware/sync.h"
+    #include "hardware/clocks.h"
 
     #define timetype uint32_t
 #else
@@ -29,6 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <queue>
 
 #ifndef _GAME_TIGER_COMMON_H
 #define _GAME_TIGER_COMMON_H
@@ -45,6 +48,8 @@
 
 #define DISPLAY_WIDTH 320
 #define DISPLAY_HEIGHT 240
+
+#define AUDIO_FLAG_VALUE 42
 
 enum ImageType {INDEXEDCOLORS, PIXELCOLOR};
 

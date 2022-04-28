@@ -10,6 +10,7 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->option = option;
     this->gameState = PLAYING;
     this->loadLevel(this->option-1);
+    this->level->audioController = this->audioController;
 
     printf("Done\n");
 }

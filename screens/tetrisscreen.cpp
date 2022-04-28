@@ -187,6 +187,7 @@ void TetrisScreen::keyPressed(uint8_t key) {
             currentBlockY++;
         else if(key == KEY_A && canMove(currentBlockX, currentBlockY, true))
             currentBlock.rotate();
+        this->audioController->beep(1500);
     }
 }
 

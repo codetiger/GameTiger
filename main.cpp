@@ -2,6 +2,7 @@
 #include "core/display.h"
 #include "core/battery.h"
 #include "core/keyboard.h"
+#include "core/audio.h"
 #include "screens/splashscreen.h"
 #include "screens/menuscreen.h"
 #include "screens/snakescreen.h"
@@ -18,6 +19,15 @@
 
 Screen *screen;
 uint32_t highscores[64];
+AudioController *audioController = new AudioController();
+
+void audioControllerCore() {
+    while (true) {
+        int32_t num = multicore_fifo_pop_blocking();
+        if(num == AUDIO_FLAG_VALUE)
+            audioController->play();
+    }
+}
 
 void highScoreHandler(uint32_t highscore) {
     highscores[0] = 64;highscores[1] = 128;
@@ -64,6 +74,7 @@ void backHandler(int8_t menu, uint8_t option) {
         else if(menu == 7)
             screen = new AboutScreen(*backHandler, *highScoreHandler, highscores[9], option);
     }
+    screen->audioController = audioController;
 }
 
 int main(int argc, char *argv[]) {
@@ -79,7 +90,17 @@ int main(int argc, char *argv[]) {
 
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();
+    multicore_launch_core1(&audioControllerCore);
+    
     screen = new SplashScreen(*backHandler, *highScoreHandler, 0, 1);
+    audioController->setNoteDuration(100);
+    std::string song[] = {  "G6", "G6", "P", "G6", "P", "D6", "G6", "P", "A6", "P", "P", "P", "A5", "P", 
+                            "P", "P", "P", "D6", "P", "P", "P", "A5", "P", "G5", "P", "P", "C6", "P",
+                            "D6", "P", "C6", "C6", "P", "A5", "P", "G6", "A6", "P", "C7", "P", "G6", "A6", 
+                            "P", "G6", "P", "D6", "F6", "D6", "P", "P", "D6", "P", "P", "A5", "P", "P", 
+                            "G5", "P", "P", "C6", "P", "D6", "P", "C6", "C6", "P6", "A5", "P", "G6", "A6", 
+                            "C7", "P", "G6", "A6", "P", "G6", "P", "D6", "F6", "D3"};
+    audioController->sing(song, sizeof(song)/sizeof(song[0]));
 
     timetype lastUpdate = getTime();
     bool close = false;

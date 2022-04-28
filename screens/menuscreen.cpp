@@ -80,13 +80,17 @@ void MenuScreen::keyPressed(uint8_t key) {
         return;
 
     if(key == KEY_RIGHT) {
-        if(this->selectedMenuItem < this->menuCount-1)
+        if(this->selectedMenuItem < this->menuCount-1) {
             this->selectedMenuItem++;
-        this->isAnimating = true;
+            this->isAnimating = true;
+            this->audioController->beep(2000);
+        }
     } else if (key == KEY_LEFT) {
-        if(this->selectedMenuItem != 0)
+        if(this->selectedMenuItem != 0) {
             this->selectedMenuItem--;
-        this->isAnimating = true;
+            this->isAnimating = true;
+            this->audioController->beep(2500);
+        }
     } else if (key == KEY_UP) {
         if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem-1].length() > 0 && this->currentOptionItem > 1)
             this->currentOptionItem--;

@@ -37,6 +37,7 @@ void TicScreen::update(uint16_t deltaTimeMS) {
     if(turn == X_TIC && this->gameState == PLAYING) {
         board.setCellValue(bestMove(board, this->moveCount), X_TIC);
         this->moveCount++;
+        this->audioController->beep(2000);
         turn = O_TIC;
         if(checkGameOver())
             this->gameState = LOST;

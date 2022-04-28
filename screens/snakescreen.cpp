@@ -35,6 +35,11 @@ void SnakeScreen::moveSnake() {
     newPos[1] += this->DIR_INFO[this->snakeDir][1];
     if(newPos[0] < 0 || newPos[0] >= BOARD_WIDTH || newPos[1] < 0 || newPos[1] >= BOARD_HEIGHT || this->checkSnakeLoop()) {
         this->gameState = LOST;
+        this->audioController->beep(1500);
+        this->audioController->beep(500);
+        this->audioController->beep(1500);
+        this->audioController->beep(500);
+        this->audioController->beep(1500);
         return;
     }
 
@@ -54,6 +59,7 @@ void SnakeScreen::moveSnake() {
             this->highScore = this->snakeLength - 3;
             this->highScoreCallBack(this->highScore);
         }
+        this->audioController->beep(1500);
     }
 }
 

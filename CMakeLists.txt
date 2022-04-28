@@ -19,6 +19,7 @@ add_executable(${PROJECT_NAME}
     core/keyboard.cpp
     core/tilemap.cpp
     core/level.cpp
+    core/audio.cpp
     screens/splashscreen.cpp
     screens/menuscreen.cpp
     screens/snakescreen.cpp
@@ -36,7 +37,7 @@ if(FORCPU)
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 else(FORCPU)
-    target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_spi hardware_pwm hardware_adc hardware_dma hardware_flash hardware_sync)
+    target_link_libraries(${PROJECT_NAME} pico_stdlib pico_multicore hardware_spi hardware_pwm hardware_adc hardware_dma hardware_flash hardware_sync)
 endif(FORCPU)
 
 if(FORCPU)

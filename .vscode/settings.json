@@ -56,7 +56,8 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "coroutine": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }
