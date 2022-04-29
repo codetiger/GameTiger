@@ -48,26 +48,27 @@ void TicScreen::draw(Display *display) {
     display->clear(Color(100, 71, 195));
     for (uint8_t y = 0; y < TIC_BOARDSIZE; y++) {
         for (uint8_t x = 0; x < TIC_BOARDSIZE; x++) {
+            Pos2 pos = Pos2(x, y) * 60 + 30;
             if(board.getCellValue(x, y) == E_TIC)
-                allGameSprite.drawSprite(display, tttBlockFrames[0], 30+x*60, 30+y*60);
+                allGameSprite.drawSprite(display, tttBlockFrames[0], pos);
             else if(board.getCellValue(x, y) == O_TIC)
-                allGameSprite.drawSprite(display, tttBlockFrames[1], 30+x*60, 30+y*60);
+                allGameSprite.drawSprite(display, tttBlockFrames[1], pos);
             else if(board.getCellValue(x, y) == X_TIC)
-                allGameSprite.drawSprite(display, tttBlockFrames[2], 30+x*60, 30+y*60);
+                allGameSprite.drawSprite(display, tttBlockFrames[2], pos);
         }
     }
 
     uint8_t width = alphanumfont.getTextWidth("Tic Tac Toe", 2);
-    alphanumfont.drawText(display, "Tic Tac Toe", (DISPLAY_WIDTH-width)/2, 2, 255, 2);
+    alphanumfont.drawText(display, "Tic Tac Toe", Pos2((DISPLAY_WIDTH-width)/2, 2), 255, 2);
     if(turn == O_TIC)
         display->rect(30+this->sx*60, 30+this->sy*60, 60, 60, GREENCOLOR);
     
     if(this->gameState == PLAYING) {
-        alphanumfont.drawText(display, "Turn", 236, 130, 255, 2);
+        alphanumfont.drawText(display, "Turn", Pos2(236, 130), 255, 2);
         if(turn == O_TIC)
-            alphanumfont.drawText(display, "You", 240, 160, 255, 2);
+            alphanumfont.drawText(display, "You", Pos2(240, 160), 255, 2);
         else
-            alphanumfont.drawText(display, "Comp", 238, 160, 255, 2);
+            alphanumfont.drawText(display, "Comp", Pos2(238, 160), 255, 2);
     } else {
         std::string str = "";
         if(won == O_TIC)
@@ -77,7 +78,7 @@ void TicScreen::draw(Display *display) {
         else
             str = "GAME DRAW";
         uint8_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH-width)/2, 210, 255, 2);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH-width)/2, 210), 255, 2);
     }
 }
 

@@ -2,20 +2,18 @@
 #include <iostream>
 #include <fstream>
 
-Image::Image(uint16_t w, uint16_t h, uint16_t cc, Color *plt, uint8_t *alphas, uint8_t *pd) {
+Image::Image(Size2 s, uint16_t cc, Color *plt, uint8_t *alphas, uint8_t *pd) {
     this->hasIndexedColors = true;
-    this->width = w;
-    this->height = h;
+    this->size = s;
     this->colorCount = cc;
     this->palette = plt;
     this->alphas = alphas;
     this->pixelData = pd;
 }
 
-Image::Image(uint16_t w, uint16_t h, uint16_t cc, Color *plt, uint8_t *alphas, uint8_t *pd, uint16_t *sd) {
+Image::Image(Size2 s, uint16_t cc, Color *plt, uint8_t *alphas, uint8_t *pd, uint16_t *sd) {
     this->hasIndexedColors = true;
-    this->width = w;
-    this->height = h;
+    this->size = s;
     this->colorCount = cc;
     this->palette = plt;
     this->alphas = alphas;
@@ -23,80 +21,73 @@ Image::Image(uint16_t w, uint16_t h, uint16_t cc, Color *plt, uint8_t *alphas, u
     this->spriteData = sd;
 }
 
-Image::Image(uint16_t w, uint16_t h, Color *pd, uint16_t *sd) {
+Image::Image(Size2 s, Color *pd, uint16_t *sd) {
     this->hasIndexedColors = false;
-    this->width = w;
-    this->height = h;
+    this->size = s;
     this->palette = pd;
     this->spriteData = sd;
 }
 
-void Image::draw(Display *display, int16_t destX, int16_t destY, uint16_t destWidth, uint16_t destHeight, 
-                                    uint16_t spriteX, uint16_t spriteY, uint16_t spriteWidth, uint16_t spriteHeight, 
-                                    uint8_t alpha, bool flipH, bool flipV) {
-    if(alpha == 0 || destX+destWidth <= 0 || destX >= DISPLAY_WIDTH || destY+destHeight <= 0 || destY >= DISPLAY_HEIGHT)
+void Image::draw(Display *display, Rect2 destRect, Rect2 spriteRect, uint8_t alpha, bool flipH, bool flipV) {
+    if(alpha == 0 || destRect.x+destRect.w <= 0 || destRect.x >= DISPLAY_WIDTH || destRect.y+destRect.h <= 0 || destRect.y >= DISPLAY_HEIGHT)
         return;
 
-    uint32_t xRatio = (destWidth == spriteWidth) ? 1 : (uint32_t)((spriteWidth << 16) / destWidth);
-    uint32_t yRatio = (destHeight == spriteHeight) ? 1 : (uint32_t)((spriteHeight << 16) / destHeight);
+    uint32_t xRatio = (destRect.w == spriteRect.w) ? 1 : (uint32_t)((spriteRect.w << 16) / destRect.w);
+    uint32_t yRatio = (destRect.h == spriteRect.h) ? 1 : (uint32_t)((spriteRect.h << 16) / destRect.h);
 
-    uint16_t fx = 0, fw = destWidth;
-    if(destX < 0) {
-        fx = abs(destX) * spriteWidth / destWidth;
-        fw += destX;
-        destX = 0;
+    uint16_t fx = 0, fw = destRect.w;
+    if(destRect.x < 0) {
+        fx = abs(destRect.x) * spriteRect.w / destRect.w;
+        fw += destRect.x;
+        destRect.x = 0;
     }
 
-    uint16_t fy = 0, fh = destHeight;
-    if(destY < 0) {
-        fy = abs(destY) * spriteHeight / destHeight;
-        fh += destY;
-        destY = 0;
+    uint16_t fy = 0, fh = destRect.h;
+    if(destRect.y < 0) {
+        fy = abs(destRect.y) * spriteRect.h / destRect.h;
+        fh += destRect.y;
+        destRect.y = 0;
     }
 
     if(!this->hasIndexedColors && !flipH && !flipV && xRatio == yRatio == 1) {
-        if(destX+spriteWidth > DISPLAY_WIDTH)
-            fw -= destX+spriteWidth-DISPLAY_WIDTH;
-        if(destY+spriteHeight > DISPLAY_HEIGHT)
-            fh -= destY+spriteHeight-DISPLAY_HEIGHT;
+        if(destRect.x+spriteRect.w > DISPLAY_WIDTH)
+            fw -= destRect.x+spriteRect.w-DISPLAY_WIDTH;
+        if(destRect.y+spriteRect.h > DISPLAY_HEIGHT)
+            fh -= destRect.y+spriteRect.h-DISPLAY_HEIGHT;
 
         for (int y = 0; y < fh; y++) {
-            int pixIndex = (fy+spriteY+y) * this->width + fx+spriteX;
-            display->drawBitmapRow(destX, destY + y, fw, &this->palette[pixIndex]);
+            int pixIndex = (fy+spriteRect.y+y) * this->size.w + fx+spriteRect.x;
+            display->drawBitmapRow(destRect.x, destRect.y + y, fw, &this->palette[pixIndex]);
         }
     } else {
         for (int y = 0; y < fh; y++) {
             for (int x = 0; x < fw; x++) {
                 uint16_t cx = (xRatio == 1) ? x : ((x * xRatio) >> 16);
                 uint16_t cy = (yRatio == 1) ? y : ((y * yRatio) >> 16);
-                uint16_t px = (flipV ? (spriteY+(fh-cy-1)) : (spriteY+fy+cy));
-                uint16_t py = (flipH ? (spriteX+(fw-cx-1)) : (spriteX+fx+cx));
-                int pixIndex = px * this->width + py;
+                uint16_t px = (flipV ? (spriteRect.y+(fh-cy-1)) : (spriteRect.y+fy+cy));
+                uint16_t py = (flipH ? (spriteRect.x+(fw-cx-1)) : (spriteRect.x+fx+cx));
+                int pixIndex = px * this->size.w + py;
                 int colIndex = this->hasIndexedColors ? this->pixelData[pixIndex] : pixIndex;
                 uint8_t a = this->hasIndexedColors ? this->alphas[colIndex] : 255;
                 a = a > alpha ? alpha : a;
-                display->setPixel(destX + x, destY + y, this->palette[colIndex], a);
+                display->setPixel(destRect.x + x, destRect.y + y, this->palette[colIndex], a);
             }
         }
     }
 }
 
-void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, bool flipH, bool flipV) {
-    this->drawSprite(display, index, destX, destY, 255, flipH, flipV);
+void Image::drawSprite(Display *display, uint16_t index, Pos2 destPos, bool flipH, bool flipV) {
+    this->drawSprite(display, index, destPos, 255, flipH, flipV);
 }
 
-void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint8_t alpha, bool flipH, bool flipV) {
-    uint16_t spriteWidth = this->getSpriteWidth(index);
-    uint16_t spriteHeight = this->getSpriteHeight(index);
-    this->drawSprite(display, index, destX, destY, spriteWidth, spriteHeight, alpha, flipH, flipV);
+void Image::drawSprite(Display *display, uint16_t index, Pos2 destPos, uint8_t alpha, bool flipH, bool flipV) {
+    Size2 spriteSize = Size2(this->getSpriteWidth(index), this->getSpriteHeight(index));
+    this->drawSprite(display, index, Rect2(destPos, spriteSize), alpha, flipH, flipV);
 }
 
-void Image::drawSprite(Display *display, uint16_t index, int16_t destX, int16_t destY, uint16_t destWidth, uint16_t destHeight, uint8_t alpha, bool flipH, bool flipV) {
-    uint16_t spriteX = this->getSpriteX(index);
-    uint16_t spriteY = this->getSpriteY(index);
-    uint16_t spriteWidth = this->getSpriteWidth(index);
-    uint16_t spriteHeight = this->getSpriteHeight(index);
-    this->draw(display, destX, destY, destWidth, destHeight, spriteX, spriteY, spriteWidth, spriteHeight, alpha, flipH, flipV);
+void Image::drawSprite(Display *display, uint16_t index, Rect2 destRect, uint8_t alpha, bool flipH, bool flipV) {
+    Rect2 spriteRect = Rect2(this->getSpriteX(index), this->getSpriteY(index), this->getSpriteWidth(index), this->getSpriteHeight(index));
+    this->draw(display, destRect, spriteRect, alpha, flipH, flipV);
 }
 
 uint16_t Image::getSpriteX(uint16_t index) {
@@ -115,23 +106,21 @@ uint16_t Image::getSpriteHeight(uint16_t index) {
     return this->spriteData[index*4+3];
 }
 
-void Image::drawText(Display *display, std::string text, int16_t destX, int16_t destY) {
-    this->drawText(display, text, destX, destY, 255);
+void Image::drawText(Display *display, std::string text, Pos2 destPos) {
+    this->drawText(display, text, destPos, 255);
 }
 
-void Image::drawText(Display *display, std::string text, int16_t destX, int16_t destY, uint8_t alpha) {
-    this->drawText(display, text, destX, destY, alpha, 1);
+void Image::drawText(Display *display, std::string text, Pos2 destPos, uint8_t alpha) {
+    this->drawText(display, text, destPos, alpha, 1);
 }
 
-void Image::drawText(Display *display, std::string text, int16_t destX, int16_t destY, uint8_t alpha, uint8_t scaleRatio) {
-    uint16_t posX = destX;
+void Image::drawText(Display *display, std::string text, Pos2 destPos, uint8_t alpha, uint8_t scaleRatio) {
     for(char& c : text) {
         uint16_t i = ref.find(c);
-        uint16_t spriteWidth = this->getSpriteWidth(i);
-        uint16_t spriteHeight = this->getSpriteHeight(i);
+        Size2 spriteSize = Size2(this->getSpriteWidth(i), this->getSpriteHeight(i));
         if(c != ' ')
-            this->drawSprite(display, i, posX, destY, spriteWidth*scaleRatio, spriteHeight*scaleRatio, alpha);
-        posX += (spriteWidth - 1) * scaleRatio;
+            this->drawSprite(display, i, Rect2(destPos, spriteSize*scaleRatio), alpha);
+        destPos.x += (spriteSize.w - 1) * scaleRatio;
     }
 }
 

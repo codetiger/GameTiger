@@ -5,10 +5,10 @@ Color WHITECOLOR = 0xffff;
 Color REDCOLOR = Color(255, 0, 0);
 Color GREENCOLOR = Color(0, 255, 0);
 
-Image alphanumfont = Image(alphanumfont_img_width, alphanumfont_img_height, alphanumfont_color_count, (Color*)alphanumfontPaletteColors, (uint8_t*)alphanumfontPaletteAlphas, (uint8_t*)alphanumfont_pixel_data, (uint16_t*)alphanumfontSpriteData);
-Image allGameAlphaSprite = Image(allGameAlphaSpriteWidth, allGameAlphaSpriteHeight, allGameAlphaSpriteColorCount, (Color*)allGameAlphaSpritePaletteColors, (uint8_t*)allGameAlphaSpritePaletteAlphas, (uint8_t*)allGameAlphaSpritePixelData, (uint16_t*)allGameAlphaSpriteSpriteData);
-Image menuSprite = Image(menuSpriteWidth, menuSpriteHeight, menuSpriteColorCount, (Color*)menuSpritePaletteColors, (uint8_t*)menuSpritePaletteAlphas, (uint8_t*)menuSpritePixelData, (uint16_t*)menuSpriteSpriteData);
-Image allGameSprite = Image(allGameSpriteWidth, allGameSpriteHeight, (Color*)allGameSpritePixelData, (uint16_t*)allGameSpriteSpriteData);
+Image alphanumfont = Image(Size2(alphanumfont_img_width, alphanumfont_img_height), alphanumfont_color_count, (Color*)alphanumfontPaletteColors, (uint8_t*)alphanumfontPaletteAlphas, (uint8_t*)alphanumfont_pixel_data, (uint16_t*)alphanumfontSpriteData);
+Image allGameAlphaSprite = Image(Size2(allGameAlphaSpriteWidth, allGameAlphaSpriteHeight), allGameAlphaSpriteColorCount, (Color*)allGameAlphaSpritePaletteColors, (uint8_t*)allGameAlphaSpritePaletteAlphas, (uint8_t*)allGameAlphaSpritePixelData, (uint16_t*)allGameAlphaSpriteSpriteData);
+Image menuSprite = Image(Size2(menuSpriteWidth, menuSpriteHeight), menuSpriteColorCount, (Color*)menuSpritePaletteColors, (uint8_t*)menuSpritePaletteAlphas, (uint8_t*)menuSpritePixelData, (uint16_t*)menuSpriteSpriteData);
+Image allGameSprite = Image(Size2(allGameSpriteWidth, allGameSpriteHeight), (Color*)allGameSpritePixelData, (uint16_t*)allGameSpriteSpriteData);
 
 timetype getTime() {
     timetype now;

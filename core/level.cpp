@@ -219,7 +219,7 @@ void Level::draw(Display *display) {
                 frame = item.hitSeq[item.curFrameIndex];
             else if(item.state == MOVING)
                 frame = item.runSeq[item.curFrameIndex];
-            item.sprite->drawSprite(display, frame, item.x-this->gameScrollX, item.y-this->gameScrollY, item.direction);
+            item.sprite->drawSprite(display, frame, Pos2(item.x-this->gameScrollX, item.y-this->gameScrollY), item.direction);
         }
     }
     uint16_t frame;
@@ -235,7 +235,7 @@ void Level::draw(Display *display) {
         frame = hero.fallFrame;
     else if(hero.state == HURT)
         frame = hero.hurtSeq[hero.curFrameIndex];
-    hero.sprite->drawSprite(display, frame, hero.x-this->gameScrollX, hero.y-this->gameScrollY, hero.direction);
+    hero.sprite->drawSprite(display, frame, Pos2(hero.x-this->gameScrollX, hero.y-this->gameScrollY), hero.direction);
 }
 
 void Level::setBGLayer(Image *sprite, uint16_t spriteID, bool isHSroll) {

@@ -97,22 +97,22 @@ void SnakeScreen::draw(Display *display) {
         this->drawBlock(display, 10 + this->snakeBlocks[i][0]*10, 30 + this->snakeBlocks[i][1]*10);
 
     this->drawBlock(display, 10 + this->foodPos[0]*10, 30 + this->foodPos[1]*10);
-    alphanumfont.drawText(display, std::to_string(this->snakeLength-3), 200, 8);
-    alphanumfont.drawText(display, std::to_string(this->highScore), 12, 8);
+    alphanumfont.drawText(display, std::to_string(this->snakeLength-3), Pos2(200, 8));
+    alphanumfont.drawText(display, std::to_string(this->highScore), Pos2(12, 8));
     if(this->gameState == LOST) {
         std::string str = "Game Over";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 108, 255, 2);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
     } else if(this->gameState == PAUSED) {
         std::string str = "Game Paused";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 108, 255, 2);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
         str = "Press A to continue";
         width = alphanumfont.getTextWidth(str, 1);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 140, 255, 1);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 140), 255, 1);
         str = "Press B to quit";
         width = alphanumfont.getTextWidth(str, 1);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 160, 255, 1);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 160), 255, 1);
     }
 }
 

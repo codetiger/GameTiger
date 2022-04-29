@@ -193,7 +193,7 @@ void G2048Screen::draw(Display *display) {
             if (board[i*BOARDSIZE+j]) {
                 std::string str = std::to_string((uint16_t)pow(2, board[i*BOARDSIZE+j]));
                 uint16_t width = alphanumfont.getTextWidth(str, 2);
-                alphanumfont.drawText(display, str, 5 + (70-width)/2 + 80*j, 22 + 60*i, 255, 2);
+                alphanumfont.drawText(display, str, Pos2(5 + (70-width)/2 + 80*j, 22 + 60*i), 255, 2);
             }
         }
     }
@@ -202,17 +202,17 @@ void G2048Screen::draw(Display *display) {
         std::string str = "Game Over";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
         display->fillRect((DISPLAY_WIDTH - width)/2, 104, width, 24, BLACKCOLOR);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 108, 255, 2);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
     } else if(this->gameState == PAUSED) {
         std::string str = "Game Paused";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 108, 255, 2);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
         str = "Press A to continue";
         width = alphanumfont.getTextWidth(str, 1);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 140, 255, 1);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 140), 255, 1);
         str = "Press B to quit";
         width = alphanumfont.getTextWidth(str, 1);
-        alphanumfont.drawText(display, str, (DISPLAY_WIDTH - width)/2, 160, 255, 1);
+        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 160), 255, 1);
     }
 }
 
