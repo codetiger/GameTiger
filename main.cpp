@@ -22,11 +22,13 @@ uint32_t highscores[64];
 AudioController *audioController = new AudioController();
 
 void audioControllerCore() {
+#ifdef FORMPU
     while (true) {
         int32_t num = multicore_fifo_pop_blocking();
         if(num == AUDIO_FLAG_VALUE)
             audioController->play();
     }
+#endif
 }
 
 void highScoreHandler(uint32_t highscore) {
@@ -81,6 +83,7 @@ int main(int argc, char *argv[]) {
     #ifdef FORMPU
     stdio_init_all();
     sleep_ms(3000);
+    multicore_launch_core1(&audioControllerCore);
     #endif
 
     srand((unsigned int)time(0));
@@ -90,7 +93,6 @@ int main(int argc, char *argv[]) {
 
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();
-    multicore_launch_core1(&audioControllerCore);
     
     screen = new SplashScreen(*backHandler, *highScoreHandler, 0, 1);
     audioController->setNoteDuration(100);

@@ -9,7 +9,9 @@ AudioController::AudioController() {
 }
 
 AudioController::~AudioController() {
+#ifdef FORMPU
     pwm_set_enabled(slice, false);
+#endif
 }
 
 void AudioController::play() {
@@ -42,15 +44,21 @@ void AudioController::sing(std::string song[], uint16_t num) {
         uint16_t freq = toneFreqs[index];
         songFreqs.push(freq);
     }
+#ifdef FORMPU
     multicore_fifo_push_blocking(AUDIO_FLAG_VALUE);
+#endif
 }
 
 void AudioController::beep(u_int16_t freq) {
     songFreqs.push(freq);
+#ifdef FORMPU
     multicore_fifo_push_blocking(AUDIO_FLAG_VALUE);
+#endif
 }
 
 void AudioController::stop() {
     songFreqs = std::queue<uint16_t>();
+#ifdef FORMPU
     pwm_set_gpio_level(BUZZER_PIN, 0);
+#endif
 }

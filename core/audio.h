@@ -8,7 +8,9 @@ private:
     const uint8_t BUZZER_PIN = 15;
     uint16_t slice = 0;
     uint8_t channel = 0;
+#ifdef FORMPU
     pwm_config config;
+#endif
     uint16_t noteDuration = 0;
     const uint16_t dutyCycle = 1000;
 
