@@ -12,9 +12,8 @@ fruitIndex = []
 terrainSizes = []
 terrainIndex = []
 
-levelList = ["level01.tmx"]
+levelList = ["level01.tmx", "level02.tmx"]
 for levelFile in levelList:
-    levelData = {}
     dom = minidom.parse(levelFile)
     layer = dom.getElementsByTagName('layer')[0]
 

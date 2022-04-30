@@ -1,6 +1,7 @@
 #include "common.h"
 #include <map>
 #include <vector>
+#include <algorithm>
 #include "../core/keyboard.h"
 
 #ifndef _GAME_TIGER_LEVEL_H

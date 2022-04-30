@@ -26,19 +26,16 @@ void Level::updateGameItem(GameItem &item) {
             item.state = MOVING;
             item.direction = !item.direction;
         }
-    } else if(item.state == MOVING && item.curFrameIndex >= item.numIdleFrames) {
+    } else if(item.state == MOVING && item.curFrameIndex >= item.numRunFrames) {
         item.curFrameIndex = 0;
     }
+    
     if(item.state == MOVING) {
         if(item.movementType == HORIZONTAL) {
             int8_t delta = item.speed * (item.direction ? 1 : -1);
             item.x = item.x + delta;
-            if(item.x > item.maxAxis) {
-                item.x = item.maxAxis;
-                item.curFrameIndex = 0;
-                item.state = IDLE;
-            } else if(item.x < item.minAxis) {
-                item.x = item.minAxis;
+            item.x = std::max(item.minAxis, std::min(item.x, item.maxAxis));
+            if(item.x == item.minAxis || item.x == item.maxAxis) {
                 item.curFrameIndex = 0;
                 item.state = IDLE;
             }

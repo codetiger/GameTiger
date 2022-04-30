@@ -55,16 +55,16 @@
             "scale": 2.070703125,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 258.60780984719867,
-                "y": 187.1345029239766
+                "x": 262.4712318430485,
+                "y": 183.75400867760797
             }
         },
         "level02.tmx": {
-            "scale": 1,
-            "selectedLayer": 0,
+            "scale": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 0.5,
-                "y": 258.5
+                "x": 263.25,
+                "y": 105.25
             }
         },
         "pa2..js": {

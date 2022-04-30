@@ -25,36 +25,35 @@ void PixelAdventureScreen::loadLevel(uint8_t level) {
     uint8_t xCount = terrainSizes[level*2 + 0];
     uint8_t yCount = terrainSizes[level*2 + 1];
     uint16_t *levelMap = new uint16_t[xCount*yCount];
-    for (int i = 0; i < xCount*yCount; i++)
-        levelMap[i] = terrainFrames[terrainIndex[level + i]-1];
+    uint16_t terrainStartIndex = 0, fruitStartIndex = 0, enemyStartIndex = 0;
+    for (uint8_t i = 0; i < level; i++) {
+        terrainStartIndex += terrainSizes[i*2 + 0] * terrainSizes[i*2 + 1];
+        fruitStartIndex += fruitCounts[i];
+        enemyStartIndex += enemyCounts[i];
+    }
+    
+    for (int i = terrainStartIndex; i < terrainStartIndex + xCount*yCount; i++)
+        levelMap[i-terrainStartIndex] = terrainFrames[terrainIndex[i]-1];
     this->level->setGameLayer(&allGameSprite, xCount, yCount, levelMap, 24);
-    for (int i = 0; i < fruitCounts[level]; i++) {
+
+    for (int i = fruitStartIndex; i < fruitStartIndex+fruitCounts[level]; i++) {
         uint16_t *anim = 0;
-        switch (fruitIndex[level+i]){
-        case 0:
-            anim = (uint16_t*)AppleAnimSeq;break;
-        case 1:
-            anim = (uint16_t*)BananasAnimSeq;break;
-        case 2:
-            anim = (uint16_t*)CherriesAnimSeq;break;
-        case 3:
-            anim = (uint16_t*)KiwiAnimSeq;break;
-        case 4:
-            anim = (uint16_t*)MelonAnimSeq;break;
-        case 5:
-            anim = (uint16_t*)OrangeAnimSeq;break;
-        case 6:
-            anim = (uint16_t*)PineappleAnimSeq;break;
-        case 7:
-            anim = (uint16_t*)StrawberryAnimSeq;break;
+        switch (fruitIndex[i]) {
+        case 0:anim = (uint16_t*)AppleAnimSeq;break;
+        case 1:anim = (uint16_t*)BananasAnimSeq;break;
+        case 2:anim = (uint16_t*)CherriesAnimSeq;break;
+        case 3:anim = (uint16_t*)KiwiAnimSeq;break;
+        case 4:anim = (uint16_t*)MelonAnimSeq;break;
+        case 5:anim = (uint16_t*)OrangeAnimSeq;break;
+        case 6:anim = (uint16_t*)PineappleAnimSeq;break;
+        case 7:anim = (uint16_t*)StrawberryAnimSeq;break;
         }
         GameItem item;
         item.state = IDLE;
         item.movementType = STATIC;
         item.type = FRIEND;
-        item.x = fruitPos[(level + i)*2 + 0];
-        item.y = fruitPos[(level + i)*2 + 1];
-        item.speed = 2;
+        item.x = fruitPos[i*2 + 0];
+        item.y = fruitPos[i*2 + 1];
         item.width = allGameAlphaSprite.getSpriteWidth(anim[0]);
         item.height = allGameAlphaSprite.getSpriteHeight(anim[0]);
         item.sprite = &allGameAlphaSprite;
@@ -68,26 +67,41 @@ void PixelAdventureScreen::loadLevel(uint8_t level) {
         this->level->addGameItem(item);
     }
 
-    for (int i = 0; i < enemyCounts[level]; i++) {
+    for (int i = enemyStartIndex; i < enemyStartIndex+enemyCounts[level]; i++) {
         GameItem item;
         item.state = IDLE;
         item.movementType = HORIZONTAL;
         item.type = ENEMY;
-        item.x = enemyPos[(level + i)*2 + 0];
-        item.y = enemyPos[(level + i)*2 + 1];
-        item.minAxis = enemyLimits[(level + i)*2 + 0];
-        item.maxAxis = enemyLimits[(level + i)*2 + 1];
-        item.width = allGameAlphaSprite.getSpriteWidth(mushroomIdleAnimSeq[0]);
-        item.height = allGameAlphaSprite.getSpriteHeight(mushroomIdleAnimSeq[0]);
+        item.x = enemyPos[i*2 + 0];
+        item.y = enemyPos[i*2 + 1];
+        item.minAxis = enemyLimits[i*2 + 0];
+        item.maxAxis = enemyLimits[i*2 + 1];
         item.sprite = &allGameAlphaSprite;
         item.deltaHealth = -100;
         item.deltaScore = 0;
-        item.numIdleFrames = 14;
-        item.idleSeq = (uint16_t*)mushroomIdleAnimSeq;
-        item.numRunFrames = 16;
-        item.runSeq = (uint16_t*)mushroomRunAnimSeq;
-        item.numHitFrames = 5;
-        item.hitSeq = (uint16_t*)mushroomHitAnimSeq;
+        
+        switch (enemyIndex[i]) {
+        case 0: 
+            item.speed = 2;
+            item.numIdleFrames = 14; 
+            item.idleSeq = (uint16_t*)mushroomIdleAnimSeq;
+            item.numRunFrames = 16;
+            item.runSeq = (uint16_t*)mushroomRunAnimSeq;
+            item.numHitFrames = 5;
+            item.hitSeq = (uint16_t*)mushroomHitAnimSeq;
+            break;
+        case 1: 
+            item.speed = 8;
+            item.numIdleFrames = 11; 
+            item.idleSeq = (uint16_t*)rinoIdleAnimSeq;
+            item.numRunFrames = 6;
+            item.runSeq = (uint16_t*)rinoRunAnimSeq;
+            item.numHitFrames = 5;
+            item.hitSeq = (uint16_t*)rinoHitAnimSeq;
+            break;
+        }
+        item.width = allGameAlphaSprite.getSpriteWidth(item.idleSeq[0]);
+        item.height = allGameAlphaSprite.getSpriteHeight(item.idleSeq[0]);
         item.curFrameIndex = 0;
         this->level->addGameItem(item);
     }
