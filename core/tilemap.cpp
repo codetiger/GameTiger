@@ -40,9 +40,9 @@ void TileMap::draw(Display *display, uint16_t screenx, uint16_t screeny) {
                     uint16_t index = this->tiles[y*xCount+x];
                     TileInfo tinfo = this->tileInfoList[index];
                     if(tinfo.type == COLORFILL) {
-                        display->fillRect(tx, ty, this->tileWidth, this->tileHeight, tinfo.color);
+                        display->fillRect(Rect2(tx, ty, this->tileWidth, this->tileHeight), tinfo.color);
                     } else if(tinfo.type == SPRITE) {
-                        tinfo.sprite->drawSprite(display, tinfo.textureID, Pos2(tx, ty));
+                        tinfo.sprite->drawSprite(display, tinfo.textureID, Vec2(tx, ty));
                     } else if(tinfo.type == ANIMATEDSPRITE) {
                         uint16_t index = y*xCount+x;
                         if ( animationFrame.find(index) == animationFrame.end() )
@@ -53,7 +53,7 @@ void TileMap::draw(Display *display, uint16_t screenx, uint16_t screeny) {
                             frameIndex = 0;
                         }
                         char frame = tinfo.animationFrames[frameIndex];
-                        tinfo.sprite->drawSprite(display, frame, Pos2(tx, ty));
+                        tinfo.sprite->drawSprite(display, frame, Vec2(tx, ty));
                     }
                 }
             }

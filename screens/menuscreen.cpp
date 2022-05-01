@@ -64,11 +64,11 @@ void MenuScreen::draw(Display *display) {
     }
     if(!isAnimating) {
         uint16_t width = alphanumfont.getTextWidth(this->menuItemNames[this->currentMenuItem][0], 2);
-        alphanumfont.drawText(display, this->menuItemNames[this->currentMenuItem][0], Pos2((DISPLAY_WIDTH - width)/2, 170), 255, 2);
+        alphanumfont.drawText(display, this->menuItemNames[this->currentMenuItem][0], Vec2((DISPLAY_WIDTH - width)/2, 170), 255, 2);
         if(this->menuItemNames[this->currentMenuItem][this->currentOptionItem].length() > 0) {
             std::string option = this->menuItemNames[this->currentMenuItem][this->currentOptionItem];
             width = alphanumfont.getTextWidth(option);
-            alphanumfont.drawText(display, option, Pos2((DISPLAY_WIDTH - width)/2, 200));
+            alphanumfont.drawText(display, option, Vec2((DISPLAY_WIDTH - width)/2, 200));
         }
     }
 }

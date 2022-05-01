@@ -57,7 +57,7 @@ void Image::draw(Display *display, Rect2 destRect, Rect2 spriteRect, uint8_t alp
 
         for (int y = 0; y < fh; y++) {
             int pixIndex = (fy+spriteRect.y+y) * this->size.w + fx+spriteRect.x;
-            display->drawBitmapRow(destRect.x, destRect.y + y, fw, &this->palette[pixIndex]);
+            display->drawBitmapRow(Vec2(destRect.x, destRect.y + y), fw, &this->palette[pixIndex]);
         }
     } else {
         for (int y = 0; y < fh; y++) {
@@ -70,17 +70,17 @@ void Image::draw(Display *display, Rect2 destRect, Rect2 spriteRect, uint8_t alp
                 int colIndex = this->hasIndexedColors ? this->pixelData[pixIndex] : pixIndex;
                 uint8_t a = this->hasIndexedColors ? this->alphas[colIndex] : 255;
                 a = a > alpha ? alpha : a;
-                display->setPixel(destRect.x + x, destRect.y + y, this->palette[colIndex], a);
+                display->setPixel(Vec2(destRect.x + x, destRect.y + y), this->palette[colIndex], a);
             }
         }
     }
 }
 
-void Image::drawSprite(Display *display, uint16_t index, Pos2 destPos, bool flipH, bool flipV) {
+void Image::drawSprite(Display *display, uint16_t index, Vec2 destPos, bool flipH, bool flipV) {
     this->drawSprite(display, index, destPos, 255, flipH, flipV);
 }
 
-void Image::drawSprite(Display *display, uint16_t index, Pos2 destPos, uint8_t alpha, bool flipH, bool flipV) {
+void Image::drawSprite(Display *display, uint16_t index, Vec2 destPos, uint8_t alpha, bool flipH, bool flipV) {
     Size2 spriteSize = Size2(this->getSpriteWidth(index), this->getSpriteHeight(index));
     this->drawSprite(display, index, Rect2(destPos, spriteSize), alpha, flipH, flipV);
 }
@@ -106,15 +106,15 @@ uint16_t Image::getSpriteHeight(uint16_t index) {
     return this->spriteData[index*4+3];
 }
 
-void Image::drawText(Display *display, std::string text, Pos2 destPos) {
+void Image::drawText(Display *display, std::string text, Vec2 destPos) {
     this->drawText(display, text, destPos, 255);
 }
 
-void Image::drawText(Display *display, std::string text, Pos2 destPos, uint8_t alpha) {
+void Image::drawText(Display *display, std::string text, Vec2 destPos, uint8_t alpha) {
     this->drawText(display, text, destPos, alpha, 1);
 }
 
-void Image::drawText(Display *display, std::string text, Pos2 destPos, uint8_t alpha, uint8_t scaleRatio) {
+void Image::drawText(Display *display, std::string text, Vec2 destPos, uint8_t alpha, uint8_t scaleRatio) {
     for(char& c : text) {
         uint16_t i = ref.find(c);
         Size2 spriteSize = Size2(this->getSpriteWidth(i), this->getSpriteHeight(i));

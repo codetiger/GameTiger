@@ -36,25 +36,37 @@
 #ifndef _GAME_TIGER_COMMON_H
 #define _GAME_TIGER_COMMON_H
 
-typedef struct Pos2 {
+typedef struct Vec2 {
     int16_t x, y;
 
-    Pos2() {
+    Vec2() {
         x = y = 0;
     }
 
-    Pos2(int16_t _x, int16_t _y) {
+    Vec2(int16_t _x, int16_t _y) {
         x = _x; y = _y;
     }
 
-    Pos2 operator+(const uint16_t &v) {
-        return Pos2(this->x + v, this->y + v);
+    Vec2 operator+(const uint16_t &v) {
+        return Vec2(this->x + v, this->y + v);
     };
 
-    Pos2 operator*(const uint16_t &v) {
-        return Pos2(this->x * v, this->y * v);
+    Vec2 operator-(const Vec2 &v) {
+        return Vec2(this->x - v.x, this->y - v.y);
     };
-} Pos2;
+
+    Vec2 operator+(const Vec2 &v) {
+        return Vec2(this->x + v.x, this->y + v.y);
+    };
+
+    Vec2 operator*(const float &v) {
+        return Vec2(this->x * v, this->y * v);
+    };
+
+    // Vec2 operator*(const uint16_t &v) {
+    //     return Vec2(this->x * v, this->y * v);
+    // };
+} Vec2;
 
 typedef struct Size2 {
     uint16_t w, h;
@@ -83,7 +95,7 @@ typedef struct Rect2 {
         x = y = w = h = 0;
     }
 
-    Rect2(Pos2 _p, Size2 _s) {
+    Rect2(Vec2 _p, Size2 _s) {
         x = _p.x; y = _p.y;
         w = _s.w; h = _s.h;
     }

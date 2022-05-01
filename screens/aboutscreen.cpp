@@ -52,13 +52,13 @@ void AboutScreen::draw(Display *display) {
     for (int i = 0; i < 10; i++) {
         std::string title = aboutText[i][0];
         uint16_t width = alphanumfont.getTextWidth(title, 2);
-        alphanumfont.drawText(display, title, Pos2((DISPLAY_WIDTH - width)/2, y - scroll), 255, 2);
+        alphanumfont.drawText(display, title, Vec2((DISPLAY_WIDTH - width)/2, y - scroll), 255, 2);
         y += 36;
         for (int j = 1; j < 5; j++) {
             std::string text = aboutText[i][j];
             if(text.length() > 0) {
                 uint16_t width = alphanumfont.getTextWidth(text);
-                alphanumfont.drawText(display, text, Pos2((DISPLAY_WIDTH - width)/2, y - scroll));
+                alphanumfont.drawText(display, text, Vec2((DISPLAY_WIDTH - width)/2, y - scroll));
                 y += 24;
             }
         }

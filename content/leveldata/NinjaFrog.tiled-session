@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level01.tmx",
+    "activeFile": "level02.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -61,10 +61,10 @@
         },
         "level02.tmx": {
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 263.25,
-                "y": 105.25
+                "y": 196.25
             }
         },
         "pa2..js": {
@@ -108,7 +108,8 @@
     "map.width": 64,
     "openFiles": [
         "GameItems.tsx",
-        "level01.tmx"
+        "level01.tmx",
+        "level02.tmx"
     ],
     "project": "NinjaFrog.tiled-project",
     "property.type": "int",

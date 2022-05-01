@@ -51,9 +51,9 @@ void TetrisScreen::update(uint16_t deltaTimeMS) {
 
 void TetrisScreen::draw(Display *display) {
     display->clear(Color(247, 72, 69));
-    display->fillRect(45, 0, 5, 240, DARKBG);
-    display->fillRect(194, 0, 5, 240, DARKBG);
-    display->fillRect(50, 0, 144, 240, LIGHTBG);
+    display->fillRect(Rect2(45, 0, 5, 240), DARKBG);
+    display->fillRect(Rect2(194, 0, 5, 240), DARKBG);
+    display->fillRect(Rect2(50, 0, 144, 240), LIGHTBG);
     
     for (int r = 0; r < BOARD_HEIGHT; r++) {
         for (int c = 0; c < BOARD_WIDTH; c++) {
@@ -63,37 +63,37 @@ void TetrisScreen::draw(Display *display) {
                 if(cellValue == 0 && currentBlock.cells[(r-currentBlockY) * BLOCK_SIZE + (c-currentBlockX)])
                     cellValue = currentBlock.type;
             if(cellValue != 0) {
-                display->fillRect(50+12*c, 12*r, 11, 11, blockColors[cellValue]);
-                display->rect(50+12*c, 12*r, 12, 12, WHITECOLOR);
+                display->fillRect(Rect2(50+12*c, 12*r, 11, 11), blockColors[cellValue]);
+                display->rect(Rect2(50+12*c, 12*r, 12, 12), WHITECOLOR);
             }
         }
     }
-    alphanumfont.drawText(display, std::to_string(this->score), Pos2(240, 200), 255, 2);
+    alphanumfont.drawText(display, std::to_string(this->score), Vec2(240, 200), 255, 2);
 
-    display->fillRect(215, 25, 80, 80, DARKBG);
-    display->fillRect(220, 30, 70, 70, LIGHTBG);
+    display->fillRect(Rect2(215, 25, 80, 80), DARKBG);
+    display->fillRect(Rect2(220, 30, 70, 70), LIGHTBG);
 
     for (int r = 0; r < BLOCK_SIZE; r++)
         for (int c = 0; c < BLOCK_SIZE; c++)
             if(nextBlock.cells[r * BLOCK_SIZE + c]) {
-                display->fillRect(235+12*c, 45+12*r, 11, 11, blockColors[nextBlock.type]);
-                display->rect(235+12*c, 45+12*r, 12, 12, WHITECOLOR);
+                display->fillRect(Rect2(235+12*c, 45+12*r, 11, 11), blockColors[nextBlock.type]);
+                display->rect(Rect2(235+12*c, 45+12*r, 12, 12), WHITECOLOR);
             }
 
     if(this->gameState == LOST) {
         std::string str = "Game Over";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
     } else if(this->gameState == PAUSED) {
         std::string str = "Game Paused";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
         str = "Press A to continue";
         width = alphanumfont.getTextWidth(str);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 140), 255, 1);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 140), 255, 1);
         str = "Press B to quit";
         width = alphanumfont.getTextWidth(str);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 160), 255, 1);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 160), 255, 1);
     }
 }
 

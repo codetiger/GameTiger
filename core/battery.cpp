@@ -42,8 +42,8 @@ bool Battery::isCharging() {
 
 void Battery::drawLevel(Display* display) {
     Color c = Color(0, 0, 0);
-    display->fillRect(310, 11, 4, 6, c);
-    display->rect(280, 8, 30, 12, c);
+    display->fillRect(Rect2(310, 11, 4, 6), c);
+    display->rect(Rect2(280, 8, 30, 12), c);
     uint8_t level = this->getLevel();
     if(level < 20)
         c = Color(180, 0, 8);
@@ -52,7 +52,7 @@ void Battery::drawLevel(Display* display) {
     else if(level > 80 && this->isCharging())
         c = Color(30, 195, 6);
 
-    display->fillRect(282, 10, 27 * this->getLevel() / 100, 9, c);
+    display->fillRect(Rect2(282, 10, 27 * this->getLevel() / 100, 9), c);
 }
 
 Battery::~Battery()

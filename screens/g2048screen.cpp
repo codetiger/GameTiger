@@ -189,11 +189,11 @@ void G2048Screen::draw(Display *display) {
     for (uint8_t i = 0; i < BOARDSIZE; i++) {
         for (uint8_t j = 0; j < BOARDSIZE; j++) {
             Color c = board[i*BOARDSIZE+j] < 12 ? colors[board[i*BOARDSIZE+j]] : Color(32, 32, 32);
-            display->fillRect(5 + 80*j, 5 + 60*i, 70, 50, c);
+            display->fillRect(Rect2(5 + 80*j, 5 + 60*i, 70, 50), c);
             if (board[i*BOARDSIZE+j]) {
                 std::string str = std::to_string((uint16_t)pow(2, board[i*BOARDSIZE+j]));
                 uint16_t width = alphanumfont.getTextWidth(str, 2);
-                alphanumfont.drawText(display, str, Pos2(5 + (70-width)/2 + 80*j, 22 + 60*i), 255, 2);
+                alphanumfont.drawText(display, str, Vec2(5 + (70-width)/2 + 80*j, 22 + 60*i), 255, 2);
             }
         }
     }
@@ -201,18 +201,18 @@ void G2048Screen::draw(Display *display) {
     if(this->gameState == LOST) {
         std::string str = "Game Over";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
-        display->fillRect((DISPLAY_WIDTH - width)/2, 104, width, 24, BLACKCOLOR);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
+        display->fillRect(Rect2((DISPLAY_WIDTH - width)/2, 104, width, 24), BLACKCOLOR);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
     } else if(this->gameState == PAUSED) {
         std::string str = "Game Paused";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
         str = "Press A to continue";
         width = alphanumfont.getTextWidth(str, 1);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 140), 255, 1);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 140), 255, 1);
         str = "Press B to quit";
         width = alphanumfont.getTextWidth(str, 1);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 160), 255, 1);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 160), 255, 1);
     }
 }
 

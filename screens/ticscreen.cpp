@@ -48,7 +48,7 @@ void TicScreen::draw(Display *display) {
     display->clear(Color(100, 71, 195));
     for (uint8_t y = 0; y < TIC_BOARDSIZE; y++) {
         for (uint8_t x = 0; x < TIC_BOARDSIZE; x++) {
-            Pos2 pos = Pos2(x, y) * 60 + 30;
+            Vec2 pos = Vec2(x, y) * 60 + 30;
             if(board.getCellValue(x, y) == E_TIC)
                 allGameSprite.drawSprite(display, tttBlockFrames[0], pos);
             else if(board.getCellValue(x, y) == O_TIC)
@@ -59,16 +59,16 @@ void TicScreen::draw(Display *display) {
     }
 
     uint8_t width = alphanumfont.getTextWidth("Tic Tac Toe", 2);
-    alphanumfont.drawText(display, "Tic Tac Toe", Pos2((DISPLAY_WIDTH-width)/2, 2), 255, 2);
+    alphanumfont.drawText(display, "Tic Tac Toe", Vec2((DISPLAY_WIDTH-width)/2, 2), 255, 2);
     if(turn == O_TIC)
-        display->rect(30+this->sx*60, 30+this->sy*60, 60, 60, GREENCOLOR);
+        display->rect(Rect2(30+this->sx*60, 30+this->sy*60, 60, 60), GREENCOLOR);
     
     if(this->gameState == PLAYING) {
-        alphanumfont.drawText(display, "Turn", Pos2(236, 130), 255, 2);
+        alphanumfont.drawText(display, "Turn", Vec2(236, 130), 255, 2);
         if(turn == O_TIC)
-            alphanumfont.drawText(display, "You", Pos2(240, 160), 255, 2);
+            alphanumfont.drawText(display, "You", Vec2(240, 160), 255, 2);
         else
-            alphanumfont.drawText(display, "Comp", Pos2(238, 160), 255, 2);
+            alphanumfont.drawText(display, "Comp", Vec2(238, 160), 255, 2);
     } else {
         std::string str = "";
         if(won == O_TIC)
@@ -78,7 +78,7 @@ void TicScreen::draw(Display *display) {
         else
             str = "GAME DRAW";
         uint8_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH-width)/2, 210), 255, 2);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH-width)/2, 210), 255, 2);
     }
 }
 

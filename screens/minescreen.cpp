@@ -30,16 +30,16 @@ void MineScreen::draw(Display *display) {
     for (int y = 0; y < MINE_BOARD_HEIGHT; y++) {
         for (int x = 0; x < MINE_BOARD_WIDTH; x++) {
             if(state[y*MINE_BOARD_WIDTH+x] == CLOSE)
-                allGameSprite.drawSprite(display, sweeperFrames[9], Pos2(x, y)*16);
+                allGameSprite.drawSprite(display, sweeperFrames[9], Vec2(x, y)*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == FLAG)
-                allGameSprite.drawSprite(display, sweeperFrames[11], Pos2(x, y)*16);
+                allGameSprite.drawSprite(display, sweeperFrames[11], Vec2(x, y)*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == DOUBT)
-                allGameSprite.drawSprite(display, sweeperFrames[13], Pos2(x, y)*16);
+                allGameSprite.drawSprite(display, sweeperFrames[13], Vec2(x, y)*16);
             else if(state[y*MINE_BOARD_WIDTH+x] == OPEN) {
                 if(board[y*MINE_BOARD_WIDTH+x] >= 0 && board[y*MINE_BOARD_WIDTH+x] <= 8)
-                    allGameSprite.drawSprite(display, sweeperFrames[0]+board[y*MINE_BOARD_WIDTH+x], Pos2(x, y)*16);
+                    allGameSprite.drawSprite(display, sweeperFrames[0]+board[y*MINE_BOARD_WIDTH+x], Vec2(x, y)*16);
                 else if(board[y*MINE_BOARD_WIDTH+x] == 9)
-                    allGameSprite.drawSprite(display, sweeperFrames[10], Pos2(x, y)*16);
+                    allGameSprite.drawSprite(display, sweeperFrames[10], Vec2(x, y)*16);
             }
         }
     }
@@ -47,9 +47,9 @@ void MineScreen::draw(Display *display) {
     if(this->gameState == LOST) {
         std::string str = "Game Over";
         uint16_t width = alphanumfont.getTextWidth(str, 2);
-        alphanumfont.drawText(display, str, Pos2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
+        alphanumfont.drawText(display, str, Vec2((DISPLAY_WIDTH - width)/2, 108), 255, 2);
     } else 
-        display->rect(selectedX*16, selectedY*16, 16, 16, REDCOLOR);
+        display->rect(Rect2(selectedX*16, selectedY*16, 16, 16), REDCOLOR);
 }
 
 void MineScreen::resetBoard() {

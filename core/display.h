@@ -50,12 +50,15 @@ public:
     void clear(Color c);
     void setBrightness(uint8_t brightness);
 
-    void setPixel(int x, int y, Color &c, uint8_t alpha);
-    void drawBitmapRow(int x, int y, int width, Color *c);
-    void fillRect(int x, int y, int width, int height, Color &c, uint8_t alpha = 255);
-    void hLine(int x, int y, int width, Color &c, uint8_t alpha = 255);
-    void vLine(int x, int y, int height, Color &c, uint8_t alpha = 255);
-    void rect(int x, int y, int width, int height, Color &c, uint8_t alpha = 255);
+    void setPixel(Vec2 pos, Color &c, uint8_t alpha);
+    void drawBitmapRow(Vec2 pos, int width, Color *c);
+    void fillRect(Rect2 rect, Color &c, uint8_t alpha = 255);
+    void hLine(Vec2 pos, int width, Color &c, uint8_t alpha = 255);
+    void vLine(Vec2 pos, int height, Color &c, uint8_t alpha = 255);
+    void rect(Rect2 rect, Color &c, uint8_t alpha = 255);
+    void line(Vec2 p0, Vec2 p1, Color &c, uint8_t alpha = 255);
+    void triangle(Vec2 p0, Vec2 p1, Vec2 p2, Color &c, uint8_t alpha = 255);
+    void fillTriangle(Vec2 p0, Vec2 p1, Vec2 p2, Color &c, uint8_t alpha = 255);
 };
 
 #endif
