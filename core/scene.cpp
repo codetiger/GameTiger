@@ -34,7 +34,6 @@ void Scene3D::render(Display *display) {
         for (uint16_t tIndex = 0; tIndex < model->triangleCount; tIndex++) {
             Vec2 texs[3];
             Vec4 points[3];
-            Unit d = 0;
 
             for(uint8_t i = 0; i < 3; ++i) {
                 Index vertexIndex = model->triangles[tIndex * indexStride + i] * 3;
@@ -45,7 +44,6 @@ void Scene3D::render(Display *display) {
 
                 points[i] = modelMat * points[i];
                 points[i].w = points[i].z;
-                d += points[i].z;
                 points[i].perspectiveDivide(camera.focalLength);
                 points[i] = points[i].getScreenCoords();
     
@@ -75,13 +73,13 @@ void Scene3D::drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0,
         std::swap(t1, t2);
     }
     Unit depth = p0.z + p1.z + p2.z;
-    t0 = (t0 * FRACTIONS_PER_UNIT) / p0.z;
-    t1 = (t1 * FRACTIONS_PER_UNIT) / p1.z;
-    t2 = (t2 * FRACTIONS_PER_UNIT) / p2.z;
+    t0 = this->recipro(t0, p0.z);
+    t1 = this->recipro(t1, p1.z);
+    t2 = this->recipro(t2, p2.z);
 
-    Unit p0z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p0.z;
-    Unit p1z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p1.z;
-    Unit p2z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p2.z;
+    int32_t p0z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p0.z;
+    int32_t p1z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p1.z;
+    int32_t p2z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p2.z;
  
     Unit total_height = p2.y - p0.y;
     for (Index i = 0; i < total_height; i++) { 
@@ -100,19 +98,30 @@ void Scene3D::drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0,
 
             Vec2 p = Vec2(j, y);
             Vec4 b = this->baryCentric(p0.xy(), p1.xy(), p2.xy(), p);
-            Vec2 uv = interpolate(t0, t1, t2, b.x, b.y, b.z);
+            Vec2 uv = this->interpolate(t0, t1, t2, b.x, b.y, b.z);
 
-            Unit z = ((b.x * p0z) + (b.y * p1z) + (b.z * p2z)) / FRACTIONS_PER_UNIT;
-            uv = (uv * FRACTIONS_PER_UNIT) / z;
+            int32_t z = ((b.x * p0z) + (b.y * p1z) + (b.z * p2z)) / FRACTIONS_PER_UNIT;
+            z = (z == 0) ? 1 : z;
+            int32_t s = (int32_t)uv.x * FRACTIONS_PER_UNIT / z;
+            int32_t t = (int32_t)uv.y * FRACTIONS_PER_UNIT / z;
+            Color c = modelSprite.getColor(Vec2(s, t));
 
-            Color c = modelSprite.getColor(uv);
+            // Color c = modelSprite.getColor(uv);
             display->setPixel(p, c, 255);
         }
     } 
 }
 
+Vec2 Scene3D::recipro(Vec2 t, int32_t z) {
+    int32_t tx = (t.x * FRACTIONS_PER_UNIT) / z;
+    int32_t ty = (t.y * FRACTIONS_PER_UNIT) / z;
+    return Vec2(tx, ty);
+}
+
 Vec2 Scene3D::interpolate(Vec2 t0, Vec2 t1, Vec2 t2, Unit u, Unit v, Unit w) {
-    return ((t0 * u) + (t1 * v) + (t2 * w)) / (Unit)FRACTIONS_PER_UNIT;
+    int32_t tx = ((t0.x * u) + (t1.x * v) + (t2.x * w)) / FRACTIONS_PER_UNIT;
+    int32_t ty = ((t0.y * u) + (t1.y * v) + (t2.y * w)) / FRACTIONS_PER_UNIT;
+    return Vec2((Unit)tx, (Unit)ty);
 }
 
 Vec4 Scene3D::baryCentric(Vec2 a, Vec2 b, Vec2 c, Vec2 p) {
@@ -120,12 +129,12 @@ Vec4 Scene3D::baryCentric(Vec2 a, Vec2 b, Vec2 c, Vec2 p) {
     Vec2 v1 = c - a;
     Vec2 v2 = p - a;
 
-    Unit d00 = v0.dot(v0);
-    Unit d01 = v0.dot(v1);
-    Unit d11 = v1.dot(v1);
-    Unit d20 = v2.dot(v0);
-    Unit d21 = v2.dot(v1);
-    Unit denom = ((d00 * d11) / FRACTIONS_PER_UNIT) - ((d01 * d01) / FRACTIONS_PER_UNIT);
+    int32_t d00 = v0.dot(v0);
+    int32_t d01 = v0.dot(v1);
+    int32_t d11 = v1.dot(v1);
+    int32_t d20 = v2.dot(v0);
+    int32_t d21 = v2.dot(v1);
+    int32_t denom = ((d00 * d11) - (d01 * d01)) / FRACTIONS_PER_UNIT;
 
     Vec4 result;
     result.y = (d11 * d20 - d01 * d21) / denom;
@@ -133,7 +142,3 @@ Vec4 Scene3D::baryCentric(Vec2 a, Vec2 b, Vec2 c, Vec2 p) {
     result.x = FRACTIONS_PER_UNIT - result.y - result.z;
     return result;
 }
-
-Unit edgeFunction(Vec2 a, Vec2 b, Vec2 c) { 
-    return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x); 
-} 

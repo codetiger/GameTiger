@@ -4,8 +4,8 @@
 #define _GAME_TIGER_INTMATH_H
 
 #define FRACTIONS_PER_UNIT 512
-#define Unit int32_t
-#define Index uint32_t
+#define Unit int16_t
+#define Index uint16_t
 #define UNIT_MAX 32767
 #define UNIT_MIN -32768
 
@@ -58,12 +58,12 @@ typedef struct Vec2 {
         return Vec2(this->x / v, this->y / v);
     }
 
-    Vec2 operator/(const float &v) {
-        return Vec2(this->x / v, this->y / v);
-    }
+    // Vec2 operator/(const float &v) {
+    //     return Vec2(this->x / v, this->y / v);
+    // }
 
-    Unit dot(const Vec2 &v) {
-        return (x * v.x) + (y * v.y);
+    int32_t dot(const Vec2 &v) {
+        return ((int32_t)x * (int32_t)v.x) + ((int32_t)y * (int32_t)v.y);
     }
 
     void print() {

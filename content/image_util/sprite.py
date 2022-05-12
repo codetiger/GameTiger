@@ -213,10 +213,10 @@ menuSpriteList = [
 cubeImageList = [
     ("../3dmodel/cube.png", "cubeTexture", 64, 64, 64, 0, 0, 0, 0),
 ]
-processSprite(cubeImageList, "modelSprite", 64, 64, False)
+# processSprite(cubeImageList, "modelSprite", 64, 64, False)
 
-# diabloImageList = [
-#     ("../3dmodel/diablo.png", "diabloTexture", 256, 256, 128, 0, 0, 0, 0),
-# ]
-# processSprite(diabloImageList, "modelSprite", 320, 256, False)
+diabloImageList = [
+    ("../3dmodel/diablo.png", "diabloTexture", 64, 64, 128, 0, 0, 0, 0),
+]
+processSprite(diabloImageList, "modelSprite", 64, 64, False)
 

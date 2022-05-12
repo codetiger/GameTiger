@@ -49,6 +49,11 @@ typedef struct Camera {
 
 enum CULLING {NONE, CLOCKWISE, COUNTERCLOCKWISE};
 
+typedef struct Triangle3D {
+    Index vi0, vi1, vi2;
+    Index ti0, ti1, ti2;
+} Triangle3D;
+
 typedef struct Model3D {
     const Unit *vertices, *textureCoords, *normals;
     Index vertexCount, textureCoordCount, normalCount;
@@ -89,15 +94,18 @@ typedef struct Model3D {
 class Scene3D {
 private:
     std::vector<Model3D*> models;
+
+    Vec2 recipro(Vec2 t, int32_t z);
+    void drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0, Vec2 t1, Vec2 t2);
+    Vec4 baryCentric(Vec2 a, Vec2 b, Vec2 c, Vec2 p);
+    Vec2 interpolate(Vec2 t0, Vec2 t1, Vec2 t2, Unit u, Unit v, Unit w);
+
 public:
     Scene3D();
     ~Scene3D();
 
     void addModel(Model3D *model);
     void render(Display *display);
-    void drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0, Vec2 t1, Vec2 t2);
-    Vec4 baryCentric(Vec2 a, Vec2 b, Vec2 c, Vec2 p);
-    Vec2 interpolate(Vec2 t0, Vec2 t1, Vec2 t2, Unit u, Unit v, Unit w);
 
     Camera camera;
 };

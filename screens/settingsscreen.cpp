@@ -1,4 +1,5 @@
 #include "settingsscreen.h"
+#include "../content/models.h"
 
 SettingsScreen::SettingsScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Setting screen loading...");
@@ -29,6 +30,29 @@ SettingsScreen::SettingsScreen(void (*rcb)(int8_t menu, uint8_t option), void (*
     this->bgLayer->addTileInfo(1, tinfo);
     tinfo.color = Color(198, 151, 178);
     this->bgLayer->addTileInfo(2, tinfo);
+
+    this->scene = new Scene3D();
+    model.vertices = (Unit*)diabloVertices;
+    model.vertexCount = diabloVertexCount;
+    model.normals = (Unit*)diabloNormals;
+    model.normalCount = diabloNormalCount;
+    model.textureCoords = (Unit*)diabloTextureCoords;
+    model.textureCoordCount = diabloTextureCoordCount;
+    model.triangles = (Index*)diabloFaces;
+    model.triangleCount = diabloFaceCount;
+    // model.vertices = (Unit*)cubeVertices;
+    // model.vertexCount = cubeVertexCount;
+    // model.normals = (Unit*)cubeNormals;
+    // model.normalCount = cubeNormalCount;
+    // model.textureCoords = (Unit*)cubeTextureCoords;
+    // model.textureCoordCount = cubeTextureCoordCount;
+    // model.triangles = (Index*)cubeFaces;
+    // model.triangleCount = cubeFaceCount;
+
+    this->scene->camera.lookAt(model.transform.translation);
+    this->scene->addModel(&model);
+    this->scene->camera.transform.translation.z = FRACTIONS_PER_UNIT*2;
+
     printf("Done\n");
 }
 
@@ -43,10 +67,18 @@ void SettingsScreen::update(uint16_t deltaTimeMS) {
             this->scroll = 0;
         this->lastUpdate = getTime();
     }
+    model.transform.rotation.y++;
+    if(model.transform.rotation.y > 512)
+        model.transform.rotation.y = 0;
+    // model.transform.rotation.z++;
+    // if(model.transform.rotation.z > 512)
+    //     model.transform.rotation.z = 0;
 }
 
 void SettingsScreen::draw(Display *display) {
-    this->bgLayer->draw(display, 0, 0);    
+    display->clear(BLACKCOLOR);
+    this->scene->render(display);
+    // this->bgLayer->draw(display, 0, 0);    
 }
 
 void SettingsScreen::keyPressed(uint8_t key) {
