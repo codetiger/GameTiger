@@ -12,10 +12,12 @@ void Scene3D::addModel(Model3D *model) {
 }
 
 void Scene3D::render(Display *display) {
+    this->clearDepthBuffer();
     Mat4 cameraMat = this->camera.getMat();
     Index sortArrayLength = 0;
 
-    for(Model3D *model : this->models) {
+    for(uint8_t modelIndex = 0; modelIndex < this->models.size(); modelIndex++) {
+        Model3D *model = this->models[modelIndex];
         if(!model->visible)
             continue;
 
@@ -53,33 +55,27 @@ void Scene3D::render(Display *display) {
             }
 
             if(model->isTriangleVisible(points[2].xy(), points[1].xy(), points[0].xy()))
-                this->drawTriangle(display, points[0], points[1], points[2], texs[0], texs[1], texs[2]);
+                this->drawTriangle(display, points[0], points[1], points[2], texs[0], texs[1], texs[2], model->needsPerspectiveCorrection);
         }
     }
 }
 
-void Scene3D::drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0, Vec2 t1, Vec2 t2) {
+void Scene3D::drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0, Vec2 t1, Vec2 t2, bool needsPC) {
     if(p0.y == p1.y && p0.y == p2.y) return;
-    if(p0.y > p1.y) {
-        std::swap(p0, p1);
-        std::swap(t0, t1);
-    }
-    if(p0.y > p2.y) {
-        std::swap(p0, p2);
-        std::swap(t0, t2);
-    }
-    if(p1.y > p2.y) {
-        std::swap(p1, p2);
-        std::swap(t1, t2);
-    }
-    Unit depth = p0.z + p1.z + p2.z;
-    t0 = this->recipro(t0, p0.z);
-    t1 = this->recipro(t1, p1.z);
-    t2 = this->recipro(t2, p2.z);
+    if(p0.y > p1.y) { std::swap(p0, p1); std::swap(t0, t1); }
+    if(p0.y > p2.y) { std::swap(p0, p2); std::swap(t0, t2); }
+    if(p1.y > p2.y) { std::swap(p1, p2); std::swap(t1, t2); }
 
-    int32_t p0z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p0.z;
-    int32_t p1z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p1.z;
-    int32_t p2z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p2.z;
+    int32_t p0z, p1z, p2z;
+    if(needsPC) {
+        t0 = this->recipro(t0, p0.z);
+        t1 = this->recipro(t1, p1.z);
+        t2 = this->recipro(t2, p2.z);
+
+        p0z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p0.z;
+        p1z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p1.z;
+        p2z = (FRACTIONS_PER_UNIT * FRACTIONS_PER_UNIT) / p2.z;
+    }
  
     Unit total_height = p2.y - p0.y;
     for (Index i = 0; i < total_height; i++) { 
@@ -96,18 +92,27 @@ void Scene3D::drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0,
         for (Index j = A.x; j < B.x; j++) {
             Index y = p0.y + i;
 
-            Vec2 p = Vec2(j, y);
-            Vec4 b = this->baryCentric(p0.xy(), p1.xy(), p2.xy(), p);
-            Vec2 uv = this->interpolate(t0, t1, t2, b.x, b.y, b.z);
+            int16_t depth = (p0.z + p1.z + p2.z) / (3 * ZBUFFER_DEPTH_DIV);
+            uint16_t depthIndex = y * DISPLAY_WIDTH + j;
+            if(this->depthBuffer[depthIndex] > depth) {
+                this->depthBuffer[depthIndex] = depth;
 
-            int32_t z = ((b.x * p0z) + (b.y * p1z) + (b.z * p2z)) / FRACTIONS_PER_UNIT;
-            z = (z == 0) ? 1 : z;
-            int32_t s = (int32_t)uv.x * FRACTIONS_PER_UNIT / z;
-            int32_t t = (int32_t)uv.y * FRACTIONS_PER_UNIT / z;
-            Color c = modelSprite.getColor(Vec2(s, t));
+                Vec2 p = Vec2(j, y);
+                Vec4 b = this->baryCentric(p0.xy(), p1.xy(), p2.xy(), p);
+                Vec2 uv = this->interpolate(t0, t1, t2, b.x, b.y, b.z);
+                Color c;
 
-            // Color c = modelSprite.getColor(uv);
-            display->setPixel(p, c, 255);
+                if(needsPC) {
+                    int32_t z = ((b.x * p0z) + (b.y * p1z) + (b.z * p2z)) / FRACTIONS_PER_UNIT;
+                    z = (z == 0) ? 1 : z;
+                    int32_t s = (int32_t)uv.x * FRACTIONS_PER_UNIT / z;
+                    int32_t t = (int32_t)uv.y * FRACTIONS_PER_UNIT / z;
+
+                    c = modelSprite.getColor(Vec2(s, t));
+                } else 
+                    c = modelSprite.getColor(uv);
+                display->setPixel(p, c, 255);
+            }
         }
     } 
 }
@@ -134,11 +139,16 @@ Vec4 Scene3D::baryCentric(Vec2 a, Vec2 b, Vec2 c, Vec2 p) {
     int32_t d11 = v1.dot(v1);
     int32_t d20 = v2.dot(v0);
     int32_t d21 = v2.dot(v1);
-    int32_t denom = ((d00 * d11) - (d01 * d01)) / FRACTIONS_PER_UNIT;
+    int32_t denom = (d00 * d11) - (d01 * d01);
 
-    Vec4 result;
-    result.y = (d11 * d20 - d01 * d21) / denom;
-    result.z = (d00 * d21 - d01 * d20) / denom;
-    result.x = FRACTIONS_PER_UNIT - result.y - result.z;
-    return result;
+    int32_t ry = FRACTIONS_PER_UNIT * (d11 * d20 - d01 * d21) / denom;
+    int32_t rz = FRACTIONS_PER_UNIT * (d00 * d21 - d01 * d20) / denom;
+    int32_t rx = FRACTIONS_PER_UNIT - ry - rz;
+    return Vec4(rx, ry, rz, FRACTIONS_PER_UNIT);
+}
+
+void Scene3D::clearDepthBuffer() {
+    for (uint16_t y = 0; y < DISPLAY_HEIGHT; y++)
+        for (uint16_t x = 0; x < DISPLAY_WIDTH; x++)
+            this->depthBuffer[y * DISPLAY_WIDTH + x] = 127;
 }

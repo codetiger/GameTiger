@@ -58,12 +58,8 @@ typedef struct Vec2 {
         return Vec2(this->x / v, this->y / v);
     }
 
-    // Vec2 operator/(const float &v) {
-    //     return Vec2(this->x / v, this->y / v);
-    // }
-
     int32_t dot(const Vec2 &v) {
-        return ((int32_t)x * (int32_t)v.x) + ((int32_t)y * (int32_t)v.y);
+        return (x * v.x) + (y * v.y);
     }
 
     void print() {

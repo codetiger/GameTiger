@@ -49,11 +49,6 @@ typedef struct Camera {
 
 enum CULLING {NONE, CLOCKWISE, COUNTERCLOCKWISE};
 
-typedef struct Triangle3D {
-    Index vi0, vi1, vi2;
-    Index ti0, ti1, ti2;
-} Triangle3D;
-
 typedef struct Model3D {
     const Unit *vertices, *textureCoords, *normals;
     Index vertexCount, textureCoordCount, normalCount;
@@ -62,7 +57,7 @@ typedef struct Model3D {
     Index triangleCount;
 
     uint8_t backfaceCulling;
-    bool visible;
+    bool visible, needsPerspectiveCorrection;
 
     Transform3D transform;
     Mat4 customTransformMatrix;
@@ -72,6 +67,7 @@ typedef struct Model3D {
         visible = true;
         backfaceCulling = COUNTERCLOCKWISE;
         updatedMatrix = false;
+        needsPerspectiveCorrection = false;
     }
 
     int8_t getTriangleWinding(Vec2 p0, Vec2 p1, Vec2 p2) const {
@@ -91,14 +87,18 @@ typedef struct Model3D {
     }
 } Model3D;
 
+#define ZBUFFER_DEPTH_DIV 32
+
 class Scene3D {
 private:
     std::vector<Model3D*> models;
+    int8_t depthBuffer[DISPLAY_WIDTH * DISPLAY_HEIGHT];
 
     Vec2 recipro(Vec2 t, int32_t z);
-    void drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0, Vec2 t1, Vec2 t2);
+    void drawTriangle(Display *display, Vec4 p0, Vec4 p1, Vec4 p2, Vec2 t0, Vec2 t1, Vec2 t2, bool needsPerspectiveCorrection);
     Vec4 baryCentric(Vec2 a, Vec2 b, Vec2 c, Vec2 p);
     Vec2 interpolate(Vec2 t0, Vec2 t1, Vec2 t2, Unit u, Unit v, Unit w);
+    void clearDepthBuffer();
 
 public:
     Scene3D();
