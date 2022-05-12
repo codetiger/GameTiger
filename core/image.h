@@ -37,6 +37,8 @@ public:
     void drawSprite(Display *display, uint16_t index, Rect2 destRect, uint8_t alpha, bool flipH = false, bool flipV = false);
     uint16_t getSpriteWidth(uint16_t index);
     uint16_t getSpriteHeight(uint16_t index);
+
+    Color getColor(Vec2 pos);
 }Image;
 
 #endif

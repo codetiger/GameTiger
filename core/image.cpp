@@ -29,7 +29,7 @@ Image::Image(Size2 s, Color *pd, uint16_t *sd) {
 }
 
 void Image::draw(Display *display, Rect2 destRect, Rect2 spriteRect, uint8_t alpha, bool flipH, bool flipV) {
-    if(alpha == 0 || destRect.x+destRect.w <= 0 || destRect.x >= DISPLAY_WIDTH || destRect.y+destRect.h <= 0 || destRect.y >= DISPLAY_HEIGHT)
+    if(alpha == 0 || (int)destRect.x+(int)destRect.w <= 0 || destRect.x >= DISPLAY_WIDTH || (int)destRect.y+(int)destRect.h <= 0 || destRect.y >= DISPLAY_HEIGHT)
         return;
 
     uint32_t xRatio = (destRect.w == spriteRect.w) ? 1 : (uint32_t)((spriteRect.w << 16) / destRect.w);
@@ -140,4 +140,12 @@ uint16_t Image::getTextWidth(std::string text, uint8_t scaleRatio) {
         width += (this->getSpriteWidth(i) - 1)*scaleRatio;
     }
     return width;
+}
+
+Color Image::getColor(Vec2 pos) {
+    Index x = ((pos.x * this->size.w) / FRACTIONS_PER_UNIT);
+    Index y = ((pos.y * this->size.h) / FRACTIONS_PER_UNIT);
+    int pixIndex = x * this->size.w + y;
+    int colIndex = this->hasIndexedColors ? this->pixelData[pixIndex] : pixIndex;
+    return this->palette[colIndex];
 }

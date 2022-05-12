@@ -1,5 +1,6 @@
 #include "../core/common.h"
 #include "../core/screen.h"
+#include "../core/scene.h"
 
 class SplashScreen : public Screen
 {
@@ -10,6 +11,9 @@ private:
     uint16_t totalDuration, accDeltaTimeMS;
     TileMap *bgLayer;
     uint8_t option;
+
+    Scene3D *scene;
+    Model3D model;
 public:
     SplashScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~SplashScreen();

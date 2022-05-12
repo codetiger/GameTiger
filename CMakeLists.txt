@@ -20,6 +20,8 @@ add_executable(${PROJECT_NAME}
     core/tilemap.cpp
     core/level.cpp
     core/audio.cpp
+    core/intmath.cpp
+    core/scene.cpp
     screens/splashscreen.cpp
     screens/menuscreen.cpp
     screens/snakescreen.cpp

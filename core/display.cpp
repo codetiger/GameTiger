@@ -250,10 +250,10 @@ void Display::fillRect(Rect2 rect, Color &c, uint8_t alpha) {
     if(rect.x >= DISPLAY_WIDTH || rect.y >= DISPLAY_HEIGHT || rect.x + rect.w < 0 || rect.y + rect.h < 0)
         return;
 
-    rect.w = std::min(rect.w, (uint16_t)(DISPLAY_WIDTH - rect.x));
-    rect.h = std::min(rect.h, (uint16_t)(DISPLAY_HEIGHT - rect.y));
-    rect.x = std::max(rect.x, (int16_t)0);
-    rect.y = std::max(rect.y, (int16_t)0);
+    rect.w = std::min(rect.w, (Index)(DISPLAY_WIDTH - rect.x));
+    rect.h = std::min(rect.h, (Index)(DISPLAY_HEIGHT - rect.y));
+    rect.x = std::max(rect.x, (Unit)0);
+    rect.y = std::max(rect.y, (Unit)0);
 
     if(alpha != 255 || rect.w < 8) {
         for (int i = rect.y; i < rect.y + rect.h; i++)
@@ -348,16 +348,18 @@ void Display::fillTriangle(Vec2 p0, Vec2 p1, Vec2 p2, Color &c, uint8_t alpha) {
     if(p0.y > p2.y) std::swap(p0, p2);
     if(p1.y > p2.y) std::swap(p1, p2);
 
-    uint16_t total_height = p2.y - p0.y;
-    for (uint16_t i = 0; i < total_height; i++) { 
+    Unit total_height = p2.y - p0.y;
+    for (Unit i = 0; i < total_height; i++) { 
         bool second_half = i > p1.y-p0.y || p1.y == p0.y; 
-        uint16_t segment_height = second_half ? p2.y-p1.y : p1.y-p0.y;
-        float yAlpha = (float)i/total_height;
-        float beta  = (float)(i-(second_half ? p1.y-p0.y : 0))/segment_height;
-        printf("%f, %f\n", yAlpha, beta);
-        Vec2 A = p0 + (p2-p0)*yAlpha;
-        Vec2 B = second_half ? p1 + (p2-p1)*beta : p0 + (p1-p0)*beta; 
-        if (A.x>B.x) std::swap(A, B); 
+        Unit segment_height = second_half ? p2.y-p1.y : p1.y-p0.y;
+        Vec2 A = p0 + ((p2-p0) * i) / total_height;
+        Vec2 B; 
+        if(second_half)
+            B = p1 + ((p2-p1) * (i-p1.y+p0.y)) / segment_height;
+        else
+            B = p0 + ((p1-p0) * i) / segment_height;
+
+        if (A.x > B.x) std::swap(A, B); 
         this->hLine(Vec2(A.x, p0.y+i), B.x - A.x, c, alpha);
     } 
 }

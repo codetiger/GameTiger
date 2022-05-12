@@ -48,7 +48,7 @@ class Sprite:
             if name not in self.animSeq:
                 self.animSeq[name] = []
             self.animSeq[name].append(index)
-            img.save("temp/" + name + str(index) + ".png")
+            # img.save("temp/" + name + str(index) + ".png")
 
     def save(self, width, height, filename):
         self.packer.add_bin(width, height)
@@ -181,7 +181,7 @@ allGameAlphaSpriteList = [
     ("ninjafrog/hero/idle.png", "heroIdleAnimSeq", 32, 32, 12, 0, 0, 0, 0),
     ("ninjafrog/hero/run.png", "heroRunAnimSeq", 32, 32, 12, 0, 0, 0, 0),
 ]
-processSprite(allGameAlphaSpriteList, "allGameAlphaSprite", 380, 380, True)
+# processSprite(allGameAlphaSpriteList, "allGameAlphaSprite", 380, 380, True)
 
 allGameSpriteList = [
     ("ninjafrog/background/Blue.png", "bgFrames", 64, 64, 2, 0, 0, 0, 0),
@@ -195,7 +195,7 @@ allGameSpriteList = [
     ("sweeper.png", "sweeperFrames", 16, 16, 32, 0, 0, 0, 0),
     ("tttblocks.png", "tttBlockFrames", 60, 60, 32, 0, 0, 0, 0),
 ]
-processSprite(allGameSpriteList, "allGameSprite", 330, 256, False)
+# processSprite(allGameSpriteList, "allGameSprite", 330, 256, False)
 
 menuSpriteList = [
     ("menu/snake.png", "menuItemFrames", 96, 96, 16, 0, 0, 0, 0),
@@ -208,6 +208,15 @@ menuSpriteList = [
     ("menu/about.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
     ("menu/tiger.png", "tigerFrame", 128, 128, 64, 0, 0, 0, 0),
 ]
-processSprite(menuSpriteList, "menuSprite", 320, 320, True)
+# processSprite(menuSpriteList, "menuSprite", 320, 320, True)
 
+cubeImageList = [
+    ("../3dmodel/cube.png", "cubeTexture", 64, 64, 64, 0, 0, 0, 0),
+]
+processSprite(cubeImageList, "modelSprite", 64, 64, False)
+
+# diabloImageList = [
+#     ("../3dmodel/diablo.png", "diabloTexture", 256, 256, 128, 0, 0, 0, 0),
+# ]
+# processSprite(diabloImageList, "modelSprite", 320, 256, False)
 

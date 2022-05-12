@@ -112,3 +112,8 @@ If you wish to contribute to this repo, please feel free to implement your favou
 
 ## License
 The entire project is open-sourced software licensed under the MIT license.
+
+## References
+* [Tiny Renderer](https://github.com/ssloy/tinyrenderer)
+* [Small3dLib](https://gitlab.com/drummyfish/small3dlib)
+* [HAGL Graphics Library](https://github.com/tuupola/hagl)

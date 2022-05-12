@@ -36,88 +36,21 @@
 #ifndef _GAME_TIGER_COMMON_H
 #define _GAME_TIGER_COMMON_H
 
-typedef struct Vec2 {
-    int16_t x, y;
+#define DISPLAY_WIDTH 320
+#define DISPLAY_HEIGHT 240
 
-    Vec2() {
-        x = y = 0;
-    }
-
-    Vec2(int16_t _x, int16_t _y) {
-        x = _x; y = _y;
-    }
-
-    Vec2 operator+(const uint16_t &v) {
-        return Vec2(this->x + v, this->y + v);
-    };
-
-    Vec2 operator-(const Vec2 &v) {
-        return Vec2(this->x - v.x, this->y - v.y);
-    };
-
-    Vec2 operator+(const Vec2 &v) {
-        return Vec2(this->x + v.x, this->y + v.y);
-    };
-
-    Vec2 operator*(const float &v) {
-        return Vec2(this->x * v, this->y * v);
-    };
-
-    // Vec2 operator*(const uint16_t &v) {
-    //     return Vec2(this->x * v, this->y * v);
-    // };
-} Vec2;
-
-typedef struct Size2 {
-    uint16_t w, h;
-
-    Size2() {
-        w = h = 0;
-    }
-
-    Size2(uint16_t _w, uint16_t _h) {
-        w = _w; h = _h;
-    }
-
-    Size2 operator*(const uint16_t &v) {
-        Size2 result;
-        result.w = this->w * v;
-        result.h = this->h * v;
-        return result;
-    };
-} Size2;
-
-typedef struct Rect2 {
-    int16_t x, y;
-    uint16_t w, h;
-
-    Rect2() {
-        x = y = w = h = 0;
-    }
-
-    Rect2(Vec2 _p, Size2 _s) {
-        x = _p.x; y = _p.y;
-        w = _s.w; h = _s.h;
-    }
-
-    Rect2(int16_t _x, int16_t _y, uint16_t _w, uint16_t _h) {
-        x = _x; y = _y;
-        w = _w; h = _h;
-    }
-} Rect2;
+#include "intmath.h"
 
 #include "color.h"
 #include "../content/allGameSprite.h"
 #include "../content/allGameAlphaSprite.h"
 #include "../content/menuSprite.h"
 #include "../content/alphanumfont.h"
+#include "../content/modelSprite.h"
 
-#include "../core/image.h"
+#include "image.h"
 #include "tilemap.h"
 #include "level.h"
-
-#define DISPLAY_WIDTH 320
-#define DISPLAY_HEIGHT 240
 
 #define AUDIO_FLAG_VALUE 42
 
@@ -158,4 +91,5 @@ extern Image alphanumfont;
 extern Image allGameSprite;
 extern Image allGameAlphaSprite;
 extern Image menuSprite;
+extern Image modelSprite;
 #endif

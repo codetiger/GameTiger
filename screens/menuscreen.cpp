@@ -58,9 +58,11 @@ void MenuScreen::draw(Display *display) {
         int posx = (i-this->currentMenuItem) * this->menuItemGap;
         if(isAnimating)
             posx += (this->currentMenuItem - this->selectedMenuItem) * this->animationCounter;
-        uint8_t alpha = 255 - (abs(posx)*128/this->menuItemGap);
-        uint8_t size = 96 - (abs(posx)*36/this->menuItemGap);
-        menuSprite.drawSprite(display, menuItemFrames[i], Rect2(posx + (DISPLAY_WIDTH - size)/2, (DISPLAY_HEIGHT - size)/2, size, size), alpha);
+        int16_t deltaGap = (abs(posx) * 32) / this->menuItemGap;
+        uint8_t alpha = 255 - (deltaGap * 4) - 1;
+        uint8_t size = 96 - deltaGap;
+        Rect2 itemRect = Rect2(posx + (DISPLAY_WIDTH - size)/2, (DISPLAY_HEIGHT - size)/2, size, size);
+        menuSprite.drawSprite(display, menuItemFrames[i], itemRect, alpha);
     }
     if(!isAnimating) {
         uint16_t width = alphanumfont.getTextWidth(this->menuItemNames[this->currentMenuItem][0], 2);

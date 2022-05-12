@@ -1,4 +1,5 @@
 #include "splashscreen.h"
+#include "../content/models.h"
 
 SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Splash screen loading...");
@@ -10,6 +11,28 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     this->accDeltaTimeMS = 0;
     this->totalDuration = 0;
     this->option = option;
+
+    // this->scene = new Scene3D();
+    // // model.vertices = (Unit*)diabloVertices;
+    // // model.vertexCount = diabloVertexCount;
+    // // model.normals = (Unit*)diabloNormals;
+    // // model.normalCount = diabloNormalCount;
+    // // model.textureCoords = (Unit*)diabloTextureCoords;
+    // // model.textureCoordCount = diabloTextureCoordCount;
+    // // model.triangles = (Index*)diabloFaces;
+    // // model.triangleCount = diabloFaceCount;
+    // model.vertices = (Unit*)cubeVertices;
+    // model.vertexCount = cubeVertexCount;
+    // model.normals = (Unit*)cubeNormals;
+    // model.normalCount = cubeNormalCount;
+    // model.textureCoords = (Unit*)cubeTextureCoords;
+    // model.textureCoordCount = cubeTextureCoordCount;
+    // model.triangles = (Index*)cubeFaces;
+    // model.triangleCount = cubeFaceCount;
+
+    // this->scene->camera.lookAt(model.transform.translation);
+    // this->scene->addModel(&model);
+    // this->scene->camera.transform.translation.z = FRACTIONS_PER_UNIT*2;
 
     uint16_t tileWidth = 20, tileHeight = 20;
     uint8_t xCount = 4 + (DISPLAY_WIDTH / tileWidth);
@@ -38,6 +61,13 @@ SplashScreen::~SplashScreen() {
 }
 
 void SplashScreen::update(uint16_t deltaTimeMS) {
+    // model.transform.rotation.y++;
+    // if(model.transform.rotation.y > 512)
+    //     model.transform.rotation.y = 0;
+    // model.transform.rotation.z++;
+    // if(model.transform.rotation.z > 512)
+    //     model.transform.rotation.z = 0;
+
     this->totalDuration += deltaTimeMS;
     if(this->totalDuration > 3000) {
         this->returnCallBack(this->screenId, this->option);
@@ -57,6 +87,8 @@ void SplashScreen::update(uint16_t deltaTimeMS) {
 }
 
 void SplashScreen::draw(Display *display) {
+    // display->clear(BLACKCOLOR);
+    // this->scene->render(display);
     this->bgLayer->draw(display, this->tileMoveX, this->tileMoveY+40);
     uint16_t width = menuSprite.getSpriteWidth(tigerFrame);
     menuSprite.drawSprite(display, tigerFrame, Vec2((DISPLAY_WIDTH - width)/2, 56), this->imageAlpha);
