@@ -4,8 +4,8 @@
 class MenuScreen : public Screen
 {
 private:
-    const uint8_t menuCount = 8;
-    const std::string menuItemNames[8][4] = {
+    const uint8_t menuCount = 9;
+    const std::string menuItemNames[9][4] = {
         {"Snake", "", "", ""},
         {"2048", "", "", ""},
         {"Tetris", "Easy", "Medium", "Hard"},

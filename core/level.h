@@ -8,7 +8,7 @@
 #define _GAME_TIGER_LEVEL_H
 
 enum GameItemState {IDLE, MOVING, HIT, DISAPPEAR};
-enum GameItemMoveType {STATIC, HORIZONTAL, VERTICAL};
+enum GameItemMoveType {STATIC_MT, HORIZONTAL_MT, VERTICAL_MT};
 enum GameItemType {FRIEND, ENEMY};
 
 struct GameItem {

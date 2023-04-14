@@ -518,5 +518,5 @@ const uint16_t menuSpriteSpriteData[] = {
 	0, 0, 128, 128,
 };
 
-const uint16_t menuItemFrames[8] = {0,1,2,3,4,5,6,7};
+const uint16_t menuItemFrames[9] = {0,1,2,3,4,5,6,7};
 const uint16_t tigerFrame = 8;

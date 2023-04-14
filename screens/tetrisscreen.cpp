@@ -2,8 +2,7 @@
 
 TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t hs, uint8_t option) {
     printf("Tetris screen loading...");
-    this->screenId = 2;
-    this->type = Type::GAME;
+    this->screenId = ScreenEnum::TETRISSCREEN;
     this->highScore = hs;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -174,7 +173,7 @@ void TetrisScreen::removeRow(uint8_t row) {
 void TetrisScreen::keyPressed(uint8_t key) {
     if(key == KEY_B && this->gameState == PLAYING)
         this->gameState = PAUSED;
-    else if(key == KEY_B && this->gameState == PAUSED)
+    else if(key == KEY_EXIT)
         this->returnCallBack(this->screenId, this->option);
     else if(key == KEY_A && (this->gameState == WAITING || this->gameState == PAUSED))
         this->gameState = PLAYING;

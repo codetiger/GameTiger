@@ -4,8 +4,7 @@
 
 G2048Screen::G2048Screen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("2048 screen loading...");
-    this->screenId = 1;
-    this->type = Type::GAME;
+    this->screenId = ScreenEnum::G2048SCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
     this->highestValue = 2;
@@ -240,7 +239,7 @@ bool G2048Screen::checkGameOver() {
 void G2048Screen::keyPressed(uint8_t key) {
     if(key == KEY_DOWN || key == KEY_UP || key == KEY_LEFT || key == KEY_RIGHT)
         this->direction = key;
-    else if(key == KEY_B)
+    else if(key == KEY_EXIT)
         this->returnCallBack(this->screenId, this->option);
 }
 

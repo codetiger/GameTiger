@@ -22,7 +22,7 @@ void Level::updateGameItem(GameItem &item) {
         item.state = DISAPPEAR;
     } else if(item.state == IDLE && item.curFrameIndex >= item.numIdleFrames) {
         item.curFrameIndex = 0;
-        if(item.movementType == HORIZONTAL || item.movementType == VERTICAL) {
+        if(item.movementType == HORIZONTAL_MT || item.movementType == VERTICAL_MT) {
             item.state = MOVING;
             item.direction = !item.direction;
         }
@@ -31,7 +31,7 @@ void Level::updateGameItem(GameItem &item) {
     }
     
     if(item.state == MOVING) {
-        if(item.movementType == HORIZONTAL) {
+        if(item.movementType == HORIZONTAL_MT) {
             int8_t delta = item.speed * (item.direction ? 1 : -1);
             item.x = item.x + delta;
             item.x = std::max(item.minAxis, std::min(item.x, item.maxAxis));
@@ -271,7 +271,7 @@ void Level::setGameLayer(Image *sprite, uint8_t xCount, uint8_t yCount, uint16_t
 }
 
 void Level::addGameItem(GameItem &gi) {
-    if(gi.movementType != STATIC)
+    if(gi.movementType != STATIC_MT)
         gi.direction = ((rand() % 10) % 2 == 0);
     gameItems.push_back(gi);
 }

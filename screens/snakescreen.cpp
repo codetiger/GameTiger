@@ -2,8 +2,7 @@
 
 SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t hs, uint8_t option) {
     printf("Snake screen loading...");
-    this->screenId = 0;
-    this->type = Type::GAME;
+    this->screenId = ScreenEnum::SNAKESCREEN;
     this->highScore = hs;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -127,10 +126,10 @@ void SnakeScreen::keyPressed(uint8_t key) {
             this->gameState = PLAYING;
         else if(this->gameState == PLAYING) 
             this->gameSpeed = (this->gameSpeed < 12) ? this->gameSpeed+1 : this->gameSpeed;
+    } else if(key == KEY_EXIT) {
+        this->returnCallBack(this->screenId, this->option);
     } else if(key == KEY_B) {
-        if(this->gameState == LOST || this->gameState == PAUSED)
-            this->returnCallBack(this->screenId, this->option);
-        else if(this->gameState == PLAYING)
+        if(this->gameState == PLAYING)
             this->gameState = PAUSED;
     }
 }

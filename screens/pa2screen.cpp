@@ -3,8 +3,7 @@
 
 PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Pixel screen loading...");
-    this->screenId = 5;
-    this->type = Type::GAME;
+    this->screenId = ScreenEnum::PA2SCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
     this->option = option;
@@ -50,7 +49,7 @@ void PixelAdventureScreen::loadLevel(uint8_t level) {
         }
         GameItem item;
         item.state = IDLE;
-        item.movementType = STATIC;
+        item.movementType = STATIC_MT;
         item.type = FRIEND;
         item.x = fruitPos[i*2 + 0];
         item.y = fruitPos[i*2 + 1];
@@ -70,7 +69,7 @@ void PixelAdventureScreen::loadLevel(uint8_t level) {
     for (int i = enemyStartIndex; i < enemyStartIndex+enemyCounts[level]; i++) {
         GameItem item;
         item.state = IDLE;
-        item.movementType = HORIZONTAL;
+        item.movementType = HORIZONTAL_MT;
         item.type = ENEMY;
         item.x = enemyPos[i*2 + 0];
         item.y = enemyPos[i*2 + 1];
@@ -148,15 +147,15 @@ void PixelAdventureScreen::draw(Display *display) {
 }
 
 void PixelAdventureScreen::keyPressed(uint8_t key) {
-    if(this->gameState == PAUSED) {
-        if(key == KEY_B)
-            this->returnCallBack(this->screenId, this->option);
-        else if(key == KEY_A)
+    if(key == KEY_EXIT)
+        this->returnCallBack(this->screenId, this->option);
+    else if(key == KEY_B) {
+        if(this->gameState == PAUSED)
             this->gameState = PLAYING;
+        else if(this->gameState == PLAYING)
+            this->gameState = PAUSED;
     } else if(this->gameState == PLAYING) {
         this->level->keyPressed(key);
-        if(key == KEY_B)
-            this->gameState = PAUSED;
     }
 }
 

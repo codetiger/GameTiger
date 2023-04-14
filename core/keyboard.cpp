@@ -3,11 +3,11 @@
 KeyBoard::KeyBoard() {
     printf("Keyboard driver loading...");
 #ifdef FORMPU
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < KEY_COUNT; i++) {
         this->prevKeyState[i] = false;
         gpio_init(this->gpioPins[i]);
         gpio_set_dir(this->gpioPins[i], GPIO_IN);
-        gpio_pull_down(this->gpioPins[i]);
+        gpio_pull_up(this->gpioPins[i]);
     }
 #endif
     printf("Done\n");
@@ -18,7 +18,7 @@ KeyBoard::~KeyBoard() {
 
 void KeyBoard::checkKeyState(Screen *screen) {
 #ifdef FORMPU
-    for (uint8_t i = 0; i < 6; i++) {
+    for (uint8_t i = 0; i < KEY_COUNT; i++) {
         bool keyState = gpio_get(this->gpioPins[i]);
         if (this->prevKeyState[i] != keyState) {
             if (keyState) 

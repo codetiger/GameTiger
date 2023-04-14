@@ -5,7 +5,7 @@
 #ifndef _GAME_TIGER_SCREEN_H
 #define _GAME_TIGER_SCREEN_H
 
-enum Type { SPLASH, MENU, GAME };
+enum ScreenEnum { SPLASHSCREEN, MENUSCREEN, SNAKESCREEN, G2048SCREEN, TETRISSCREEN, MINESCREEN, TICSCREEN, PA2SCREEN, SETTINGSSCREEN, ABOUTSCREEN };
 
 class Screen {
 protected:
@@ -18,7 +18,9 @@ public:
     virtual void keyReleased(uint8_t key) = 0;
     virtual void keyDown(uint8_t key) = 0;
 
-    Type type;
+    virtual ~Screen() {
+        printf("Destructing base screen\n");
+    }
     uint8_t screenId = 0;
     AudioController *audioController;
 };

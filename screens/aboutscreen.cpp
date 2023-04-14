@@ -2,8 +2,7 @@
 
 AboutScreen::AboutScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("About screen loading...");
-    this->screenId = 7;
-    this->type = Type::GAME;
+    this->screenId = ScreenEnum::ABOUTSCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
     this->option = option;
@@ -67,7 +66,7 @@ void AboutScreen::draw(Display *display) {
 }
 
 void AboutScreen::keyPressed(uint8_t key) {
-    if(key == KEY_B)
+    if(key == KEY_EXIT)
         this->returnCallBack(this->screenId, this->option);
 }
 

@@ -132,3 +132,4 @@ dmypy.json
 hs.dat
 buildCPU
 .vscode
+wifipass.h

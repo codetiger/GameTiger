@@ -20,6 +20,8 @@
 Screen *screen;
 uint32_t highscores[64];
 AudioController *audioController = new AudioController();
+bool shouldSwitchScreen;
+uint8_t newScreenId, newOption;
 
 void audioControllerCore() {
 #ifdef FORMPU
@@ -33,7 +35,7 @@ void audioControllerCore() {
 
 void highScoreHandler(uint32_t highscore) {
     highscores[0] = 64;highscores[1] = 128;
-    highscores[screen->screenId+2] = highscore;
+    highscores[screen->screenId] = highscore;
     #ifdef FORMPU
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
@@ -54,35 +56,50 @@ void readHighScoreData() {
 }
 
 void backHandler(int8_t menu, uint8_t option) {
-    if(screen->type == Type::SPLASH || screen->type == Type::GAME) {
+    newScreenId = menu;
+    newOption = option;
+    shouldSwitchScreen = true;
+}
+
+void checkScreenSwitch() {
+    if(!shouldSwitchScreen)
+        return;
+
+    if(screen->screenId == ScreenEnum::MENUSCREEN) {
         delete screen;
-        screen = new MenuScreen(*backHandler, *highScoreHandler, menu, option);
-    } else if(screen->type == Type::MENU) {
+        if(newScreenId == ScreenEnum::SNAKESCREEN)
+            screen = new SnakeScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else if(newScreenId == ScreenEnum::G2048SCREEN)
+            screen = new G2048Screen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else if(newScreenId == ScreenEnum::TETRISSCREEN)
+            screen = new TetrisScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else if(newScreenId == ScreenEnum::MINESCREEN)
+            screen = new MineScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else if(newScreenId == ScreenEnum::TICSCREEN)
+            screen = new TicScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else if(newScreenId == ScreenEnum::PA2SCREEN)
+            screen = new PixelAdventureScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else if(newScreenId == ScreenEnum::SETTINGSSCREEN)
+            screen = new SettingsScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else if(newScreenId == ScreenEnum::ABOUTSCREEN)
+            screen = new AboutScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else
+            printf("Something failed badly\n");
+    } else if(screen->screenId == ScreenEnum::SPLASHSCREEN) {
         delete screen;
-        if(menu == 0)
-            screen = new SnakeScreen(*backHandler, *highScoreHandler, highscores[2], option);
-        else if(menu == 1)
-            screen = new G2048Screen(*backHandler, *highScoreHandler, highscores[3], option);
-        else if(menu == 2)
-            screen = new TetrisScreen(*backHandler, *highScoreHandler, highscores[4], option);
-        else if(menu == 3)
-            screen = new MineScreen(*backHandler, *highScoreHandler, highscores[5], option);
-        else if(menu == 4)
-            screen = new TicScreen(*backHandler, *highScoreHandler, highscores[6], option);
-        else if(menu == 5)
-            screen = new PixelAdventureScreen(*backHandler, *highScoreHandler, highscores[7], option);
-        else if(menu == 6)
-            screen = new SettingsScreen(*backHandler, *highScoreHandler, highscores[8], option);
-        else if(menu == 7)
-            screen = new AboutScreen(*backHandler, *highScoreHandler, highscores[9], option);
+        screen = new MenuScreen(*backHandler, *highScoreHandler, newScreenId, newOption);
+    } else {
+        delete screen;
+        screen = new MenuScreen(*backHandler, *highScoreHandler, newScreenId-2, newOption);
     }
     screen->audioController = audioController;
+    shouldSwitchScreen = false;
 }
 
 int main(int argc, char *argv[]) {
     #ifdef FORMPU
     stdio_init_all();
-    sleep_ms(3000);
+    // sleep_ms(3000);
     multicore_launch_core1(&audioControllerCore);
     #endif
 
@@ -117,6 +134,7 @@ int main(int argc, char *argv[]) {
         battery->drawLevel(display);
         // printf("FPS: %d\n", int(1000 / deltaTimeMS));
         display->update();
+        checkScreenSwitch();
     }
 
     return EXIT_SUCCESS;

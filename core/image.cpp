@@ -141,16 +141,3 @@ uint16_t Image::getTextWidth(std::string text, uint8_t scaleRatio) {
     }
     return width;
 }
-
-Color Image::getColor(Vec2 pos) {
-    Unit x = ((pos.x * (Unit)this->size.w) / FRACTIONS_PER_UNIT);
-    Unit y = ((pos.y * (Unit)this->size.h) / FRACTIONS_PER_UNIT);
-    if(x < 0) x += this->size.w;
-    if(y < 0) y += this->size.h;
-    if(x >= this->size.w) x -= this->size.w;
-    if(y >= this->size.h) y -= this->size.h;
-
-    int pixIndex = (this->size.h-y) * this->size.w + x;
-    int colIndex = this->hasIndexedColors ? this->pixelData[pixIndex] : pixIndex;
-    return this->palette[colIndex];
-}

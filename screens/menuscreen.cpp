@@ -3,8 +3,7 @@
 
 MenuScreen::MenuScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Menu screen loading...");
-    this->screenId = 1;
-    this->type = Type::MENU;
+    this->screenId = ScreenEnum::MENUSCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
     this->currentMenuItem = highscore;
@@ -38,6 +37,7 @@ MenuScreen::MenuScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(ui
 }
 
 MenuScreen::~MenuScreen() {
+    printf("Destructing MenuScreen\n");
 }
 
 void MenuScreen::update(uint16_t deltaTimeMS) {
@@ -100,7 +100,7 @@ void MenuScreen::keyPressed(uint8_t key) {
         if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem+1].length() > 0 && this->currentOptionItem < 3)
             this->currentOptionItem++;
     } else if(key == KEY_A) {
-        this->returnCallBack(this->currentMenuItem, this->currentOptionItem);
+        this->returnCallBack(this->currentMenuItem+2, this->currentOptionItem);
     }
 }
 

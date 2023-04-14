@@ -2,8 +2,7 @@
 
 SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("Splash screen loading...");
-    this->screenId = 0;
-    this->type = Type::SPLASH;
+    this->screenId = ScreenEnum::SPLASHSCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
     this->imageAlpha = 0;
@@ -35,6 +34,7 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
 }
 
 SplashScreen::~SplashScreen() {
+    printf("Destructing SplashScreen\n");
 }
 
 void SplashScreen::update(uint16_t deltaTimeMS) {

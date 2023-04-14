@@ -11,12 +11,14 @@
 #define KEY_RIGHT 3
 #define KEY_A 4
 #define KEY_B 5
+#define KEY_EXIT 6
+#define KEY_COUNT 7
 
 class KeyBoard
 {
 private:
-    const uint8_t gpioPins[6] = {2, 0, 1, 3, 4, 5};
-    bool prevKeyState[6];
+    const uint8_t gpioPins[KEY_COUNT] = {2, 0, 1, 3, 4, 5, 6};
+    bool prevKeyState[KEY_COUNT];
 public:
     KeyBoard();
     ~KeyBoard();

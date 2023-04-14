@@ -2,8 +2,7 @@
 
 MineScreen::MineScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
     printf("MineSweeper screen loading...");
-    this->screenId = 3;
-    this->type = Type::GAME;
+    this->screenId = ScreenEnum::MINESCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
 
@@ -142,16 +141,14 @@ void MineScreen::keyPressed(uint8_t key) {
             }
         }
     } else if(key == KEY_B) {
-        if(this->gameState == LOST) 
-            this->returnCallBack(this->screenId, this->option);
-        else if(this->gameState == PLAYING) {
-            if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == CLOSE)
-                state[selectedY*MINE_BOARD_WIDTH+selectedX] = FLAG;
-            else if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == FLAG)
-                state[selectedY*MINE_BOARD_WIDTH+selectedX] = DOUBT;
-            else if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == DOUBT)
-                state[selectedY*MINE_BOARD_WIDTH+selectedX] = CLOSE;
-        }
+        if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == CLOSE)
+            state[selectedY*MINE_BOARD_WIDTH+selectedX] = FLAG;
+        else if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == FLAG)
+            state[selectedY*MINE_BOARD_WIDTH+selectedX] = DOUBT;
+        else if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == DOUBT)
+            state[selectedY*MINE_BOARD_WIDTH+selectedX] = CLOSE;
+    } else if(key == KEY_EXIT) {
+        this->returnCallBack(this->screenId, this->option);
     }
     // printBoard();
 }

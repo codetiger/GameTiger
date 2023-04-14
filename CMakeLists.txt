@@ -1,13 +1,18 @@
 cmake_minimum_required(VERSION 3.12)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 if(FORCPU)
     set(CMAKE_CXX_STANDARD 11)
     find_package(SDL2 REQUIRED)
 else(FORCPU)
     add_definitions ( -DFORMPU=1 )
-    include(pico_sdk_import.cmake)    
-endif(FORCPU)
+    # set(PICO_BOARD pico)
 
+    include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+    include(${PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
+
+endif(FORCPU)
 
 project(GameTiger VERSION 1.0.0)
  
@@ -20,8 +25,6 @@ add_executable(${PROJECT_NAME}
     core/tilemap.cpp
     core/level.cpp
     core/audio.cpp
-    core/intmath.cpp
-    core/scene.cpp
     screens/splashscreen.cpp
     screens/menuscreen.cpp
     screens/snakescreen.cpp
@@ -39,7 +42,17 @@ if(FORCPU)
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 else(FORCPU)
-    target_link_libraries(${PROJECT_NAME} pico_stdlib pico_multicore hardware_spi hardware_pwm hardware_adc hardware_dma hardware_flash hardware_sync)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR} )
+    target_link_libraries(${PROJECT_NAME} 
+        pico_stdlib 
+        pico_multicore 
+        hardware_spi 
+        hardware_pwm 
+        hardware_adc 
+        hardware_dma 
+        hardware_flash 
+        hardware_sync
+    )
 endif(FORCPU)
 
 if(FORCPU)

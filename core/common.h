@@ -46,7 +46,6 @@
 #include "../content/allGameAlphaSprite.h"
 #include "../content/menuSprite.h"
 #include "../content/alphanumfont.h"
-#include "../content/modelSprite.h"
 
 #include "image.h"
 #include "tilemap.h"
@@ -91,5 +90,4 @@ extern Image alphanumfont;
 extern Image allGameSprite;
 extern Image allGameAlphaSprite;
 extern Image menuSprite;
-extern Image modelSprite;
 #endif
