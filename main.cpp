@@ -3,6 +3,7 @@
 #include "core/battery.h"
 #include "core/keyboard.h"
 #include "core/audio.h"
+#include "core/lora.h"
 #include "screens/splashscreen.h"
 #include "screens/menuscreen.h"
 #include "screens/snakescreen.h"
@@ -18,17 +19,26 @@
 #define FLASH_TARGET_OFFSET (1536 * 1024)
 
 Screen *screen;
+Lora *lora;
 uint32_t highscores[64];
 AudioController *audioController = new AudioController();
 bool shouldSwitchScreen;
 uint8_t newScreenId, newOption;
 
-void audioControllerCore() {
+void secondCPUCore() {
 #ifdef FORMPU
+    printf("Second CPU Core started\n");
     while (true) {
-        int32_t num = multicore_fifo_pop_blocking();
-        if(num == AUDIO_FLAG_VALUE)
-            audioController->play();
+        printf("Second CPU Core loop\n");
+        std::string name("Hi Lora, Game Tiger");
+        const uint8_t* p = reinterpret_cast<const uint8_t*>(name.c_str());
+        lora->SendPayload((uint8_t*)p, name.length(), 5000);
+        lora->checkStatus();
+
+        sleep_ms(10000);
+        // int32_t num = multicore_fifo_pop_blocking();
+        // if(num == AUDIO_FLAG_VALUE)
+        //     audioController->play();
     }
 #endif
 }
@@ -99,8 +109,7 @@ void checkScreenSwitch() {
 int main(int argc, char *argv[]) {
     #ifdef FORMPU
     stdio_init_all();
-    // sleep_ms(3000);
-    multicore_launch_core1(&audioControllerCore);
+    sleep_ms(3000);
     #endif
 
     srand((unsigned int)time(0));
@@ -110,6 +119,11 @@ int main(int argc, char *argv[]) {
 
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();
+    lora = new Lora();
+
+    #ifdef FORMPU
+    // multicore_launch_core1(&secondCPUCore);
+    #endif
     
     screen = new SplashScreen(*backHandler, *highScoreHandler, 0, 1);
     audioController->setNoteDuration(100);

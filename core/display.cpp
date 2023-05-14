@@ -72,9 +72,9 @@ void Display::initHardware() {
     pwm_config config = pwm_get_default_config();
     pwm_config_set_clkdiv(&config, 4.f);
     pwm_init(slice_num, &config, true);
-    this->setBrightness(50);
+    this->setBrightness(100);
 
-    int br = spi_init(spi1, 62.5 * 1000 * 1000);
+    int br = spi_init(spi1, 62.5 * 1000 * 1000); //62.5
     // printf("Display baudrate: %d\n", br);
 
     gpio_set_function(SCK_PIN, GPIO_FUNC_SPI);
@@ -85,7 +85,7 @@ void Display::initSequence() {
     this->reset();
     gpio_put(CS_PIN, 0);
 
-    this->sendData(0x36, (uint8_t)0x78);
+    this->sendData(0x36, (uint8_t)0xB8);  //0xB8 or 0x78 rotation
     this->sendData(0x3A, 0x05);
 
     this->write_cmd(0x21);

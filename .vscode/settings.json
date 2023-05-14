@@ -57,7 +57,8 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "coroutine": "cpp"
+        "coroutine": "cpp",
+        "sync.h": "c"
     },
     "C_Cpp.dimInactiveRegions": false
 }

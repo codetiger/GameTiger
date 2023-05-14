@@ -5,7 +5,7 @@
 
 class AudioController {
 private:
-    const uint8_t BUZZER_PIN = 15;
+    const uint8_t BUZZER_PIN = 27;
     uint16_t slice = 0;
     uint8_t channel = 0;
 #ifdef FORMPU

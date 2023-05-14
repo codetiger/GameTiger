@@ -150,7 +150,6 @@ def processSprite(imageList, image_name, image_width, image_height, hasIndexedCo
     sprite.save(image_width, image_height, image_name)
     sprite = None
 
-
 allGameAlphaSpriteList = [
     ("ninjafrog/fruits/Apple.png", "AppleAnimSeq", 32, 32, 10, 8, 8, 5, 9),
     ("ninjafrog/fruits/Bananas.png", "BananasAnimSeq", 32, 32, 12, 7, 7, 5, 8),
@@ -197,6 +196,20 @@ allGameSpriteList = [
 ]
 # processSprite(allGameSpriteList, "allGameSprite", 330, 256, False)
 
+# 2MB limit
+# menuSpriteList = [
+#     ("menu/snake.png", "menuItemFrames", 96, 96, 16, 0, 0, 0, 0),
+#     ("menu/g2048.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
+#     ("menu/tetris.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
+#     ("menu/mine.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
+#     ("menu/ttt.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
+#     ("menu/ninjafrog.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
+#     ("menu/settings.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
+#     ("menu/about.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
+#     ("menu/tiger.png", "tigerFrame", 128, 128, 64, 0, 0, 0, 0),
+# ]
+# processSprite(menuSpriteList, "menuSprite", 320, 320, True)
+
 menuSpriteList = [
     ("menu/snake.png", "menuItemFrames", 96, 96, 16, 0, 0, 0, 0),
     ("menu/g2048.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
@@ -206,17 +219,7 @@ menuSpriteList = [
     ("menu/ninjafrog.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
     ("menu/settings.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
     ("menu/about.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
-    ("menu/tiger.png", "tigerFrame", 128, 128, 64, 0, 0, 0, 0),
+    ("menu/tiger.png", "tigerFrame", 128, 128, 96, 0, 0, 0, 0),
 ]
-# processSprite(menuSpriteList, "menuSprite", 320, 320, True)
-
-cubeImageList = [
-    ("../3dmodel/cube.png", "cubeTexture", 64, 64, 64, 0, 0, 0, 0),
-]
-# processSprite(cubeImageList, "modelSprite", 64, 64, False)
-
-diabloImageList = [
-    ("../3dmodel/diablo.png", "diabloTexture", 64, 64, 128, 0, 0, 0, 0),
-]
-processSprite(diabloImageList, "modelSprite", 64, 64, False)
+processSprite(menuSpriteList, "menuSprite", 320, 320, True)
 

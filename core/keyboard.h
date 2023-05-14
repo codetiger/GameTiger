@@ -5,6 +5,10 @@
 #ifndef _GAME_TIGER_KEYBOARD_H
 #define _GAME_TIGER_KEYBOARD_H
 
+#define ADDR 0x27
+#define I2CSDA 2
+#define I2CSCL 3
+
 #define KEY_UP 0
 #define KEY_DOWN 1
 #define KEY_LEFT 2
@@ -17,7 +21,7 @@
 class KeyBoard
 {
 private:
-    const uint8_t gpioPins[KEY_COUNT] = {2, 0, 1, 3, 4, 5, 6};
+    const uint8_t pinId[KEY_COUNT] = {11, 8, 9, 10, 6, 7, 5};
     bool prevKeyState[KEY_COUNT];
 public:
     KeyBoard();

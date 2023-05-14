@@ -1,14 +1,21 @@
 #include "keyboard.h"
 
 KeyBoard::KeyBoard() {
-    printf("Keyboard driver loading...");
+    printf("Keyboard driver loading...\n");
+    for (uint8_t i = 0; i < KEY_COUNT; i++)
+        this->prevKeyState[i] == false;
 #ifdef FORMPU
-    for (int i = 0; i < KEY_COUNT; i++) {
-        this->prevKeyState[i] = false;
-        gpio_init(this->gpioPins[i]);
-        gpio_set_dir(this->gpioPins[i], GPIO_IN);
-        gpio_pull_up(this->gpioPins[i]);
-    }
+    int br = i2c_init(i2c1, 400 * 1000);
+    printf("PCF8575 baudrate: %d\n", br);
+    gpio_set_function(I2CSDA, GPIO_FUNC_I2C);
+    gpio_set_function(I2CSCL, GPIO_FUNC_I2C);
+
+    uint8_t keystate[2];
+    keystate[0] = 0xff;
+    keystate[1] = 0xff;
+    int ret = i2c_write_blocking(i2c1, ADDR, keystate, 2, false);
+    if(ret <= 0)
+        printf("Error: %d\n", ret);
 #endif
     printf("Done\n");
 }
@@ -18,17 +25,25 @@ KeyBoard::~KeyBoard() {
 
 void KeyBoard::checkKeyState(Screen *screen) {
 #ifdef FORMPU
-    for (uint8_t i = 0; i < KEY_COUNT; i++) {
-        bool keyState = gpio_get(this->gpioPins[i]);
-        if (this->prevKeyState[i] != keyState) {
-            if (keyState) 
-                screen->keyPressed(i);
-            else
-                screen->keyReleased(i);
-        } else if(keyState)
-            screen->keyDown(i);
-        this->prevKeyState[i] = keyState;
+    uint8_t keystate[2];
+    int ret = i2c_read_blocking(i2c1, ADDR, keystate, 2, false);
+    uint state = ~(keystate[0] | (keystate[1] << 8));
+    if(ret <= 0)
+        printf("Error: %d\n", ret);
+    else if(screen && state != 0xffff) {
+        for (uint8_t i = 0; i < KEY_COUNT; i++) {
+            bool keyState = (state >> pinId[i]) & 1;
+            if (this->prevKeyState[i] != keyState) {
+                if (keyState) 
+                    screen->keyPressed(i);
+                else
+                    screen->keyReleased(i);
+            } else if(keyState)
+                screen->keyDown(i);
+            this->prevKeyState[i] = keyState;
+        }
     }
+
 #else
     SDL_Event event; 
     while (SDL_PollEvent(&event)) {

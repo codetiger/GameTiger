@@ -30,7 +30,7 @@ A Retro style game console designed and built entirely for educational purpose a
 ![Ninja Frog Game GameTiger Console](/docs/NinjaFrog.gif)
 
 ## Component specification
-*  MCU RP2040
+*  MCU RP2040 (Adafruit Feather RP2040)
     *  32-bit dual ARM Cortex-M0+ Microcontroller
     *  133 MHz Clock speed
     *  264 KB SRAM
@@ -43,6 +43,7 @@ A Retro style game console designed and built entirely for educational purpose a
     *  Driver: ST7789
     *  Backlight: LED
     *  Operating voltage: 3.3V/5V
+*  PCF8575 16 Bit I/O Expander Module
 *  Tactile Buttons
 *  LiPo SHIM for Pico by Pimoroni
     *  MCP73831 charger
@@ -55,23 +56,23 @@ A Retro style game console designed and built entirely for educational purpose a
 ## Wiring 
 The components are based on standard interfaces and thus nothing complicated in wiring. You can feel free to use different GPIO pins based on lot of tutorials but this is what I've used and configured in the software as default. 
 
-| Component | Pin | Pico GPIO | Description |
-|--|--|--|--|
-|LCD|VCC|VSYS|Power Input|
-||GND|GND|Ground|
-||DIN|GP11|MOSI pin of SPI, data transmitted|
-||CLK|GP10|SCK pin of SPI, clock pin|
-||CS|GP9|Chip selection of SPI, low active|
-||DC|GP8|Data/Command control pin (High:data; Low: command)|
-||RST|GP12|Reset pin, low active|
-||BL|GP13|Backlight control|
-|Buttons|Up|GPIO2|Up button in the keypad|
-||Down|GPIO0|Down button in the keypad|
-||Left|GPIO1|Left button in the keypad|
-||Right|GPIO3|Right button in the keypad|
-||A|GPIO4|A (Action) button in the keypad|
-||B|GPIO5|B (Back) button in the keypad|
-|LiPo SHIM| | | Directly mounted on Pico based on datasheet|
+| Component | Pin | Pico GPIO | Adafruit Feather RP2040 | Description |
+|--|--|--|--|--|
+|LCD|VCC|VSYS|3.3v pin|Power Input|
+||GND|GND|GND|Ground|
+||DIN|GP11|GPIO11|MOSI pin of SPI, data transmitted|
+||CLK|GP10|GPIO10|SCK pin of SPI, clock pin|
+||CS|GP9|GPIO9|Chip selection of SPI, low active|
+||DC|GP8|GPIO8|Data/Command control pin (High:data; Low: command)|
+||RST|GP12|GPIO13|Reset pin, low active|
+||BL|GP13|GPIO12|Backlight control|
+|Buttons|Up|GPIO2||Up button in the keypad|
+||Down|GPIO0||Down button in the keypad|
+||Left|GPIO1||Left button in the keypad|
+||Right|GPIO3||Right button in the keypad|
+||A|GPIO4||A (Action) button in the keypad|
+||B|GPIO5||B (Back) button in the keypad|
+|LiPo SHIM| | | | Directly mounted on Pico based on datasheet|
 ____
 
 ## Software

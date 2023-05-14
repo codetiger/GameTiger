@@ -6,12 +6,12 @@
 
 class Display {
 private:
-    const uint8_t CS_PIN = 9;
-    const uint8_t BL_PIN = 13;
-    const uint8_t DC_PIN = 8;
-    const uint8_t RST_PIN = 12;
     const uint8_t MOSI_PIN = 11;
     const uint8_t SCK_PIN = 10;
+    const uint8_t CS_PIN = 9;
+    const uint8_t DC_PIN = 8;
+    const uint8_t RST_PIN = 13;
+    const uint8_t BL_PIN = 12;
 
 #ifdef FORMPU
     void write_cmd(const uint8_t cmd);

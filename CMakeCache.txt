@@ -234,6 +234,9 @@ GameTiger_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 GameTiger_SOURCE_DIR:STATIC=/Users/harishankar/Development/GameTiger-Console
 
+//No help, variable specified on the command line.
+PICO_BOARD:UNINITIALIZED=adafruit_feather_rp2040
+
 
 ########################
 # INTERNAL cache entries
