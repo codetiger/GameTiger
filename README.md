@@ -43,7 +43,8 @@ A Retro style game console designed and built entirely for educational purpose a
     *  Driver: ST7789
     *  Backlight: LED
     *  Operating voltage: 3.3V/5V
-*  PCF8575 16 Bit I/O Expander Module
+*  PCF8575 16Bit I/O Expander Module
+*  SX1262 LoRa Module
 *  Tactile Buttons
 *  LiPo SHIM for Pico by Pimoroni
     *  MCP73831 charger
