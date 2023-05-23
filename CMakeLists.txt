@@ -22,6 +22,8 @@ project(GameTiger VERSION 1.0.0)
  
 add_executable(${PROJECT_NAME} 
     core/common.cpp
+    core/sx126x_driver/src/sx126x_rp2040_hal.cpp
+    core/sx126x_driver/src/sx126x.cpp
     core/display.cpp
     core/image.cpp
     core/battery.cpp
@@ -29,7 +31,6 @@ add_executable(${PROJECT_NAME}
     core/tilemap.cpp
     core/level.cpp
     core/audio.cpp
-    core/SX126x.cpp
     core/lora.cpp
     screens/splashscreen.cpp
     screens/menuscreen.cpp

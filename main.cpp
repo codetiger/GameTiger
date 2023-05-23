@@ -29,13 +29,9 @@ void secondCPUCore() {
 #ifdef FORMPU
     printf("Second CPU Core started\n");
     while (true) {
-        printf("Second CPU Core loop\n");
-        std::string name("Hi Lora, Game Tiger");
-        const uint8_t* p = reinterpret_cast<const uint8_t*>(name.c_str());
-        lora->SendPayload((uint8_t*)p, name.length(), 5000);
-        lora->checkStatus();
-
-        sleep_ms(10000);
+        char payload[] = "Hi Lora, GameTiger";
+        lora->SendData(payload, strlen(payload));
+        sleep_ms(5000);
         // int32_t num = multicore_fifo_pop_blocking();
         // if(num == AUDIO_FLAG_VALUE)
         //     audioController->play();
@@ -122,7 +118,7 @@ int main(int argc, char *argv[]) {
     lora = new Lora();
 
     #ifdef FORMPU
-    // multicore_launch_core1(&secondCPUCore);
+    multicore_launch_core1(&secondCPUCore);
     #endif
     
     screen = new SplashScreen(*backHandler, *highScoreHandler, 0, 1);

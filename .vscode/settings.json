@@ -58,7 +58,9 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "coroutine": "cpp",
-        "sync.h": "c"
+        "sync.h": "c",
+        "sx126x_regs.h": "c",
+        "sx126x_hal.h": "c"
     },
     "C_Cpp.dimInactiveRegions": false
 }
