@@ -1,7 +1,7 @@
 #include "minescreen.h"
 
 MineScreen::MineScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("MineSweeper screen loading...");
+    printf("[MineScreen] loading...\n");
     this->screenId = ScreenEnum::MINESCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -14,7 +14,7 @@ MineScreen::MineScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(ui
 
     resetBoard();
     // printBoard();
-    printf("Done\n");
+    printf("[MineScreen] Done\n");
 }
 
 MineScreen::~MineScreen() {

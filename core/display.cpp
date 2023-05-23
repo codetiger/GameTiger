@@ -4,26 +4,26 @@
 #include <memory>
 
 Display::Display() {
-    printf("Display driver loading... ");
+    printf("[Display] driver loading...\n");
     this->buffer = new Color[DISPLAY_WIDTH * DISPLAY_HEIGHT];
 #ifdef FORMPU
     this->initHardware();
     this->initSequence();
 #else
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-		printf("SDL_Init Error: %s\n", SDL_GetError());
+		printf("[Display] SDL_Init Error: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
 	}
 
 	this->window = SDL_CreateWindow("GameTiger!", 100, 100, DISPLAY_WIDTH, DISPLAY_HEIGHT, SDL_WINDOW_SHOWN);
 	if (this->window == NULL) {
-		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
+		printf("[Display] SDL_CreateWindow Error: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
 	}
 
 	this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (this->renderer == NULL) {
-		printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
+		printf("[Display] SDL_CreateRenderer Error: %s\n", SDL_GetError());
 		SDL_DestroyWindow(this->window);
 		SDL_Quit();
         exit(EXIT_FAILURE);
@@ -31,7 +31,7 @@ Display::Display() {
     SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
     SDL_RenderClear(this->renderer);
 #endif
-    printf("Done\n");
+    printf("[Display] Done\n");
 }
 
 #ifdef FORMPU

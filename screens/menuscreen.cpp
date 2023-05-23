@@ -2,7 +2,7 @@
 #include "../core/keyboard.h"
 
 MenuScreen::MenuScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("Menu screen loading...");
+    printf("[MenuScreen] loading...\n");
     this->screenId = ScreenEnum::MENUSCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -33,11 +33,11 @@ MenuScreen::MenuScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(ui
     this->bgLayer->addTileInfo(1, tinfo);
     tinfo.color = Color(252, 183, 35);
     this->bgLayer->addTileInfo(2, tinfo);
-    printf("Done\n");
+    printf("[MenuScreen] Done\n");
 }
 
 MenuScreen::~MenuScreen() {
-    printf("Destructing MenuScreen\n");
+    printf("[MenuScreen] Destructing\n");
 }
 
 void MenuScreen::update(uint16_t deltaTimeMS) {

@@ -27,7 +27,7 @@ uint8_t newScreenId, newOption;
 
 void secondCPUCore() {
 #ifdef FORMPU
-    printf("Second CPU Core started\n");
+    printf("[Main] Second CPU Core started\n");
     while (true) {
         char payload[] = "Hi Lora, GameTiger";
         lora->SendData(payload, strlen(payload));
@@ -90,7 +90,7 @@ void checkScreenSwitch() {
         else if(newScreenId == ScreenEnum::ABOUTSCREEN)
             screen = new AboutScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
         else
-            printf("Something failed badly\n");
+            printf("[Main] Something failed badly\n");
     } else if(screen->screenId == ScreenEnum::SPLASHSCREEN) {
         delete screen;
         screen = new MenuScreen(*backHandler, *highScoreHandler, newScreenId, newOption);
@@ -108,6 +108,7 @@ int main(int argc, char *argv[]) {
     sleep_ms(3000);
     #endif
 
+    printf("[Main] Starting\n");
     srand((unsigned int)time(0));
     readHighScoreData(); 
     Display *display = new Display();
@@ -142,7 +143,7 @@ int main(int argc, char *argv[]) {
         screen->draw(display);
 
         battery->drawLevel(display);
-        // printf("FPS: %d\n", int(1000 / deltaTimeMS));
+        // printf("[Main] FPS: %d\n", int(1000 / deltaTimeMS));
         display->update();
         checkScreenSwitch();
     }

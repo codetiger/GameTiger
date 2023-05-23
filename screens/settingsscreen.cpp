@@ -1,7 +1,7 @@
 #include "settingsscreen.h"
 
 SettingsScreen::SettingsScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("Setting screen loading...");
+    printf("[SettingsScreen] loading...\n");
     this->screenId = ScreenEnum::SETTINGSSCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -29,7 +29,7 @@ SettingsScreen::SettingsScreen(void (*rcb)(int8_t menu, uint8_t option), void (*
     tinfo.color = Color(198, 151, 178);
     this->bgLayer->addTileInfo(2, tinfo);
 
-    printf("Done\n");
+    printf("[SettingsScreen] Done\n");
 }
 
 SettingsScreen::~SettingsScreen() {

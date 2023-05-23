@@ -2,7 +2,7 @@
 #include "../content/pa2levels.h"
 
 PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("Pixel screen loading...");
+    printf("[PixelAdventureScreen] loading...\n");
     this->screenId = ScreenEnum::PA2SCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -11,7 +11,7 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->loadLevel(this->option-1);
     this->level->audioController = this->audioController;
 
-    printf("Done\n");
+    printf("[PixelAdventureScreen] Done\n");
 }
 
 PixelAdventureScreen::~PixelAdventureScreen() {

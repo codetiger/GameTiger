@@ -3,7 +3,7 @@
 /* Board move/combine code is copied from https://github.com/yerzhan7/2048/blob/master/2048/game.cpp */
 
 G2048Screen::G2048Screen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("2048 screen loading...");
+    printf("[G2048Screen] loading...\n");
     this->screenId = ScreenEnum::G2048SCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -17,7 +17,7 @@ G2048Screen::G2048Screen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(
         board[i] = 0;
     this->addRandomBlock();
     this->addRandomBlock();
-    printf("Done\n");
+    printf("[G2048Screen] Done\n");
 }
 
 G2048Screen::~G2048Screen() {

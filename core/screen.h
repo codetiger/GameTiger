@@ -19,7 +19,7 @@ public:
     virtual void keyDown(uint8_t key) = 0;
 
     virtual ~Screen() {
-        printf("Destructing base screen\n");
+        // printf("[Screen] Destructing base screen\n");
     }
     uint8_t screenId = 0;
     AudioController *audioController;

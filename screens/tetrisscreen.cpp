@@ -1,7 +1,7 @@
 #include "tetrisscreen.h"
 
 TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t hs, uint8_t option) {
-    printf("Tetris screen loading...");
+    printf("[TetrisScreen] loading...\n");
     this->screenId = ScreenEnum::TETRISSCREEN;
     this->highScore = hs;
     this->returnCallBack = rcb;
@@ -19,7 +19,7 @@ TetrisScreen::TetrisScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     createNewBlock();
     createNewBlock();
     createNewBlock();
-    printf("Done\n");
+    printf("[TetrisScreen] Done\n");
 }
 
 TetrisScreen::~TetrisScreen() {

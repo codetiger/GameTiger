@@ -2,7 +2,7 @@
 #include <algorithm> 
 
 TicScreen::TicScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("Tic screen loading...");
+    printf("[TicScreen] loading...\n");
     this->screenId = ScreenEnum::TICSCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -25,7 +25,7 @@ TicScreen::TicScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint
         for (uint8_t x = 0; x < TIC_BOARDSIZE; x++)
             board.setCellValue(x, y, E_TIC);
     // printBoard();
-    printf("Done\n");
+    printf("[TicScreen] Done\n");
 }
 
 TicScreen::~TicScreen() {

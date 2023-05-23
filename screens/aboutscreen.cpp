@@ -1,7 +1,7 @@
 #include "aboutscreen.h"
 
 AboutScreen::AboutScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("About screen loading...");
+    printf("[AboutScreen] loading...\n");
     this->screenId = ScreenEnum::ABOUTSCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -28,7 +28,7 @@ AboutScreen::AboutScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(
     this->bgLayer->addTileInfo(1, tinfo);
     tinfo.color = Color(130, 188, 132);
     this->bgLayer->addTileInfo(2, tinfo);
-    printf("Done\n");
+    printf("[AboutScreen] Done\n");
 }
 
 AboutScreen::~AboutScreen() {

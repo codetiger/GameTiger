@@ -1,12 +1,12 @@
 #include "keyboard.h"
 
 KeyBoard::KeyBoard() {
-    printf("Keyboard driver loading...\n");
+    printf("[Keyboard] driver loading...\n");
     for (uint8_t i = 0; i < KEY_COUNT; i++)
         this->prevKeyState[i] == false;
 #ifdef FORMPU
     int br = i2c_init(i2c1, 400 * 1000);
-    printf("PCF8575 baudrate: %d\n", br);
+    printf("[Keyboard] PCF8575 baudrate: %d\n", br);
     gpio_set_function(I2CSDA, GPIO_FUNC_I2C);
     gpio_set_function(I2CSCL, GPIO_FUNC_I2C);
 
@@ -15,9 +15,9 @@ KeyBoard::KeyBoard() {
     keystate[1] = 0xff;
     int ret = i2c_write_blocking(i2c1, ADDR, keystate, 2, false);
     if(ret <= 0)
-        printf("Error: %d\n", ret);
+        printf("[Keyboard] Error: %d\n", ret);
 #endif
-    printf("Done\n");
+    printf("[Keyboard] Done\n");
 }
 
 KeyBoard::~KeyBoard() {
@@ -29,7 +29,7 @@ void KeyBoard::checkKeyState(Screen *screen) {
     int ret = i2c_read_blocking(i2c1, ADDR, keystate, 2, false);
     uint state = ~(keystate[0] | (keystate[1] << 8));
     if(ret <= 0)
-        printf("Error: %d\n", ret);
+        printf("[Keyboard] Error: %d\n", ret);
     else if(screen && state != 0xffff) {
         for (uint8_t i = 0; i < KEY_COUNT; i++) {
             bool keyState = (state >> pinId[i]) & 1;

@@ -1,7 +1,7 @@
 #include "splashscreen.h"
 
 SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t highscore, uint8_t option) {
-    printf("Splash screen loading...");
+    printf("[SplashScreen] loading...\n");
     this->screenId = ScreenEnum::SPLASHSCREEN;
     this->returnCallBack = rcb;
     this->highScoreCallBack = hscb;
@@ -30,11 +30,11 @@ SplashScreen::SplashScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb
     this->bgLayer->addTileInfo(1, tinfo);
     tinfo.color = Color(135, 220, 255);
     this->bgLayer->addTileInfo(2, tinfo);
-    printf("Done\n");
+    printf("[SplashScreen] Done\n");
 }
 
 SplashScreen::~SplashScreen() {
-    printf("Destructing SplashScreen\n");
+    printf("[SplashScreen] Destructing\n");
 }
 
 void SplashScreen::update(uint16_t deltaTimeMS) {
@@ -67,7 +67,7 @@ void SplashScreen::draw(Display *display) {
 
 void SplashScreen::keyPressed(uint8_t key) {
     const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
-    printf("Key: %c\n", c[key]);
+    printf("[SplashScreen] Key: %c\n", c[key]);
 }
 
 void SplashScreen::keyReleased(uint8_t key) {

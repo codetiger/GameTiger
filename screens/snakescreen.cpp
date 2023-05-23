@@ -1,7 +1,7 @@
 #include "snakescreen.h"
 
 SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(uint32_t highscore), uint32_t hs, uint8_t option) {
-    printf("Snake screen loading...");
+    printf("[SnakeScreen] loading...");
     this->screenId = ScreenEnum::SNAKESCREEN;
     this->highScore = hs;
     this->returnCallBack = rcb;
@@ -17,7 +17,7 @@ SnakeScreen::SnakeScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hscb)(
 
     this->lastUpdate = getTime();
     this->gameSpeed = 1;
-    printf("Done\n");
+    printf("[SnakeScreen] Done\n");
 }
 
 SnakeScreen::~SnakeScreen() {
