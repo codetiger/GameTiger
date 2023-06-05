@@ -46,7 +46,6 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "hardware/spi.h"
 
 /*
  * -----------------------------------------------------------------------------
@@ -62,6 +61,11 @@ extern "C" {
  * @brief Write this to SPI bus while reading data, or as a dummy/placeholder
  */
 #define SX126X_NOP ( 0x00 )
+
+#ifndef RP2040
+#define GPIO_OUT 1
+#define GPIO_IN 0
+#endif
 
 /*
  * -----------------------------------------------------------------------------
@@ -79,9 +83,15 @@ typedef struct {
     uint8_t reset;
     uint8_t busy;
     uint8_t irq;
-    uint8_t rxen;
-    uint8_t txen;
-    spi_inst_t *spi;
+    uint8_t sck;
+    uint8_t mosi;
+    uint8_t miso;
+    int8_t txen;
+    int8_t rxen;
+    int baudrate;
+    #ifdef RP2040
+    bool spi;
+    #endif
 } sx126x_hal_t;
 
 /*

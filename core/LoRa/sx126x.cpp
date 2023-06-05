@@ -502,9 +502,11 @@ sx126x_status_t sx126x_set_dio_irq_params( const void* context, const uint16_t i
                                            const uint16_t dio2_mask, const uint16_t dio3_mask )
 {
     const uint8_t buf[SX126X_SIZE_SET_DIO_IRQ_PARAMS] = {
-        SX126X_SET_DIO_IRQ_PARAMS,     ( uint8_t )( irq_mask >> 8 ),  ( uint8_t )( irq_mask >> 0 ),
-        ( uint8_t )( dio1_mask >> 8 ), ( uint8_t )( dio1_mask >> 0 ), ( uint8_t )( dio2_mask >> 8 ),
-        ( uint8_t )( dio2_mask >> 0 ), ( uint8_t )( dio3_mask >> 8 ), ( uint8_t )( dio3_mask >> 0 ),
+        SX126X_SET_DIO_IRQ_PARAMS,     
+        ( uint8_t )( irq_mask >> 8 ),  ( uint8_t )( irq_mask >> 0 ),
+        ( uint8_t )( dio1_mask >> 8 ), ( uint8_t )( dio1_mask >> 0 ), 
+        ( uint8_t )( dio2_mask >> 8 ), ( uint8_t )( dio2_mask >> 0 ), 
+        ( uint8_t )( dio3_mask >> 8 ), ( uint8_t )( dio3_mask >> 0 ),
     };
 
     return ( sx126x_status_t ) sx126x_hal_write( context, buf, SX126X_SIZE_SET_DIO_IRQ_PARAMS, 0, 0 );

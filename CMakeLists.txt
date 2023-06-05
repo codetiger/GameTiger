@@ -6,6 +6,7 @@ if(FORCPU)
     find_package(SDL2 REQUIRED)
 else(FORCPU)
     add_definitions ( -DFORMPU=1 )
+    add_definitions ( -DRP2040=1 )
 
     set(PICO_BOARD adafruit_feather_rp2040)
     set(PICO_SDK_PATH /Users/harishankar/Development/pico-sdk )
@@ -22,8 +23,8 @@ project(GameTiger VERSION 1.0.0)
  
 add_executable(${PROJECT_NAME} 
     core/common.cpp
-    core/sx126x_driver/src/sx126x_rp2040_hal.cpp
-    core/sx126x_driver/src/sx126x.cpp
+    core/LoRa/sx126x_hal.cpp
+    core/LoRa/sx126x.cpp
     core/display.cpp
     core/image.cpp
     core/battery.cpp
@@ -31,7 +32,7 @@ add_executable(${PROJECT_NAME}
     core/tilemap.cpp
     core/level.cpp
     core/audio.cpp
-    core/lora.cpp
+    core/LoRa/lora.cpp
     screens/splashscreen.cpp
     screens/menuscreen.cpp
     screens/snakescreen.cpp
