@@ -15,7 +15,7 @@ void LogPrintf(const char *format, ...) {
 #endif
 
 
-Lora::Lora(int8_t power) {
+Lora::Lora() {
     LogPrintf("[Lora] Loading driver...\n");
 
     #ifdef RP2040
@@ -201,7 +201,7 @@ void Lora::SetRxEnable() {
     }
 }
 
-void Lora::SendData(char* data, uint8_t length) {
+void Lora::SendData(int8_t power, char* data, uint8_t length) {
 	sx126x_set_standby(&context, SX126X_STANDBY_CFG_RC);
 	sx126x_status_t status = sx126x_set_buffer_base_address(&context, 0x00, 0x00);
 	if(status != SX126X_STATUS_OK)
@@ -222,7 +222,7 @@ void Lora::SendData(char* data, uint8_t length) {
 	if(status != SX126X_STATUS_OK)
 		LogPrintf("[Lora] Error in write_buffer: %d\n", status);
 
-	status = sx126x_set_tx_params(&context, 10, SX126X_RAMP_200_US);
+	status = sx126x_set_tx_params(&context, power, SX126X_RAMP_200_US);
 	if(status != SX126X_STATUS_OK)
 		LogPrintf("[Lora] Error in set_tx_params: %d\n", status);
 

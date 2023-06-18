@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
 
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();
-    lora = new Lora(20);
+    lora = new Lora();
     lora->SetToReceiveMode();
 
     #ifdef FORMPU

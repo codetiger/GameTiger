@@ -15,10 +15,10 @@ private:
     void receiveData();
 public:
 
-    Lora(int8_t power);
+    Lora();
     ~Lora();
 
-	void SendData(char* data, uint8_t length);
+	void SendData(int8_t power, char* data, uint8_t length);
     void ProcessIrq();
     void SetToReceiveMode();
 

@@ -11,7 +11,7 @@ void setup() {
   Serial.println("[Main] Setting up Lora Chip");
   SPI.begin();
   
-  lora = new Lora(20);
+  lora = new Lora();
   lora->SetRxEnable();
   Serial.println("[Main] Done");
 }
@@ -20,7 +20,7 @@ void loop() {
   digitalWrite(LED_GPIO, LOW);
 
   char payload[] = "Hi Lora, GameTiger";
-  lora->SendData(payload, strlen(payload));
+  lora->SendData(22, payload, strlen(payload));
   uint16_t delta = 0;
   do {
       delta += 50;
