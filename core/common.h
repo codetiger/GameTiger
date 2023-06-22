@@ -10,7 +10,9 @@
     #include "hardware/sync.h"
     #include "hardware/clocks.h"
     #include "hardware/i2c.h"
-    
+    #include "hardware/vreg.h"
+    #include "hardware/pll.h" // don't forget to add hardware_pll to your Cmakelists.txt
+
     #define timetype uint32_t
 #else
     #include <cstdint>
@@ -48,6 +50,7 @@
 #include "../content/allGameSprite.h"
 #include "../content/allGameAlphaSprite.h"
 #include "../content/menuSprite.h"
+#include "../content/logoSprite.h"
 #include "../content/alphanumfont.h"
 
 #include "image.h"
@@ -71,4 +74,5 @@ extern Image alphanumfont;
 extern Image allGameSprite;
 extern Image allGameAlphaSprite;
 extern Image menuSprite;
+extern Image logoSprite;
 #endif

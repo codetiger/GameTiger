@@ -7,6 +7,7 @@
 #include "screens/splashscreen.h"
 #include "screens/menuscreen.h"
 #include "screens/snakescreen.h"
+#include "screens/gameboyscreen.h"
 #include "screens/g2048screen.h"
 #include "screens/tetrisscreen.h"
 #include "screens/minescreen.h"
@@ -80,6 +81,8 @@ void checkScreenSwitch() {
         delete screen;
         if(newScreenId == ScreenEnum::SNAKESCREEN)
             screen = new SnakeScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
+        else if(newScreenId == ScreenEnum::GAMEBOYSCREEN)
+            screen = new GameBoyScreen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
         else if(newScreenId == ScreenEnum::G2048SCREEN)
             screen = new G2048Screen(*backHandler, *highScoreHandler, highscores[newScreenId], newOption);
         else if(newScreenId == ScreenEnum::TETRISSCREEN)
@@ -107,17 +110,70 @@ void checkScreenSwitch() {
     shouldSwitchScreen = false;
 }
 
+void gset_sys_clock_pll(uint32_t vco_freq, uint post_div1, uint post_div2) {
+    if (!running_on_fpga()) {
+        clock_configure(clk_sys,
+                        CLOCKS_CLK_SYS_CTRL_SRC_VALUE_CLKSRC_CLK_SYS_AUX,
+                        CLOCKS_CLK_SYS_CTRL_AUXSRC_VALUE_CLKSRC_PLL_USB,
+                        48 * MHZ,
+                        48 * MHZ);
+
+        pll_init(pll_sys, 1, vco_freq, post_div1, post_div2);
+        uint32_t freq = vco_freq / (post_div1 * post_div2);
+
+        // Configure clocks
+        // CLK_REF = XOSC (12MHz) / 1 = 12MHz
+        clock_configure(clk_ref,
+                        CLOCKS_CLK_REF_CTRL_SRC_VALUE_XOSC_CLKSRC,
+                        0, // No aux mux
+                        12 * MHZ,
+                        12 * MHZ);
+
+        // CLK SYS = PLL SYS (125MHz) / 1 = 125MHz
+        clock_configure(clk_sys,
+                        CLOCKS_CLK_SYS_CTRL_SRC_VALUE_CLKSRC_CLK_SYS_AUX,
+                        CLOCKS_CLK_SYS_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS,
+                        freq, freq);
+
+        // clock_configure(clk_peri,
+        //                 0, // Only AUX mux on ADC
+        //                 CLOCKS_CLK_PERI_CTRL_AUXSRC_VALUE_CLKSRC_PLL_USB,
+        //                 125 * MHZ,
+        //                 125 * MHZ);
+    }
+}
+
+static inline bool gset_sys_clock_khz(uint32_t freq_khz, bool required) {
+    uint vco, postdiv1, postdiv2;
+    if (check_sys_clock_khz(freq_khz, &vco, &postdiv1, &postdiv2)) {
+        printf("vco: %d, postdiv1: %d, postdiv2: %d\n", vco, postdiv1, postdiv2);
+        gset_sys_clock_pll(vco, postdiv1, postdiv2);
+        return true;
+    } else if (required) 
+        panic("System clock of %u kHz cannot be exactly achieved", freq_khz);
+
+    return false;
+}
+
 int main(int argc, char *argv[]) {
     #ifdef FORMPU
     stdio_init_all();
-    sleep_ms(3000);
+    sleep_ms(2000);
     #endif
 
     printf("[Main] Starting\n");
     srand((unsigned int)time(0));
     readHighScoreData(); 
     Display *display = new Display();
+    display->initDMAChannel();
+    display->initSequence();
     display->clear(Color(255, 255, 255));
+    display->update();
+    sleep_ms(500);
+    vreg_set_voltage(VREG_VOLTAGE_1_20);
+    sleep_ms(1);
+    gset_sys_clock_khz(250000, true);
+    sleep_ms(500);
 
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();

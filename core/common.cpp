@@ -9,6 +9,7 @@ Image alphanumfont = Image(Size2(alphanumfont_img_width, alphanumfont_img_height
 Image allGameAlphaSprite = Image(Size2(allGameAlphaSpriteWidth, allGameAlphaSpriteHeight), allGameAlphaSpriteColorCount, (Color*)allGameAlphaSpritePaletteColors, (uint8_t*)allGameAlphaSpritePaletteAlphas, (uint8_t*)allGameAlphaSpritePixelData, (uint16_t*)allGameAlphaSpriteSpriteData);
 Image menuSprite = Image(Size2(menuSpriteWidth, menuSpriteHeight), menuSpriteColorCount, (Color*)menuSpritePaletteColors, (uint8_t*)menuSpritePaletteAlphas, (uint8_t*)menuSpritePixelData, (uint16_t*)menuSpriteSpriteData);
 Image allGameSprite = Image(Size2(allGameSpriteWidth, allGameSpriteHeight), (Color*)allGameSpritePixelData, (uint16_t*)allGameSpriteSpriteData);
+Image logoSprite = Image(Size2(logoSpriteWidth, logoSpriteHeight), logoSpriteColorCount, (Color*)logoSpritePaletteColors, (uint8_t*)logoSpritePaletteAlphas, (uint8_t*)logoSpritePixelData, (uint16_t*)logoSpriteSpriteData);
 
 timetype getTime() {
     timetype now;

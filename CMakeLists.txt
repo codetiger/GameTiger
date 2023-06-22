@@ -36,6 +36,7 @@ add_executable(${PROJECT_NAME}
     screens/splashscreen.cpp
     screens/menuscreen.cpp
     screens/snakescreen.cpp
+    screens/gameboyscreen.cpp
     screens/g2048screen.cpp
     screens/tetrisscreen.cpp
     screens/minescreen.cpp
@@ -61,6 +62,7 @@ else(FORCPU)
         hardware_dma 
         hardware_flash 
         hardware_sync
+        hardware_pll
     )
 endif(FORCPU)
 

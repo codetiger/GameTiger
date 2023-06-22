@@ -7,6 +7,7 @@ private:
     const uint8_t menuCount = 9;
     const std::string menuItemNames[9][4] = {
         {"Snake", "", "", ""},
+        {"Game Boy", "", "", ""},
         {"2048", "", "", ""},
         {"Tetris", "Easy", "Medium", "Hard"},
         {"Minesweeper", "Easy", "Medium", "Hard"},

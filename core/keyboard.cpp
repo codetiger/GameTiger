@@ -5,10 +5,16 @@ KeyBoard::KeyBoard() {
     for (uint8_t i = 0; i < KEY_COUNT; i++)
         this->prevKeyState[i] == false;
 #ifdef FORMPU
-    int br = i2c_init(i2c1, 400 * 1000);
-    printf("[Keyboard] PCF8575 baudrate: %d\n", br);
+    gpio_init(I2CSDA);
     gpio_set_function(I2CSDA, GPIO_FUNC_I2C);
+    gpio_pull_up(I2CSDA);
+
+    gpio_init(I2CSCL);
     gpio_set_function(I2CSCL, GPIO_FUNC_I2C);
+    gpio_pull_up(I2CSCL);
+
+    int br = i2c_init(i2c1, 200 * 1000);
+    printf("[Keyboard] PCF8575 baudrate: %d\n", br);
 
     uint8_t keystate[2];
     keystate[0] = 0xff;
@@ -28,11 +34,11 @@ void KeyBoard::checkKeyState(Screen *screen) {
     uint8_t keystate[2];
     int ret = i2c_read_blocking(i2c1, ADDR, keystate, 2, false);
     uint state = ~(keystate[0] | (keystate[1] << 8));
-    if(ret <= 0)
-        printf("[Keyboard] Error: %d\n", ret);
-    else if(screen && state != 0xffff) {
+    if(ret <= 0) {
+        return;
+    } else if(screen && state != 0xffff) {
         for (uint8_t i = 0; i < KEY_COUNT; i++) {
-            bool keyState = (state >> pinId[i]) & 1;
+            bool keyState = (state >> pinId[i]) & 0x01;
             if (this->prevKeyState[i] != keyState) {
                 if (keyState) 
                     screen->keyPressed(i);

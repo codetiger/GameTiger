@@ -210,8 +210,14 @@ allGameSpriteList = [
 # ]
 # processSprite(menuSpriteList, "menuSprite", 320, 320, True)
 
+logoSpriteList = [
+    ("menu/tiger.png", "tigerFrame", 128, 128, 96, 0, 0, 0, 0),
+]
+processSprite(logoSpriteList, "logoSprite", 128, 128, True)
+
 menuSpriteList = [
     ("menu/snake.png", "menuItemFrames", 96, 96, 16, 0, 0, 0, 0),
+    ("menu/gameboy.png", "menuItemFrames", 96, 96, 64, 0, 0, 0, 0),
     ("menu/g2048.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
     ("menu/tetris.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
     ("menu/mine.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
@@ -219,7 +225,6 @@ menuSpriteList = [
     ("menu/ninjafrog.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
     ("menu/settings.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
     ("menu/about.png", "menuItemFrames", 96, 96, 24, 0, 0, 0, 0),
-    ("menu/tiger.png", "tigerFrame", 128, 128, 96, 0, 0, 0, 0),
 ]
-processSprite(menuSpriteList, "menuSprite", 320, 320, True)
+processSprite(menuSpriteList, "menuSprite", 288, 288, True)
 
