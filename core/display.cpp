@@ -55,7 +55,7 @@ void Display::initHardware() {
     // pwm_init(slice_num, &config, true);
     // this->setBrightness(100);
 
-    int br = spi_init(spi1, 62.5 * 1000 * 1000); //62.5
+    int br = spi_init(spi1, 60 * 1000 * 1000); //62.5
     printf("[Display] baudrate: %d\n", br);
 
     gpio_set_function(SCK_PIN, GPIO_FUNC_SPI);

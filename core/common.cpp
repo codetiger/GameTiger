@@ -1,7 +1,7 @@
 #include "common.h"
 
-Color BLACKCOLOR = 0x0;
-Color WHITECOLOR = 0xffff;
+Color BLACKCOLOR = Color((uint16_t)0x0);
+Color WHITECOLOR = Color((uint16_t)0xffff);
 Color REDCOLOR = Color(255, 0, 0);
 Color GREENCOLOR = Color(0, 255, 0);
 

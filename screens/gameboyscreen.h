@@ -19,6 +19,8 @@ public:
 	uint8_t *cart_ram;
 
     Display *display;
+    
+    Color *palette;
 
     void update(uint16_t deltaTimeMS);
     void draw(Display *display);

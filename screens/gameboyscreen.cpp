@@ -2,8 +2,125 @@
 #define ENABLE_SOUND 0
 #define ENABLE_LCD 1
 #include "../core/Peanut-GB/peanut_gb.h"
-#include "tetrisgb.h"
-#include "mariogb.h"
+#include "gbgames/tetrisgb.h"
+#include "gbgames/mariogb.h"
+#include "gbgames/kirby.h"
+#include "gbgames/metroid2.h"
+#include "gbgames/tetris2.h"
+
+void gb_load_palette(struct gb_s *gb) {
+    GameBoyScreen* p = (GameBoyScreen*)gb->direct.priv;
+
+    uint8_t checksum = gb_colour_hash(gb);
+    printf("Game Hash: %X\n", checksum);
+    p->palette = new Color[3 * 4];
+
+    switch(checksum) {
+    	/* Balloon Kid (USA, Europe) */
+        /* Tetris Blast (USA, Europe) */
+        case 0x71:
+        case 0xFF: {
+            const uint32_t palette[3][4] = {
+                { 0xFFFFFF, 0xFF9C00, 0xFF0000, 0x000000 }, /* OBJ0 */
+                { 0xFFFFFF, 0xFF9C00, 0xFF0000, 0x000000 }, /* OBJ1 */
+                { 0xFFFFFF, 0xFF9C00, 0xFF0000, 0x000000 }  /* BG */
+            };
+            for(uint8_t obj = 0; obj < 3; obj++)
+                for(uint8_t layer = 0; layer < 4; layer++)
+                    p->palette[(obj * 4) + layer] = Color(palette[obj][layer]);
+            break;
+        }
+
+        /* Hoshi no Kirby */
+        /* Kirby no Block Ball */
+        /* Kirby's Block Ball */
+        /* Kirby's Dream Land */
+        case 0x27:
+        case 0x49:
+        case 0x5C:
+        case 0xB3: {
+            const uint32_t palette[3][4] = {
+                { 0xFF6352, 0xD60000, 0x630000, 0x000000 }, /* OBJ0 */
+                { 0x0000FF, 0xFFFFFF, 0xFFFF7B, 0x0084FF }, /* OBJ1 */
+                { 0xA59CFF, 0xFFFF00, 0x006300, 0x000000 }  /* BG */
+            };
+            for(uint8_t obj = 0; obj < 3; obj++)
+                for(uint8_t layer = 0; layer < 4; layer++)
+                    p->palette[(obj * 4) + layer] = Color(palette[obj][layer]);
+            break;
+        }
+
+        /* Qix */
+        /* Tetris 2 */
+        /* Tetris Flash */
+        case 0x0D:
+        case 0x69:
+        case 0xF2: {
+            const uint32_t palette[3][4] = {
+                { 0xFFFFFF, 0xFFFF00, 0xFF0000, 0x000000 }, /* OBJ0 */
+                { 0xFFFFFF, 0xFFFF00, 0xFF0000, 0x000000 }, /* OBJ1 */
+                { 0xFFFFFF, 0x5ABDFF, 0xFF0000, 0x0000FF }  /* BG */
+            };
+            for(uint8_t obj = 0; obj < 3; obj++)
+                for(uint8_t layer = 0; layer < 4; layer++)
+                    p->palette[(obj * 4) + layer] = Color(palette[obj][layer]);
+            break;
+        }
+
+        /* Pocket Monsters - Pikachu */
+        /* Tetris */
+        case 0x15:
+        case 0xDB: {
+            const uint32_t palette[3][4] = {
+                { 0xFFFFFF, 0xFFFF00, 0xFF0000, 0x000000 }, /* OBJ0 */
+                { 0xFFFFFF, 0xFFFF00, 0xFF0000, 0x000000 }, /* OBJ1 */
+                { 0xFFFFFF, 0xFFFF00, 0xFF0000, 0x000000 }  /* BG */
+            };
+            for(uint8_t obj = 0; obj < 3; obj++)
+                for(uint8_t layer = 0; layer < 4; layer++)
+                    p->palette[(obj * 4) + layer] = Color(palette[obj][layer]);
+            break;
+        }
+
+        /* Super Mario Land 2 */
+        case 0xC9: {
+            const uint32_t palette[3][4] = {
+                { 0xFFFFFF, 0xFF7300, 0x944200, 0x000000 }, /* OBJ0 */
+                { 0xFFFFFF, 0x63A5FF, 0x0000FF, 0x000000 }, /* OBJ1 */
+                { 0xFFFFCE, 0x63EFEF, 0x9C8431, 0x5A5A5A }  /* BG */
+            };
+            for(uint8_t obj = 0; obj < 3; obj++)
+                for(uint8_t layer = 0; layer < 4; layer++)
+                    p->palette[(obj * 4) + layer] = Color(palette[obj][layer]);
+            break;
+        }
+
+        /* Metroid II - Return of Samus  */
+        case 0x46: {
+            const uint32_t palette[3][4] = {
+                { 0xFFFF00, 0xFF0000, 0x630000, 0x000000 }, /* OBJ0 */
+                { 0xFFFFFF, 0x7BFF31, 0x008400, 0x000000 }, /* OBJ1 */
+                { 0xFFFFFF, 0x63A5FF, 0x0000FF, 0x000000 }  /* BG */
+            };
+            for(uint8_t obj = 0; obj < 3; obj++)
+                for(uint8_t layer = 0; layer < 4; layer++)
+                    p->palette[(obj * 4) + layer] = Color(palette[obj][layer]);
+            break;
+        }
+
+        default: {
+            const uint32_t palette[3][4] = {
+                { 0xFFFFFF, 0x7BFF31, 0x008400, 0x000000 }, /* OBJ0 */
+                { 0xFFFFFF, 0x7BFF31, 0x008400, 0x000000 }, /* OBJ1 */
+                { 0xFFFFFF, 0x7BFF31, 0x008400, 0x000000 }  /* BG */
+            };
+            for(uint8_t obj = 0; obj < 3; obj++)
+                for(uint8_t layer = 0; layer < 4; layer++)
+                    p->palette[(obj * 4) + layer] = Color(palette[obj][layer]);
+            break;
+        }
+    }
+}
 
 uint8_t gb_rom_read(struct gb_s *gb, const uint_fast32_t addr) {
     GameBoyScreen* p = (GameBoyScreen*)gb->direct.priv;
@@ -44,23 +161,26 @@ void lcd_draw_line(struct gb_s *gb, const uint8_t pixels[160], const uint_fast8_
         return;
     }
 
-	const Color palette[] = { Color(155, 188, 15), Color(139, 172, 15), Color(48, 98, 48), Color(15, 56, 15) };
-
+	// const Color palette[] = { Color(155, 188, 15), Color(139, 172, 15), Color(48, 98, 48), Color(15, 56, 15) };
     const uint16_t pixel_width = LCD_WIDTH * 1.66f;
-
     const uint8_t minLine = floor((line * 5.0) / 3.0);
     const uint8_t maxLine = ceil((line * 5.0) / 3.0);
 
     if(minLine == maxLine) {
         for(uint16_t x = 0; x < pixel_width; x++) {
             uint16_t px = (x * 3) / 5;
-            p->display->setPixel(Vec2(27 + x, maxLine), (Color&)palette[pixels[px] & 3], 255);
+            uint8_t obj = (pixels[px] & 0x30) >> 4;
+            uint8_t layer = pixels[px] & 3;
+            Color c = p->palette[(obj * 4) + layer];
+            p->display->setPixel(Vec2(27 + x, maxLine), c, 255);
         }
     } else {
         Color lineColor[pixel_width];
         for(uint16_t x = 0; x < pixel_width; x++) {
             uint16_t px = (x * 3) / 5;
-            lineColor[x] = palette[pixels[px] & 3];
+            uint8_t obj = (pixels[px] & 0x30) >> 4;
+            uint8_t layer = pixels[px] & 3;
+            lineColor[x] = p->palette[(obj * 4) + layer];
         }
 
         for(uint8_t y = minLine; y <= maxLine; y++)
@@ -75,7 +195,12 @@ GameBoyScreen::GameBoyScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hs
     this->highScoreCallBack = hscb;
     this->option = option;
 
-    this->rom = (uint8_t*)mario_gb;
+    if(option == 1)
+        this->rom = (uint8_t*)tetris_gb;
+    else if(option == 2)
+        this->rom = (uint8_t*)kirby_gb;
+    else if(option == 3)
+        this->rom = (uint8_t*)metroid2_gb;
     this->gb_ptr = new gb_s();
     this->display = NULL;
 
@@ -91,6 +216,7 @@ GameBoyScreen::GameBoyScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hs
         this->cart_ram = (uint8_t*)malloc(cart_ram_size);
 
     gb_init_lcd((gb_s*)this->gb_ptr, &lcd_draw_line);
+    gb_load_palette((gb_s*)this->gb_ptr);
     printf("[GameBoyScreen] Done\n");
 }
 

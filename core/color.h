@@ -25,10 +25,20 @@ typedef struct Color {
         value = v;
     }
 
+    Color(uint32_t v) {
+        uint8_t r = (v & 0xFF0000) >> 16;
+        uint8_t g = (v & 0x00FF00) >> 8;
+        uint8_t b = (v & 0x0000FF) >> 0;
+        Colors.red = r >> 3; 
+        Colors.green = g >> 2; 
+        Colors.blue = b >> 3;
+    }
+
     Color& operator=(const uint16_t &v) {
         value = v;
         return *this;
     }
+
 } Color;
 
 #endif

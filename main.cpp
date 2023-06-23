@@ -158,7 +158,7 @@ static inline bool gset_sys_clock_khz(uint32_t freq_khz, bool required) {
 int main(int argc, char *argv[]) {
     #ifdef FORMPU
     stdio_init_all();
-    sleep_ms(2000);
+    sleep_ms(1000);
     #endif
 
     printf("[Main] Starting\n");
@@ -169,11 +169,11 @@ int main(int argc, char *argv[]) {
     display->initSequence();
     display->clear(Color(255, 255, 255));
     display->update();
-    sleep_ms(500);
+    sleep_ms(50);
     vreg_set_voltage(VREG_VOLTAGE_1_20);
     sleep_ms(1);
-    gset_sys_clock_khz(250000, true);
-    sleep_ms(500);
+    gset_sys_clock_khz(300000, true);
+    sleep_ms(50);
 
     Battery *battery = new Battery();
     KeyBoard *keyboard = new KeyBoard();
