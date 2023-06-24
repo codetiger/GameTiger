@@ -135,11 +135,11 @@ void gset_sys_clock_pll(uint32_t vco_freq, uint post_div1, uint post_div2) {
                         CLOCKS_CLK_SYS_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS,
                         freq, freq);
 
-        // clock_configure(clk_peri,
-        //                 0, // Only AUX mux on ADC
-        //                 CLOCKS_CLK_PERI_CTRL_AUXSRC_VALUE_CLKSRC_PLL_USB,
-        //                 125 * MHZ,
-        //                 125 * MHZ);
+        clock_configure(clk_peri,
+                        0, // Only AUX mux on ADC
+                        CLOCKS_CLK_PERI_CTRL_AUXSRC_VALUE_CLK_SYS,
+                        125 * MHZ,
+                        125 * MHZ);
     }
 }
 

@@ -196,7 +196,7 @@ GameBoyScreen::GameBoyScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hs
     this->option = option;
 
     if(option == 1)
-        this->rom = (uint8_t*)tetris_gb;
+        this->rom = (uint8_t*)mario_gb;
     else if(option == 2)
         this->rom = (uint8_t*)kirby_gb;
     else if(option == 3)
@@ -212,6 +212,7 @@ GameBoyScreen::GameBoyScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hs
 
     this->cart_ram = NULL;
     uint8_t cart_ram_size = gb_get_save_size((gb_s*)this->gb_ptr);
+    printf("[GameBoyScreen] cart_ram_size: %d\n", cart_ram_size);
     if(cart_ram_size > 0)
         this->cart_ram = (uint8_t*)malloc(cart_ram_size);
 
