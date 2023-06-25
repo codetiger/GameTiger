@@ -55,7 +55,7 @@ void Display::initHardware() {
     // pwm_init(slice_num, &config, true);
     // this->setBrightness(100);
 
-    int br = spi_init(spi1, 60 * 1000 * 1000); //62.5
+    int br = spi_init(spi1, 48 * 1000 * 1000); //62.5
     printf("[Display] baudrate: %d\n", br);
 
     gpio_set_function(SCK_PIN, GPIO_FUNC_SPI);
@@ -129,7 +129,7 @@ void Display::initSequence() {
     this->sendData(ST7789_DISPON);
 
     this->setWindow(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    spi_set_format(spi1, 16, SPI_CPOL_0, SPI_CPHA_0, SPI_MSB_FIRST);
+    spi_set_format(spi1, 16, SPI_CPOL_1, SPI_CPHA_1, SPI_MSB_FIRST);
 }
 
 void Display::reset() {
