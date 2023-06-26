@@ -161,7 +161,6 @@ void lcd_draw_line(struct gb_s *gb, const uint8_t pixels[160], const uint_fast8_
         return;
     }
 
-	// const Color palette[] = { Color(155, 188, 15), Color(139, 172, 15), Color(48, 98, 48), Color(15, 56, 15) };
     const uint16_t pixel_width = LCD_WIDTH * 1.66f;
     const uint8_t minLine = floor((line * 5.0) / 3.0);
     const uint8_t maxLine = ceil((line * 5.0) / 3.0);

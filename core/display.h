@@ -119,11 +119,11 @@ private:
     int dmaSPIChannel = 0;
     dma_channel_config dmaSPIConfig;
 
-    int dmaMemChannel = 0;
-    dma_channel_config dmaMemConfig;
+    int dmaFillChannel = 0;
+    dma_channel_config dmaFillConfig;
 
-    int dmaBufferChannel = 0;
-    dma_channel_config dmaBufferConfig;
+    int dmaCopyChannel = 0;
+    dma_channel_config dmaCopyConfig;
 #endif
 public:
     Display();

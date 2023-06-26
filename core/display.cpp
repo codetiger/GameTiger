@@ -71,19 +71,19 @@ void Display::initDMAChannel() {
     channel_config_set_ring(&this->dmaSPIConfig, false, 0);
     channel_config_set_dreq(&this->dmaSPIConfig, DREQ_SPI1_TX);
 
-    this->dmaMemChannel = dma_claim_unused_channel(true);
-    this->dmaMemConfig = dma_channel_get_default_config(this->dmaMemChannel);
-    channel_config_set_transfer_data_size(&this->dmaMemConfig, DMA_SIZE_16);
-    channel_config_set_read_increment(&this->dmaMemConfig, false);
-    channel_config_set_write_increment(&this->dmaMemConfig, true);
-    channel_config_set_ring(&this->dmaMemConfig, false, 0);
+    this->dmaFillChannel = dma_claim_unused_channel(true);
+    this->dmaFillConfig = dma_channel_get_default_config(this->dmaFillChannel);
+    channel_config_set_transfer_data_size(&this->dmaFillConfig, DMA_SIZE_16);
+    channel_config_set_read_increment(&this->dmaFillConfig, false);
+    channel_config_set_write_increment(&this->dmaFillConfig, true);
+    channel_config_set_ring(&this->dmaFillConfig, false, 0);
 
-    this->dmaBufferChannel = dma_claim_unused_channel(true);
-    this->dmaBufferConfig = dma_channel_get_default_config(this->dmaBufferChannel);
-    channel_config_set_transfer_data_size(&this->dmaBufferConfig, DMA_SIZE_16);
-    channel_config_set_read_increment(&this->dmaBufferConfig, true);
-    channel_config_set_write_increment(&this->dmaBufferConfig, true);
-    channel_config_set_ring(&this->dmaBufferConfig, false, 0);
+    this->dmaCopyChannel = dma_claim_unused_channel(true);
+    this->dmaCopyConfig = dma_channel_get_default_config(this->dmaCopyChannel);
+    channel_config_set_transfer_data_size(&this->dmaCopyConfig, DMA_SIZE_16);
+    channel_config_set_read_increment(&this->dmaCopyConfig, true);
+    channel_config_set_write_increment(&this->dmaCopyConfig, true);
+    channel_config_set_ring(&this->dmaCopyConfig, false, 0);
 }
 
 void Display::initSequence() {
@@ -196,8 +196,8 @@ void Display::setBrightness(uint8_t brightness) {
 
 void Display::clear(Color c) {
 #ifdef FORMPU
-    dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, this->buffer, &c, DISPLAY_HEIGHT*DISPLAY_WIDTH, true);
-    dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
+    dma_channel_configure(this->dmaFillChannel, &this->dmaFillConfig, this->buffer, &c, DISPLAY_HEIGHT*DISPLAY_WIDTH, true);
+    dma_channel_wait_for_finish_blocking(this->dmaFillChannel);
 #else
     for (int i = 0; i < DISPLAY_HEIGHT; i++) {
         for (int j = 0; j < DISPLAY_WIDTH; j++) {
@@ -229,8 +229,8 @@ void Display::setPixel(Vec2 pos, Color &c, uint8_t alpha) {
 void Display::drawBitmapRow(Vec2 pos, int width, Color *c) {
 #ifdef FORMPU
     int index = (pos.y * DISPLAY_WIDTH) + pos.x;
-    dma_channel_configure(this->dmaBufferChannel, &this->dmaBufferConfig, &this->buffer[index], c, width, true);
-    dma_channel_wait_for_finish_blocking(this->dmaBufferChannel);
+    dma_channel_configure(this->dmaCopyChannel, &this->dmaCopyConfig, &this->buffer[index], c, width, true);
+    dma_channel_wait_for_finish_blocking(this->dmaCopyChannel);
 #else
     for (int i = 0; i < width; i++)
         this->setPixel(Vec2(pos.x+i, pos.y), c[i], 255);
@@ -272,8 +272,8 @@ void Display::fillRect(Rect2 rect, Color &c, uint8_t alpha) {
         #ifdef FORMPU
         for (int i = rect.y; i < rect.y + rect.h; i++) {
             int index = (i * DISPLAY_WIDTH) + rect.x;
-            dma_channel_configure(this->dmaMemChannel, &this->dmaMemConfig, &(this->buffer)[index], &c, rect.w, true);
-            dma_channel_wait_for_finish_blocking(this->dmaMemChannel);
+            dma_channel_configure(this->dmaFillChannel, &this->dmaFillConfig, &(this->buffer)[index], &c, rect.w, true);
+            dma_channel_wait_for_finish_blocking(this->dmaFillChannel);
         }
         #else
         for (int i = rect.y; i < rect.y + rect.h; i++)
