@@ -161,9 +161,9 @@ void lcd_draw_line(struct gb_s *gb, const uint8_t pixels[160], const uint_fast8_
         return;
     }
 
-    const uint16_t pixel_width = LCD_WIDTH * 1.66f;
-    const uint8_t minLine = floor((line * 5.0) / 3.0);
-    const uint8_t maxLine = ceil((line * 5.0) / 3.0);
+    const uint16_t pixel_width = LCD_WIDTH * 1.667;
+    const uint8_t minLine = floor(line * 1.667);
+    const uint8_t maxLine = ceil(line * 1.667);
 
     if(minLine == maxLine) {
         for(uint16_t x = 0; x < pixel_width; x++) {

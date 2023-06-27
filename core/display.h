@@ -1,4 +1,5 @@
 #include "common.h"
+#include "framebuffer.h"
 #include "color.h"
 
 #ifndef _GAME_TIGER_DISPLAY_H
@@ -95,7 +96,6 @@ private:
     const uint8_t RST_PIN = 13;
     const uint8_t BL_PIN = 12;
 
-#ifdef FORMPU
     void write_cmd(const uint8_t cmd);
     void write_data(const uint8_t data);
     void write_data(const uint8_t data[]);
@@ -106,25 +106,12 @@ private:
     void setCursor(const uint16_t x, const uint16_t y);
 
     void initHardware();
-    
     void reset();
-#else
-    SDL_Renderer* renderer;
-    SDL_Window* window;
-#endif
 
-    Color *buffer;
+    FrameBuffer *frameBuffer;
 
-#ifdef FORMPU
     int dmaSPIChannel = 0;
     dma_channel_config dmaSPIConfig;
-
-    int dmaFillChannel = 0;
-    dma_channel_config dmaFillConfig;
-
-    int dmaCopyChannel = 0;
-    dma_channel_config dmaCopyConfig;
-#endif
 public:
     Display();
     ~Display();
@@ -133,9 +120,9 @@ public:
     void initSequence();
 
     void update();
-    void clear(Color c);
     void setBrightness(uint8_t brightness);
 
+    void clear(Color c);
     void setPixel(Vec2 pos, Color &c, uint8_t alpha);
     void drawBitmapRow(Vec2 pos, int width, Color *c);
     void fillRect(Rect2 rect, Color &c, uint8_t alpha = 255);

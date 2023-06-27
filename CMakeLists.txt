@@ -25,6 +25,7 @@ add_executable(${PROJECT_NAME}
     core/common.cpp
     core/LoRa/sx126x_hal.cpp
     core/LoRa/sx126x.cpp
+    core/framebuffer.cpp
     core/display.cpp
     core/image.cpp
     core/battery.cpp
@@ -64,6 +65,7 @@ else(FORCPU)
         hardware_sync
         hardware_pll
     )
+    target_compile_definitions(${PROJECT_NAME} PRIVATE PICO_CLOCK_AJDUST_PERI_CLOCK_WITH_SYS_CLOCK=1)
 endif(FORCPU)
 
 if(FORCPU)
