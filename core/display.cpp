@@ -151,9 +151,13 @@ void Display::update() {
     gpio_put(DC_PIN, 1);
 
     this->frameBuffer->waitOnBusy();
+    timetype lastUpdate = getTime();
     
     dma_channel_configure(this->dmaSPIChannel, &this->dmaSPIConfig, &spi_get_hw(spi1)->dr, (uint16_t*)this->frameBuffer->buffer, DISPLAY_WIDTH * DISPLAY_HEIGHT, true);
     dma_channel_wait_for_finish_blocking(this->dmaSPIChannel);
+
+    uint16_t deltaTimeMS = getTimeDiffMS(lastUpdate);
+    printf("[Display] Display Update: %d\n", deltaTimeMS);
 }
 
 Display::~Display() {

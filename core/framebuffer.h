@@ -7,6 +7,12 @@
 #define MAX_DMA_CPY_CHN 4
 #define MAX_DMA_FILL_CHN 4
 
+enum ColorFormat {
+    RGB444 = 12, 
+    RGB565 = 16, 
+    RGB666 = 18
+};
+
 class FrameBuffer {
 private:
     uint dmaCopyChannel[MAX_DMA_CPY_CHN];
