@@ -150,9 +150,7 @@ void Display::setBrightness(uint8_t brightness) {
 void Display::update() {
     gpio_put(DC_PIN, 1);
 
-    this->frameBuffer->waitOnBusy();
-    timetype lastUpdate = getTime();
-    
+    timetype lastUpdate = getTime();    
     dma_channel_configure(this->dmaSPIChannel, &this->dmaSPIConfig, &spi_get_hw(spi1)->dr, (uint16_t*)this->frameBuffer->buffer, DISPLAY_WIDTH * DISPLAY_HEIGHT, true);
     dma_channel_wait_for_finish_blocking(this->dmaSPIChannel);
 

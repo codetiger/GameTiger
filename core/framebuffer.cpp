@@ -4,23 +4,19 @@ FrameBuffer::FrameBuffer(uint16_t width, uint16_t height) {
     printf("[FrameBuffer] loading...\n");
     this->buffer = new Color[width * height];
 
-    for(uint8_t i = 0; i < MAX_DMA_CPY_CHN; i++) {
-        this->dmaCopyChannel[i] = dma_claim_unused_channel(true);
-        this->dmaCopyConfig[i] = dma_channel_get_default_config(this->dmaCopyChannel[i]);
-        channel_config_set_transfer_data_size(&this->dmaCopyConfig[i], DMA_SIZE_16);
-        channel_config_set_read_increment(&this->dmaCopyConfig[i], true);
-        channel_config_set_write_increment(&this->dmaCopyConfig[i], true);
-        channel_config_set_ring(&this->dmaCopyConfig[i], false, 0);
-    }
+    this->dmaCopyChannel = dma_claim_unused_channel(true);
+    this->dmaCopyConfig = dma_channel_get_default_config(this->dmaCopyChannel);
+    channel_config_set_transfer_data_size(&this->dmaCopyConfig, DMA_SIZE_16);
+    channel_config_set_read_increment(&this->dmaCopyConfig, true);
+    channel_config_set_write_increment(&this->dmaCopyConfig, true);
+    channel_config_set_ring(&this->dmaCopyConfig, false, 0);
 
-    for(uint8_t i = 0; i < MAX_DMA_FILL_CHN; i++) {
-        this->dmaFillChannel[i] = dma_claim_unused_channel(true);
-        this->dmaFillConfig[i] = dma_channel_get_default_config(this->dmaFillChannel[i]);
-        channel_config_set_transfer_data_size(&this->dmaFillConfig[i], DMA_SIZE_16);
-        channel_config_set_read_increment(&this->dmaFillConfig[i], false);
-        channel_config_set_write_increment(&this->dmaFillConfig[i], true);
-        channel_config_set_ring(&this->dmaFillConfig[i], false, 0);
-    }
+    this->dmaFillChannel = dma_claim_unused_channel(true);
+    this->dmaFillConfig = dma_channel_get_default_config(this->dmaFillChannel);
+    channel_config_set_transfer_data_size(&this->dmaFillConfig, DMA_SIZE_16);
+    channel_config_set_read_increment(&this->dmaFillConfig, false);
+    channel_config_set_write_increment(&this->dmaFillConfig, true);
+    channel_config_set_ring(&this->dmaFillConfig, false, 0);
 
     printf("[FrameBuffer] Done\n");
 }
@@ -28,43 +24,9 @@ FrameBuffer::FrameBuffer(uint16_t width, uint16_t height) {
 FrameBuffer::~FrameBuffer() {
 }
 
-void FrameBuffer::waitOnBusy() {
-    for(uint8_t i = 0; i < MAX_DMA_CPY_CHN; i++)
-        if(dma_channel_is_busy(this->dmaCopyChannel[i]))
-            dma_channel_wait_for_finish_blocking(this->dmaCopyChannel[i]);
-
-    for(uint8_t i = 0; i < MAX_DMA_FILL_CHN; i++)
-        if(dma_channel_is_busy(this->dmaFillChannel[i]))
-            dma_channel_wait_for_finish_blocking(this->dmaFillChannel[i]);
-}
-
-uint FrameBuffer::getFreeFillChannelIndex() {
-    uint i = 0;
-    while(true) {
-        if(dma_channel_is_busy(this->dmaFillChannel[i])) {
-            i++;
-            if(i == MAX_DMA_FILL_CHN)
-                i = 0;
-        } else
-            return i;
-    }
-}
-
-uint FrameBuffer::getFreeCopyChannelIndex() {
-    uint i = 0;
-    while(true) {
-        if(dma_channel_is_busy(this->dmaCopyChannel[i])) {
-            i++;
-            if(i == MAX_DMA_CPY_CHN)
-                i = 0;
-        } else
-            return i;
-    }
-}
-
 void FrameBuffer::clear(Color c) {
-    uint fillIndex = this->getFreeFillChannelIndex();
-    dma_channel_configure(this->dmaFillChannel[fillIndex], &this->dmaFillConfig[fillIndex], this->buffer, &c, DISPLAY_HEIGHT*DISPLAY_WIDTH, true);
+    dma_channel_configure(this->dmaFillChannel, &this->dmaFillConfig, this->buffer, &c, DISPLAY_HEIGHT*DISPLAY_WIDTH, true);
+    dma_channel_wait_for_finish_blocking(this->dmaFillChannel);
 }
 
 #define div_255_fast(x) (((x) + (((x) + 257) >> 8)) >> 8)
@@ -87,8 +49,8 @@ void FrameBuffer::setPixel(Vec2 pos, Color &c, uint8_t alpha) {
 
 void FrameBuffer::drawBitmapRow(Vec2 pos, int width, Color *c) {
     int index = (pos.y * DISPLAY_WIDTH) + pos.x;
-    uint copyIndex = this->getFreeCopyChannelIndex();
-    dma_channel_configure(this->dmaCopyChannel[copyIndex], &this->dmaCopyConfig[copyIndex], &this->buffer[index], c, width, true);
+    dma_channel_configure(this->dmaCopyChannel, &this->dmaCopyConfig, &this->buffer[index], c, width, true);
+    dma_channel_wait_for_finish_blocking(this->dmaCopyChannel);
 }
 
 void FrameBuffer::fillRect(Rect2 rect, Color &c, uint8_t alpha) {
@@ -107,8 +69,8 @@ void FrameBuffer::fillRect(Rect2 rect, Color &c, uint8_t alpha) {
     } else {
         for (int i = rect.y; i < rect.y + rect.h; i++) {
             int index = (i * DISPLAY_WIDTH) + rect.x;
-            uint fillIndex = this->getFreeFillChannelIndex();
-            dma_channel_configure(this->dmaFillChannel[fillIndex], &this->dmaFillConfig[fillIndex], &(this->buffer)[index], &c, rect.w, true);
+            dma_channel_configure(this->dmaFillChannel, &this->dmaFillConfig, &(this->buffer)[index], &c, rect.w, true);
+            dma_channel_wait_for_finish_blocking(this->dmaFillChannel);
         }
     }
 }
