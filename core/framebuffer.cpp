@@ -29,22 +29,15 @@ void FrameBuffer::clear(Color c) {
     dma_channel_wait_for_finish_blocking(this->dmaFillChannel);
 }
 
-#define div_255_fast(x) (((x) + (((x) + 257) >> 8)) >> 8)
-
 void FrameBuffer::setPixel(Vec2 pos, Color &c, uint8_t alpha) {
     if (alpha == 0 || pos.x < 0 || pos.x >= DISPLAY_WIDTH || pos.y < 0 || pos.y >= DISPLAY_HEIGHT)
         return;
 
     int index = (pos.y * DISPLAY_WIDTH) + pos.x;
-    if(alpha > 250) {
+    if(alpha > 250)
         this->buffer[index] = c;
-    } else {
-        uint8_t ralpha = 255 - alpha;
-
-        this->buffer[index].Colors.red = div_255_fast(c.Colors.red * alpha + this->buffer[index].Colors.red * ralpha);
-        this->buffer[index].Colors.green = div_255_fast(c.Colors.green * alpha + this->buffer[index].Colors.green * ralpha);
-        this->buffer[index].Colors.blue = div_255_fast(c.Colors.blue * alpha + this->buffer[index].Colors.blue * ralpha);
-    }
+    else
+        this->buffer[index].mix(c, alpha);
 }
 
 void FrameBuffer::drawBitmapRow(Vec2 pos, int width, Color *c) {

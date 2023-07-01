@@ -5,16 +5,16 @@ class MenuScreen : public Screen
 {
 private:
     const uint8_t menuCount = 9;
-    const std::string menuItemNames[9][4] = {
-        {"Snake", "", "", ""},
-        {"Game Boy", "Mario", "Kirby", "Metroid"},
-        {"2048", "", "", ""},
-        {"Tetris", "Easy", "Medium", "Hard"},
-        {"Minesweeper", "Easy", "Medium", "Hard"},
-        {"Tic Tac Toe", "Easy", "Medium", "Hard"},
-        {"Ninja Frog", "Level 01", "Level 02", "Level 03"},
-        {"Settings", "", "", ""},
-        {"About", "", "", ""}
+    const std::string menuItemNames[9][7] = {
+        {"Snake", "", "", "", "", "", ""},
+        {"Game Boy", "Mario", "Kirby", "Metroid", "Prince of Persia", "", ""},
+        {"2048", "", "", "", "", "", ""},
+        {"Tetris", "Easy", "Medium", "Hard", "", "", ""},
+        {"Minesweeper", "Easy", "Medium", "Hard", "", "", ""},
+        {"Tic Tac Toe", "Easy", "Medium", "Hard", "", "", ""},
+        {"Ninja Frog", "Level 01", "Level 02", "Level 03", "", "", ""},
+        {"Settings", "", "", "", "", "", ""},
+        {"About", "", "", "", "", "", ""}
     };
     uint8_t selectedMenuItem, currentMenuItem, animationCounter;
     uint8_t currentOptionItem;

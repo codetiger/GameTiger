@@ -97,7 +97,7 @@ void MenuScreen::keyPressed(uint8_t key) {
         if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem-1].length() > 0 && this->currentOptionItem > 1)
             this->currentOptionItem--;
     } else if (key == KEY_DOWN) {
-        if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem+1].length() > 0 && this->currentOptionItem < 3)
+        if(!isAnimating && this->menuItemNames[this->currentMenuItem][this->currentOptionItem+1].length() > 0 && this->currentOptionItem < 6)
             this->currentOptionItem++;
     } else if(key == KEY_A) {
         this->returnCallBack(this->currentMenuItem+2, this->currentOptionItem);

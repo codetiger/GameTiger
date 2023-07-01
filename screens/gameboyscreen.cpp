@@ -7,6 +7,7 @@
 #include "gbgames/kirby.h"
 #include "gbgames/metroid2.h"
 #include "gbgames/tetris2.h"
+#include "gbgames/prince.h"
 
 void gb_load_palette(struct gb_s *gb) {
     GameBoyScreen* p = (GameBoyScreen*)gb->direct.priv;
@@ -161,20 +162,20 @@ void lcd_draw_line(struct gb_s *gb, const uint8_t pixels[160], const uint_fast8_
         return;
     }
 
-    const uint16_t pixel_width = LCD_WIDTH * 1.667;
-    const uint8_t minLine = floor(line * 1.667);
-    const uint8_t maxLine = ceil(line * 1.667);
+    const uint16_t pixel_width = 268;
+    const uint8_t minLine = line * 5 / 3;
+    const uint8_t maxLine = (line + 1) * 5 / 3;
 
-    if(minLine == maxLine) {
+    if(minLine == maxLine || maxLine >= 239) {
         for(uint16_t x = 0; x < pixel_width; x++) {
             uint16_t px = (x * 3) / 5;
             uint8_t obj = (pixels[px] & 0x30) >> 4;
             uint8_t layer = pixels[px] & 3;
             Color c = p->palette[(obj * 4) + layer];
-            p->display->setPixel(Vec2(27 + x, maxLine), c, 255);
+            p->display->setPixel(Vec2(16 + x, minLine), c, 255);
         }
     } else {
-        Color lineColor[pixel_width];
+        Color *lineColor = new Color[pixel_width];
         for(uint16_t x = 0; x < pixel_width; x++) {
             uint16_t px = (x * 3) / 5;
             uint8_t obj = (pixels[px] & 0x30) >> 4;
@@ -183,7 +184,9 @@ void lcd_draw_line(struct gb_s *gb, const uint8_t pixels[160], const uint_fast8_
         }
 
         for(uint8_t y = minLine; y <= maxLine; y++)
-            p->display->drawBitmapRow(Vec2(27, y), pixel_width, lineColor);
+            p->display->drawBitmapRow(Vec2(16, y), pixel_width, lineColor);
+
+        free(lineColor);
     }
 }
 
@@ -200,6 +203,9 @@ GameBoyScreen::GameBoyScreen(void (*rcb)(int8_t menu, uint8_t option), void (*hs
         this->rom = (uint8_t*)kirby_gb;
     else if(option == 3)
         this->rom = (uint8_t*)metroid2_gb;
+    else if(option == 4)
+        this->rom = (uint8_t*)Prince_of_Persia__USA__gb;
+
     this->gb_ptr = new gb_s();
     this->display = NULL;
 
