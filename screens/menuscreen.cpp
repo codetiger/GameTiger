@@ -76,8 +76,8 @@ void MenuScreen::draw(Display *display) {
 }
 
 void MenuScreen::keyPressed(uint8_t key) {
-    // const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
-    // printf("Key Pressed: %c\n", c[key]);
+    const char c[6] = {'U', 'D', 'L', 'R', 'A', 'B'};
+    printf("Key Pressed: %c\n", c[key]);
     if(this->isAnimating)
         return;
 

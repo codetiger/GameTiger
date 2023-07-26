@@ -235,7 +235,7 @@
       "pin_to_pin": "warning",
       "power_pin_not_driven": "error",
       "similar_labels": "warning",
-      "simulation_model_issue": "error",
+      "simulation_model_issue": "ignore",
       "unannotated": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
@@ -247,7 +247,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "gametiger.kicad_pro",
+    "filename": "GameTiger.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -322,6 +322,11 @@
     "subpart_first_id": 65,
     "subpart_id_separator": 0
   },
-  "sheets": [],
+  "sheets": [
+    [
+      "c33a9324-58b6-4ca3-8378-bbd431fb85f4",
+      ""
+    ]
+  ],
   "text_variables": {}
 }

@@ -161,7 +161,7 @@ int main(int argc, char *argv[]) {
         screen->draw(display);
 
         battery->drawLevel(display);
-        printf("[Main] FPS: %d\n", int(1000 / deltaTimeMS));
+        // printf("[Main] FPS: %d\n", int(1000 / deltaTimeMS));
         display->update();
         checkScreenSwitch();
     }

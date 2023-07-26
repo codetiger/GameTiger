@@ -155,7 +155,7 @@ void Display::update() {
     dma_channel_wait_for_finish_blocking(this->dmaSPIChannel);
 
     uint16_t deltaTimeMS = getTimeDiffMS(lastUpdate);
-    printf("[Display] Display Update: %d\n", deltaTimeMS);
+    // printf("[Display] Display Update: %d\n", deltaTimeMS);
 }
 
 Display::~Display() {
