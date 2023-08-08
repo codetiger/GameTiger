@@ -135,6 +135,8 @@ buildCPU
 wifipass.h
 
 PCB/GameTiger/GameTiger-backups/
+PCB/GameTiger/production/
+
 *.000
 *.bak
 *.bck
