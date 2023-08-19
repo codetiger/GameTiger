@@ -118,6 +118,7 @@ If you wish to contribute to this repo, please feel free to implement your favou
 The entire project is open-sourced software licensed under the MIT license.
 
 ## References
-* [Tiny Renderer](https://github.com/ssloy/tinyrenderer)
-* [Small3dLib](https://gitlab.com/drummyfish/small3dlib)
+* [Hardware Design with RP2040](https://datasheets.raspberrypi.com/rp2040/hardware-design-with-rp2040.pdf)
+* [Minimal RP2040 Board](http://www.technoblogy.com/show?3U75)
 * [HAGL Graphics Library](https://github.com/tuupola/hagl)
+* [PCB Design for RP2040 youtube video](https://www.youtube.com/watch?v=kcwvuwetgEQ)
