@@ -60,7 +60,6 @@ private:
     void updateScreenScroll();
 public:
     Hero hero;
-    AudioController * audioController;
 
     Level();
     ~Level();

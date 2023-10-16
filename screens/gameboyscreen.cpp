@@ -2,6 +2,7 @@
 #define ENABLE_SOUND 0
 #define ENABLE_LCD 1
 #include "../core/Peanut-GB/peanut_gb.h"
+
 #include "gbgames/tetrisgb.h"
 #include "gbgames/mariogb.h"
 #include "gbgames/kirby.h"
@@ -245,6 +246,13 @@ void GameBoyScreen::update(uint16_t deltaTimeMS) {
         return;
 
     gb_run_frame((gb_s*)this->gb_ptr);
+
+    // if(!((gb_s*)this->gb_ptr)->direct.frame_skip) {
+    //     audio_callback(NULL, (int16_t*)audioStream, AUDIO_BUFFER_SIZE_BYTES);
+    //     int id = audio_play_once((uint8_t*)audioStream, AUDIO_BUFFER_SIZE_BYTES);
+    //     if (id >= 0) 
+    //         audio_source_set_volume(id, 1024);
+    // }
 }
 
 void GameBoyScreen::draw(Display *display) {
@@ -255,8 +263,10 @@ void GameBoyScreen::draw(Display *display) {
 }
 
 void GameBoyScreen::keyPressed(uint8_t key) {
-    if(key == KEY_EXIT)
+    if(key == KEY_START)
         ((gb_s*)this->gb_ptr)->direct.joypad_bits.start = 0;
+    else if(key == KEY_SELECT)
+        ((gb_s*)this->gb_ptr)->direct.joypad_bits.select = 0;
     else if(key == KEY_UP)
         ((gb_s*)this->gb_ptr)->direct.joypad_bits.up = 0;
     else if(key == KEY_DOWN)
@@ -272,8 +282,10 @@ void GameBoyScreen::keyPressed(uint8_t key) {
 }
 
 void GameBoyScreen::keyReleased(uint8_t key) {
-    if(key == KEY_EXIT)
+    if(key == KEY_START)
         ((gb_s*)this->gb_ptr)->direct.joypad_bits.start = 1;
+    else if(key == KEY_SELECT)
+        ((gb_s*)this->gb_ptr)->direct.joypad_bits.select = 1;
     else if(key == KEY_UP)
         ((gb_s*)this->gb_ptr)->direct.joypad_bits.up = 1;
     else if(key == KEY_DOWN)

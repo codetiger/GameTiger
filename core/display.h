@@ -89,12 +89,12 @@
 
 class Display {
 private:
-    const uint8_t MOSI_PIN = 11;
-    const uint8_t SCK_PIN = 10;
-    const uint8_t CS_PIN = 9;
-    const uint8_t DC_PIN = 8;
-    const uint8_t RST_PIN = 13;
-    const uint8_t BL_PIN = 12;
+    const uint8_t DC_PIN = 0;
+    const uint8_t CS_PIN = 1;
+    const uint8_t SCK_PIN = 2;
+    const uint8_t MOSI_PIN = 3;
+    const uint8_t RST_PIN = 4;
+    // const uint8_t BL_PIN = 12;
 
     void write_cmd(const uint8_t cmd);
     void write_data(const uint8_t data);

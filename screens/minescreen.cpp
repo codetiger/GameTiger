@@ -123,16 +123,10 @@ void MineScreen::keyPressed(uint8_t key) {
                 state[selectedY*MINE_BOARD_WIDTH+selectedX] = OPEN;
                 if(board[selectedY*MINE_BOARD_WIDTH+selectedX] == 0) {
                     chainOpen(selectedX, selectedY);
-                    this->audioController->beep(2400);
                 }
 
                 if(board[selectedY*MINE_BOARD_WIDTH+selectedX] == 9) {
                     gameState = LOST;
-                    this->audioController->beep(1500);
-                    this->audioController->beep(500);
-                    this->audioController->beep(1500);
-                    this->audioController->beep(500);
-                    this->audioController->beep(1500);
 
                     for (int y = 0; y < MINE_BOARD_HEIGHT; y++)
                         for (int x = 0; x < MINE_BOARD_WIDTH; x++)
@@ -147,7 +141,7 @@ void MineScreen::keyPressed(uint8_t key) {
             state[selectedY*MINE_BOARD_WIDTH+selectedX] = DOUBT;
         else if(state[selectedY*MINE_BOARD_WIDTH+selectedX] == DOUBT)
             state[selectedY*MINE_BOARD_WIDTH+selectedX] = CLOSE;
-    } else if(key == KEY_EXIT) {
+    } else if(key == KEY_SELECT) {
         this->returnCallBack(this->screenId, this->option);
     }
     // printBoard();

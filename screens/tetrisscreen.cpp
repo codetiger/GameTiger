@@ -173,7 +173,7 @@ void TetrisScreen::removeRow(uint8_t row) {
 void TetrisScreen::keyPressed(uint8_t key) {
     if(key == KEY_B && this->gameState == PLAYING)
         this->gameState = PAUSED;
-    else if(key == KEY_EXIT)
+    else if(key == KEY_SELECT)
         this->returnCallBack(this->screenId, this->option);
     else if(key == KEY_A && (this->gameState == WAITING || this->gameState == PAUSED))
         this->gameState = PLAYING;
@@ -186,7 +186,6 @@ void TetrisScreen::keyPressed(uint8_t key) {
             currentBlockY++;
         else if(key == KEY_A && canMove(currentBlockX, currentBlockY, true))
             currentBlock.rotate();
-        this->audioController->beep(1500);
     }
 }
 

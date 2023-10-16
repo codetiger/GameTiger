@@ -29,53 +29,6 @@ A Retro style game console designed and built entirely for educational purpose a
 ### Ninja Frog Game
 ![Ninja Frog Game GameTiger Console](/docs/NinjaFrog.gif)
 
-## Component specification
-*  MCU RP2040 (Adafruit Feather RP2040)
-    *  32-bit dual ARM Cortex-M0+ Microcontroller
-    *  133 MHz Clock speed
-    *  264 KB SRAM
-    *  2 MB flash storage
-    *  26 GPIO pins
-*  LCD display module by Waveshare
-    *  Resolution: 240×320
-    *  Color: 65K RGB (16bit RGB565)
-    *  Interface: SPI
-    *  Driver: ST7789
-    *  Backlight: LED
-    *  Operating voltage: 3.3V/5V
-*  PCF8575 16Bit I/O Expander Module
-*  SX1262 LoRa Module
-*  Tactile Buttons
-*  LiPo SHIM for Pico by Pimoroni
-    *  MCP73831 charger
-    *  XB6096I2S battery protector
-    *  Supports battery level measuring on VSYS pin
-*  Witty Fox Li-Ion Battery
-    *  Voltage: 3.7v
-    *  Capacity: 1000 mAh
-
-## Wiring 
-The components are based on standard interfaces and thus nothing complicated in wiring. You can feel free to use different GPIO pins based on lot of tutorials but this is what I've used and configured in the software as default. 
-
-| Component | Pin | Pico GPIO | Adafruit Feather RP2040 | Description |
-|--|--|--|--|--|
-|LCD|VCC|VSYS|3.3v pin|Power Input|
-||GND|GND|GND|Ground|
-||DIN|GP11|GPIO11|MOSI pin of SPI, data transmitted|
-||CLK|GP10|GPIO10|SCK pin of SPI, clock pin|
-||CS|GP9|GPIO9|Chip selection of SPI, low active|
-||DC|GP8|GPIO8|Data/Command control pin (High:data; Low: command)|
-||RST|GP12|GPIO13|Reset pin, low active|
-||BL|GP13|GPIO12|Backlight control|
-|Buttons|Up|GPIO2||Up button in the keypad|
-||Down|GPIO0||Down button in the keypad|
-||Left|GPIO1||Left button in the keypad|
-||Right|GPIO3||Right button in the keypad|
-||A|GPIO4||A (Action) button in the keypad|
-||B|GPIO5||B (Back) button in the keypad|
-|LiPo SHIM| | | | Directly mounted on Pico based on datasheet|
-____
-
 ## Software
 The software is build using Pico C++ SDK and has the basic hardware interfacing functionalities implemented. For an example, the popular Snake game is available. The below modules are ready available and is constantly under development. 
 
@@ -112,7 +65,6 @@ If you wish to contribute to this repo, please feel free to implement your favou
 * Add more games
 * Design Case in CAD software for 3d printing
 * Design PCB for holding all parts together
-
 
 ## License
 The entire project is open-sourced software licensed under the MIT license.

@@ -66,7 +66,7 @@ void AboutScreen::draw(Display *display) {
 }
 
 void AboutScreen::keyPressed(uint8_t key) {
-    if(key == KEY_EXIT)
+    if(key == KEY_SELECT)
         this->returnCallBack(this->screenId, this->option);
 }
 

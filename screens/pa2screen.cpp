@@ -9,7 +9,6 @@ PixelAdventureScreen::PixelAdventureScreen(void (*rcb)(int8_t menu, uint8_t opti
     this->option = option;
     this->gameState = PLAYING;
     this->loadLevel(this->option-1);
-    this->level->audioController = this->audioController;
 
     printf("[PixelAdventureScreen] Done\n");
 }
@@ -147,7 +146,7 @@ void PixelAdventureScreen::draw(Display *display) {
 }
 
 void PixelAdventureScreen::keyPressed(uint8_t key) {
-    if(key == KEY_EXIT)
+    if(key == KEY_SELECT)
         this->returnCallBack(this->screenId, this->option);
     else if(key == KEY_B) {
         if(this->gameState == PAUSED)

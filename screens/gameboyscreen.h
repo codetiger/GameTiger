@@ -9,6 +9,7 @@ private:
     timetype lastUpdate;
 
     void* gb_ptr;
+
 public:
     GameBoyScreen(void (*returnCallBack)(int8_t menu, uint8_t option), void (*highScoreCallBack)(uint32_t highscore), uint32_t highscore, uint8_t option);
     ~GameBoyScreen();

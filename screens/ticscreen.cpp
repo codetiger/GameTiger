@@ -36,7 +36,6 @@ void TicScreen::update(uint16_t deltaTimeMS) {
     if(turn == X_TIC && this->gameState == PLAYING) {
         board.setCellValue(bestMove(board, this->moveCount), X_TIC);
         this->moveCount++;
-        this->audioController->beep(2000);
         turn = O_TIC;
         if(checkGameOver())
             this->gameState = LOST;
@@ -156,7 +155,7 @@ void TicScreen::keyPressed(uint8_t key) {
             if(checkGameOver())
                 this->gameState = LOST;
         }
-    } else if(key == KEY_EXIT) {
+    } else if(key == KEY_SELECT) {
         this->returnCallBack(this->screenId, this->option);
     }
     // printBoard();

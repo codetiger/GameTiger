@@ -239,7 +239,7 @@ bool G2048Screen::checkGameOver() {
 void G2048Screen::keyPressed(uint8_t key) {
     if(key == KEY_DOWN || key == KEY_UP || key == KEY_LEFT || key == KEY_RIGHT)
         this->direction = key;
-    else if(key == KEY_EXIT)
+    else if(key == KEY_SELECT)
         this->returnCallBack(this->screenId, this->option);
 }
 

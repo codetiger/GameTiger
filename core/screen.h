@@ -1,6 +1,5 @@
 #include "common.h"
 #include "display.h"
-#include "audio.h"
 
 #ifndef _GAME_TIGER_SCREEN_H
 #define _GAME_TIGER_SCREEN_H
@@ -22,7 +21,6 @@ public:
         // printf("[Screen] Destructing base screen\n");
     }
     uint8_t screenId = 0;
-    AudioController *audioController;
 };
 
 #endif

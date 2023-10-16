@@ -4,24 +4,13 @@ KeyBoard::KeyBoard() {
     printf("[Keyboard] driver loading...\n");
     for (uint8_t i = 0; i < KEY_COUNT; i++)
         this->prevKeyState[i] == false;
+
 #ifdef FORMPU
-    gpio_init(I2CSDA);
-    gpio_set_function(I2CSDA, GPIO_FUNC_I2C);
-    gpio_pull_up(I2CSDA);
-
-    gpio_init(I2CSCL);
-    gpio_set_function(I2CSCL, GPIO_FUNC_I2C);
-    gpio_pull_up(I2CSCL);
-
-    int br = i2c_init(i2c1, 200 * 1000);
-    printf("[Keyboard] PCF8575 baudrate: %d\n", br);
-
-    uint8_t keystate[2];
-    keystate[0] = 0xff;
-    keystate[1] = 0xff;
-    int ret = i2c_write_blocking(i2c1, ADDR, keystate, 2, false);
-    if(ret <= 0)
-        printf("[Keyboard] Error: %d\n", ret);
+    for (uint8_t i = 0; i < KEY_COUNT; i++) {
+        gpio_init(pinId[i]);
+        gpio_set_dir(pinId[i], GPIO_IN);
+        gpio_pull_up(pinId[i]);
+    }
 #endif
     printf("[Keyboard] Done\n");
 }
@@ -31,25 +20,18 @@ KeyBoard::~KeyBoard() {
 
 void KeyBoard::checkKeyState(Screen *screen) {
 #ifdef FORMPU
-    uint8_t keystate[2];
-    int ret = i2c_read_blocking(i2c1, ADDR, keystate, 2, false);
-    uint state = ~(keystate[0] | (keystate[1] << 8));
-    if(ret <= 0) {
-        return;
-    } else if(screen && state != 0xffff) {
-        for (uint8_t i = 0; i < KEY_COUNT; i++) {
-            bool keyState = (state >> pinId[i]) & 0x01;
-            if (this->prevKeyState[i] != keyState) {
-                if (keyState) 
-                    screen->keyPressed(i);
-                else
-                    screen->keyReleased(i);
-            } else if(keyState)
-                screen->keyDown(i);
-            this->prevKeyState[i] = keyState;
-        }
+    for (uint8_t i = 0; i < KEY_COUNT; i++) {
+        bool keyState = !gpio_get(pinId[i]);
+        if (this->prevKeyState[i] != keyState) {
+            if (keyState) {
+                screen->keyPressed(i);
+                // audio_play_once(snd_drum, sizeof(snd_drum));
+            } else
+                screen->keyReleased(i);
+        } else if(keyState)
+            screen->keyDown(i);
+        this->prevKeyState[i] = keyState;
     }
-
 #else
     SDL_Event event; 
     while (SDL_PollEvent(&event)) {
@@ -85,6 +67,5 @@ void KeyBoard::checkKeyState(Screen *screen) {
             }
         }
     }
-
 #endif
 }
