@@ -5,13 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 add_definitions ( -DFORMPU=1 )
 add_definitions ( -DRP2040=1 )
 
-set(PICO_SDK_PATH /Users/harishankar/Development/pico-sdk )
-set(PICO_EXTRAS_PATH /Users/harishankar/Development/pico-extras )
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR ARM)
+set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES CMAKE_PREFIX_PATH)
 
-include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
-include(${PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
+include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+include($ENV{PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
 
 project(GameTiger VERSION 1.0.0)
  
