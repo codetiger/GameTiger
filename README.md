@@ -1,27 +1,27 @@
 <p align="center">
-    <img src="docs/tiger.png" width="200">
+    <img src="docs/images/tiger.png" width="200">
 </p>
 <p align="center">
-    <img src="docs/gametiger.png" width="300"></p>
+    <img src="docs/images/gametiger.png" width="300"></p>
 </p>
 
 ## About GameTiger Console
 A retro-themed gaming console, crafted and tailored exclusively for educational enjoyment. The console boasts a custom-designed printed circuit board (PCB), meticulously created entirely from the ground up, and is centered around the remarkable RP2040 MCU chip. The primary objective of this endeavor is to maintain complete openness, facilitating the exploration of electronic PCB design and the establishment of a platform that fosters the creation of games and emulators on microcontrollers.
 
 <div style="display: flex; justify-content: space-between;">
-    <img src="./docs/gametiger-gameboy.jpeg" alt="GameTiger Console" width="48%">
-    <img src="./docs/pcb-back.jpeg" alt="GameTiger Console" width="48%">
+    <img src="./docs/images/gametiger-gameboy.jpeg" alt="GameTiger Console" width="48%">
+    <img src="./docs/images/pcb-back.jpeg" alt="GameTiger Console" width="48%">
 </div>
 
 ## Games
 |   |   |
 |---|---|
 | Snake | 2048 |
-| ![Snake Game GameTiger Console](/docs/Snake.gif) | ![2048 Game GameTiger Console](/docs/2048.gif) 
+| ![Snake Game GameTiger Console](/docs/images/Snake.gif) | ![2048 Game GameTiger Console](/docs/images/2048.gif) 
 | Tetris | Minesweeper |
-| ![Tetris Game GameTiger Console](/docs/Tetris.gif) | ![Minesweeper Game GameTiger Console](/docs/Minesweeper.gif)
+| ![Tetris Game GameTiger Console](/docs/images/Tetris.gif) | ![Minesweeper Game GameTiger Console](/docs/images/Minesweeper.gif)
 | Tic Tac Toe | Ninja Frog |
-| ![Tic Tac Toe Game GameTiger Console](/docs/TicTacToe.gif) | ![Ninja Frog Game GameTiger Console](/docs/NinjaFrog.gif)
+| ![Tic Tac Toe Game GameTiger Console](/docs/images/TicTacToe.gif) | ![Ninja Frog Game GameTiger Console](/docs/images/NinjaFrog.gif)
 
 ## Software
 The software is constructed using the Pico C++ SDK, incorporating essential hardware interfacing functionalities. As an illustration, the well-known Snake game is already available. The following modules are currently available and are continually being developed.
@@ -61,7 +61,8 @@ Hardware V1:
 
 
 ## Build your favourite games
-If you wish to contribute to this repo, please feel free to implement your favourite games and send a pull request. 
+If you're looking to contribute to the project by developing your own games for the GameTiger console, please refer to our developer guide for detailed instructions.
+[Developer's Guide](docs/dev_guide.md)
 
 ## To Do
 * Add more games
