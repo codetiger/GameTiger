@@ -1,0 +1,138 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "level02.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "/Users/harishankar/Documents/Personal/PixelAdventure2.tsj": {
+            "scaleInDock": 1
+        },
+        "/Users/harishankar/Documents/Personal/PixelAdventure2.tsx": {
+            "scaleInDock": 1.8179,
+            "scaleInEditor": 1
+        },
+        "/Users/harishankar/Downloads/fruits-sprite/Apple.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4.61
+        },
+        "Apple.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "GameItems.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "PixelAdventure2..tsj": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Terrain.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bg.tsj": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bg.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "level01.tmx": {
+            "scale": 2.070703125,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 262.4712318430485,
+                "y": 183.75400867760797
+            }
+        },
+        "level02.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 263.25,
+                "y": 196.25
+            }
+        },
+        "pa2..js": {
+            "scale": 2.00947265625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.28614472469263,
+                "y": 144.06764834523983
+            }
+        },
+        "pa2..tmj": {
+            "scale": 2.00947265625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 255.78850172522723,
+                "y": 144.06764834523983
+            }
+        },
+        "pa2.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 250.25,
+                "y": 163.75
+            }
+        },
+        "terrain.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "/Users/harishankar/Desktop",
+    "last.externalTilesetPath": "/Users/harishankar/Documents/Personal/Pixel Adventure 2",
+    "last.imagePath": "/Users/harishankar/Development/GameTiger-Console/content/leveldata/GameItems",
+    "lastUsedTilesetExportFilter": "JSON tileset files (*.tsj *.json)",
+    "map.height": 36,
+    "map.lastUsedExportFilter": "Lua files (*.lua)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 64,
+    "openFiles": [
+        "GameItems.tsx",
+        "level01.tmx",
+        "level02.tmx"
+    ],
+    "project": "NinjaFrog.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "GameItems.tsx",
+        "level01.tmx",
+        "level02.tmx",
+        "Terrain.tsx",
+        "pa2.tmx",
+        "PixelAdventure2..tsj",
+        "Apple.tsx",
+        "pa2..tmj",
+        "/Users/harishankar/Documents/Personal/PixelAdventure2.tsx",
+        "bg.tsj",
+        "bg.tsx",
+        "terrain.tsx"
+    ],
+    "resizeMap.removeObjects": true,
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.type": 0
+}
