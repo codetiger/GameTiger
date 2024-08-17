@@ -163,14 +163,12 @@ fp-info-cache
 *.xml
 *.csv
 
-*.uf2
 elf2uf2
 generated
 pico_extras
 pico-sdk
 pioasm
 
-GameTiger.uf2
 GameTiger.bin
 GameTiger.dis
 GameTiger.elf
