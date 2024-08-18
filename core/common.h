@@ -1,4 +1,3 @@
-#ifdef FORMPU
     #include "pico/stdlib.h"
     #include "pico/multicore.h"
     #include "hardware/gpio.h"
@@ -11,19 +10,9 @@
     #include "hardware/clocks.h"
     #include "hardware/i2c.h"
     #include "hardware/vreg.h"
-    #include "hardware/pll.h" // don't forget to add hardware_pll to your Cmakelists.txt
-
+    #include "hardware/pll.h"
+    
     #define timetype uint32_t
-#else
-    #include <cstdint>
-    #include <SDL.h>
-    #include <chrono>
-
-    typedef std::chrono::high_resolution_clock Clock;
-    typedef std::chrono::milliseconds milliseconds;
-    #define timetype Clock::time_point
-    #define FLASH_PAGE_SIZE (1u << 8)
-#endif
 
 #include <map>
 #include <string>

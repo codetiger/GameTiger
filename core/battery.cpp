@@ -5,7 +5,7 @@
 
 Battery::Battery() {
     printf("[Battery] driver loading...\n");
-#if defined(FORMPU) && defined(ENABLE_BATTERY_MONITOR)
+#if defined(ENABLE_BATTERY_MONITOR)
     this->lastCachedTime = to_ms_since_boot(get_absolute_time()) - 12000;
     gpio_init(POWER_PIN);
     gpio_set_dir(POWER_PIN, GPIO_IN);
@@ -18,7 +18,7 @@ Battery::Battery() {
 }
 
 uint8_t Battery::getLevel() {
-#if defined(FORMPU) && defined(ENABLE_BATTERY_MONITOR)
+#if defined(ENABLE_BATTERY_MONITOR)
     uint8_t timeDiffSec = (to_ms_since_boot(get_absolute_time()) - this->lastCachedTime) / CLOCKS_PER_SEC;
     if(timeDiffSec > 10) {
         adc_select_input(0);
@@ -32,7 +32,7 @@ uint8_t Battery::getLevel() {
 }
 
 bool Battery::isCharging() {
-#if defined(FORMPU) && defined(ENABLE_BATTERY_MONITOR)
+#if defined(ENABLE_BATTERY_MONITOR)
     return gpio_get(POWER_PIN);
 #else
     return false;

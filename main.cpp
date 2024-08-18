@@ -28,23 +28,19 @@ uint8_t newScreenId, newOption;
 void highScoreHandler(uint32_t highscore) {
     highscores[0] = 64;highscores[1] = 128;
     highscores[screen->screenId] = highscore;
-    #ifdef FORMPU
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (uint8_t*)highscores, FLASH_PAGE_SIZE);
     restore_interrupts (ints);
-    #endif
 }
 
 void readHighScoreData() {
-    #ifdef FORMPU
     const uint32_t* flash_target_contents = (const uint32_t *) (XIP_BASE + FLASH_TARGET_OFFSET);
     for (int i = 0; i < HIGHSCORESIZE; i++)
         highscores[i] = flash_target_contents[i];
     if(highscores[0] != 64 || highscores[1] != 128)
         for (int i = 0; i < HIGHSCORESIZE; i++)
             highscores[i] = 0;
-    #endif
 }
 
 void backHandler(int8_t menu, uint8_t option) {
@@ -90,7 +86,6 @@ void checkScreenSwitch() {
 }
 
 int main(int argc, char *argv[]) {
-    #ifdef FORMPU
     sleep_ms(50);
     vreg_set_voltage(VREG_VOLTAGE_1_20);
     sleep_ms(1);
@@ -99,7 +94,6 @@ int main(int argc, char *argv[]) {
 
     stdio_init_all();
     sleep_ms(1000);
-    #endif
 
     printf("[Main] Starting\n");
     srand((unsigned int)time(0));

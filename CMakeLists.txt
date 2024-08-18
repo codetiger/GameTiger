@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.12)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
-add_definitions ( -DFORMPU=1 )
 add_definitions ( -DRP2040=1 )
 
 set(CMAKE_SYSTEM_NAME Linux)
@@ -12,7 +11,7 @@ set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES CMAKE_PREFIX_PATH)
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 include($ENV{PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
 
-project(GameTiger VERSION 1.0.0)
+project(GameTiger VERSION 1.0.0 LANGUAGES C CXX ASM)
  
 set(PICO_BOARD gametiger_rp2040)
 
